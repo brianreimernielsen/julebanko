@@ -507,24 +507,32 @@ textarea {
 .decoration-strip {
   display: flex;
   justify-content: center;
-  padding: 0 1.5rem 2.5rem;
+  width: 100%;
+  margin-top: 2.75rem;
+  padding: 1.25rem 0 3.5rem;
 }
 
 .decoration-strip img {
-  max-height: 72px;
-  width: auto;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
-  animation: sway 4.5s ease-in-out infinite;
+  display: block;
+  width: min(1120px, 96vw);
+  max-width: 100%;
+  height: auto;
+  max-height: 140px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.4));
+  animation: garlandFloat 5.5s ease-in-out infinite;
 }
 
-@keyframes sway {
-  0%, 100% { transform: rotate(-2deg); }
-  50% { transform: rotate(2deg); }
+@keyframes garlandFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
 }
 
 .site-footer {
-  margin-top: auto;
-  padding: 1.5rem;
+  margin-top: 0;
+  padding: 0.75rem 1.5rem 1.75rem;
   text-align: center;
   opacity: 0.7;
   font-size: 0.85rem;
