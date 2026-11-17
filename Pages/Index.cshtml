@@ -15,8 +15,8 @@
     </style>
 }
 
-<section class="hero">
-    <div class="hero-media" style="@(string.IsNullOrEmpty(Model.HeroUrl) ? null : $"background-image:url('{Model.HeroUrl}');")"></div>
+<section class="hero hero-compact">
+    <div class="hero-media"@if (!string.IsNullOrEmpty(Model.HeroUrl)) { <text> style="background-image:url(@Model.HeroUrl);" </text> }></div>
     <div class="hero-content">
         <p class="hero-kicker">@DateTime.Now.Year</p>
         <h1 class="brand">@Localizer["Brand"]</h1>
@@ -28,13 +28,11 @@
     </div>
 </section>
 
-<section class="section" id="numbers">
-    <h2 class="section-title">@Localizer["TodaysNumbers"]</h2>
-    <p class="section-lead">@Localizer["AllNumbersDrawOrder"] &amp; @Localizer["AllNumbersSorted"]</p>
+<section class="section section-player" id="numbers">
     <div class="numbers-grid">
-        <div>
-            <div class="number-block" style="margin-bottom:1.25rem;">
-                <h3>@Localizer["TodaysNumbers"]</h3>
+        <div class="numbers-col">
+            <div class="number-block">
+                <h2 class="block-heading">@Localizer["TodaysNumbers"]</h2>
                 @if (Model.TodayNumbers.Count == 0)
                 {
                     <p class="empty-note">@Localizer["NoNumbersYet"]</p>
@@ -49,7 +47,8 @@
                     </div>
                 }
             </div>
-            <div class="number-block" style="margin-bottom:1.25rem;">
+
+            <div class="number-block">
                 <h3>@Localizer["AllNumbersDrawOrder"]</h3>
                 @if (Model.AllDrawOrder.Count == 0)
                 {
@@ -57,14 +56,15 @@
                 }
                 else
                 {
-                    <div class="ball-row">
+                    <div class="ball-row dense">
                         @foreach (var n in Model.AllDrawOrder)
                         {
-                            <span class="ball muted">@n.Number</span>
+                            <span class="ball chip">@n.Number</span>
                         }
                     </div>
                 }
             </div>
+
             <div class="number-block">
                 <h3>@Localizer["AllNumbersSorted"]</h3>
                 @if (Model.AllSorted.Count == 0)
@@ -73,20 +73,20 @@
                 }
                 else
                 {
-                    <div class="ball-row">
+                    <div class="ball-row dense">
                         @foreach (var n in Model.AllSorted)
                         {
-                            <span class="ball muted">@n</span>
+                            <span class="ball chip">@n</span>
                         }
                     </div>
                 }
             </div>
         </div>
 
-        <div id="claim">
-            <div class="claim-panel" style="margin-bottom:1rem;">
+        <aside class="claim-col" id="claim">
+            <div class="claim-panel">
                 <h2>@Localizer["HaveYouWon"]</h2>
-                <p class="section-lead" style="margin-bottom:1rem;">@Localizer["ClaimHint"]</p>
+                <p class="claim-hint">@Localizer["ClaimHint"]</p>
                 @if (Model.StatusMessage == "ok")
                 {
                     <div class="alert alert-success">@Localizer["ClaimSubmitted"]</div>
@@ -130,7 +130,7 @@
                     </ul>
                 }
             </div>
-        </div>
+        </aside>
     </div>
 </section>
 

@@ -81,7 +81,10 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowIntensity, "1");
 
-        await db.SaveChangesAsync();
+        await db.SaveChangesAsync(cancellationToken);
+
+        var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        await EnsureSampleMediaAsync(db, env, logger, cancellationToken);
     }
 
     private static async Task EnsureSettingAsync(AppDbContext db, string key, string value)
@@ -90,5 +93,58 @@ public static class DbSeeder
         {
             db.AppSettings.Add(new AppSetting { Key = key, Value = value });
         }
+    }
+
+    /// <summary>
+    /// Copies bundled sample festive images into App_Data/uploads when a slot is empty.
+    /// Setup Admin can replace/delete these later.
+    /// </summary>
+    private static async Task EnsureSampleMediaAsync(
+        AppDbContext db,
+        IWebHostEnvironment env,
+        ILogger logger,
+        CancellationToken cancellationToken)
+    {
+        var samples = new (MediaSlot Slot, string FileName)[]
+        {
+            (MediaSlot.PlayerHero, "hero.jpg"),
+            (MediaSlot.PlayerBackground, "background.jpg"),
+            (MediaSlot.PlayerDecoration, "decoration.jpg")
+        };
+
+        var sampleRoot = Path.Combine(env.WebRootPath, "sample-media");
+        var uploadRoot = Path.Combine(env.ContentRootPath, "App_Data", "uploads");
+        Directory.CreateDirectory(uploadRoot);
+
+        foreach (var (slot, fileName) in samples)
+        {
+            if (await db.MediaAssets.AnyAsync(m => m.Slot == slot, cancellationToken))
+            {
+                continue;
+            }
+
+            var source = Path.Combine(sampleRoot, fileName);
+            if (!File.Exists(source))
+            {
+                logger.LogWarning("Sample media missing: {Path}", source);
+                continue;
+            }
+
+            var destName = $"{slot.ToString().ToLowerInvariant()}-sample{Path.GetExtension(fileName)}";
+            var destPath = Path.Combine(uploadRoot, destName);
+            File.Copy(source, destPath, overwrite: true);
+
+            db.MediaAssets.Add(new MediaAsset
+            {
+                Slot = slot,
+                FileName = fileName,
+                ContentType = "image/jpeg",
+                RelativePath = $"/uploads/{destName}",
+                UploadedAt = DateTime.UtcNow
+            });
+            logger.LogInformation("Seeded sample media for slot {Slot}", slot);
+        }
+
+        await db.SaveChangesAsync(cancellationToken);
     }
 }
