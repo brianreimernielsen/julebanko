@@ -10,4 +10,5 @@ public static class SettingKeys
     public const string ClaimNotifyTo = "ClaimNotifyTo";
     public const string MailFrom = "MailFrom";
     public const string SeasonTitle = "SeasonTitle";
+    public const string PlayerSnowEnabled = "PlayerSnowEnabled";
 }

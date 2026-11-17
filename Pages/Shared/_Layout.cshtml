@@ -7,6 +7,9 @@
     var playerBg = await Settings.GetAsync(SettingKeys.PlayerBgColor, "#8B1E1E");
     var accent = await Settings.GetAsync(SettingKeys.AccentColor, "#D4A017");
     var playerText = await Settings.GetAsync(SettingKeys.PlayerTextColor, "#FFF8F0");
+    var snowRaw = await Settings.GetAsync(SettingKeys.PlayerSnowEnabled, "true");
+    var snowEnabled = !string.Equals(snowRaw, "false", StringComparison.OrdinalIgnoreCase)
+                      && snowRaw != "0";
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 <!DOCTYPE html>
@@ -28,9 +31,13 @@
     </style>
 </head>
 <body class="@(ViewData["BodyClass"] as string)">
-    <div class="snow" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
+    @if (snowEnabled)
+    {
+        <div class="snow" data-snow aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    }
     <div class="site-shell">
         <div class="topbar">
             <div class="lang-switch" aria-label="@Localizer["Language"]">

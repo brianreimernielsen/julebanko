@@ -222,14 +222,15 @@ END
 -- Default AppSettings
 MERGE dbo.AppSettings AS t
 USING (VALUES
-    (N'PlayerBgColor',   N'#8B1E1E'),
-    (N'AdminBgColor',    N'#1B4332'),
-    (N'AccentColor',     N'#D4A017'),
-    (N'PlayerTextColor', N'#FFF8F0'),
-    (N'AdminTextColor',  N'#F0F7F2'),
-    (N'ClaimNotifyTo',   N'banko@example.com'),
-    (N'MailFrom',        N'julebanko@example.com'),
-    (N'SeasonTitle',     CONCAT(N'Julebanko ', @Year))
+    (N'PlayerBgColor',      N'#8B1E1E'),
+    (N'AdminBgColor',       N'#1B4332'),
+    (N'AccentColor',        N'#D4A017'),
+    (N'PlayerTextColor',    N'#FFF8F0'),
+    (N'AdminTextColor',     N'#F0F7F2'),
+    (N'ClaimNotifyTo',      N'banko@example.com'),
+    (N'MailFrom',           N'julebanko@example.com'),
+    (N'SeasonTitle',        CONCAT(N'Julebanko ', @Year)),
+    (N'PlayerSnowEnabled',  N'true')
 ) AS s([Key], Value)
 ON t.[Key] = s.[Key]
 WHEN NOT MATCHED THEN

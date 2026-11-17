@@ -23,6 +23,10 @@
             <label>Player text<input asp-for="PlayerTextColor" type="color" /></label>
             <label>Admin text<input asp-for="AdminTextColor" type="color" /></label>
         </div>
+        <label style="display:flex; gap:0.55rem; align-items:center;">
+            <input asp-for="PlayerSnowEnabled" type="checkbox" style="width:auto;" />
+            Falling snow on player page
+        </label>
         <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
     </form>
 </div>

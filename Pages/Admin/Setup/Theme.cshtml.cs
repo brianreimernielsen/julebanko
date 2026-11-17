@@ -13,6 +13,7 @@ public class ThemeModel(SettingsService settings) : PageModel
     [BindProperty] public string PlayerTextColor { get; set; } = "#FFF8F0";
     [BindProperty] public string AdminTextColor { get; set; } = "#F0F7F2";
     [BindProperty] public string SeasonTitle { get; set; } = "Julebanko";
+    [BindProperty] public bool PlayerSnowEnabled { get; set; } = true;
     public bool Saved { get; private set; }
 
     public async Task OnGetAsync()
@@ -29,7 +30,8 @@ public class ThemeModel(SettingsService settings) : PageModel
             [SettingKeys.AccentColor] = AccentColor,
             [SettingKeys.PlayerTextColor] = PlayerTextColor,
             [SettingKeys.AdminTextColor] = AdminTextColor,
-            [SettingKeys.SeasonTitle] = SeasonTitle.Trim()
+            [SettingKeys.SeasonTitle] = SeasonTitle.Trim(),
+            [SettingKeys.PlayerSnowEnabled] = PlayerSnowEnabled ? "true" : "false"
         });
         Saved = true;
         await LoadAsync();
@@ -44,5 +46,7 @@ public class ThemeModel(SettingsService settings) : PageModel
         PlayerTextColor = await settings.GetAsync(SettingKeys.PlayerTextColor, PlayerTextColor);
         AdminTextColor = await settings.GetAsync(SettingKeys.AdminTextColor, AdminTextColor);
         SeasonTitle = await settings.GetAsync(SettingKeys.SeasonTitle, SeasonTitle);
+        var snow = await settings.GetAsync(SettingKeys.PlayerSnowEnabled, "true");
+        PlayerSnowEnabled = !string.Equals(snow, "false", StringComparison.OrdinalIgnoreCase) && snow != "0";
     }
 }

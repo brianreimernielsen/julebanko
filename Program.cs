@@ -11,8 +11,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
 
+var useSqlite = string.Equals(Environment.GetEnvironmentVariable("JULEBANKO_USE_SQLITE"), "1", StringComparison.Ordinal);
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (useSqlite)
+    {
+        var sqlitePath = Environment.GetEnvironmentVariable("JULEBANKO_SQLITE_PATH")
+            ?? Path.Combine(builder.Environment.ContentRootPath, "App_Data", "julebanko-preview.db");
+        Directory.CreateDirectory(Path.GetDirectoryName(sqlitePath)!);
+        options.UseSqlite($"Data Source={sqlitePath}");
+    }
+    else
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    }
+});
 
 // SharedResource lives in namespace Julebanko; .resx under Resources/ embeds as Julebanko.SharedResource.*
 builder.Services.AddLocalization();
@@ -71,7 +84,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (!string.Equals(Environment.GetEnvironmentVariable("JULEBANKO_USE_SQLITE"), "1", StringComparison.Ordinal))
+{
+    app.UseHttpsRedirection();
+}
 app.UseRequestLocalization(localizationOptions);
 
 var uploadsPath = Path.Combine(app.Environment.ContentRootPath, "App_Data", "uploads");

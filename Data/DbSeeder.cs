@@ -19,7 +19,16 @@ public static class DbSeeder
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DbSeeder");
 
-        await db.Database.MigrateAsync(cancellationToken);
+        if (string.Equals(Environment.GetEnvironmentVariable("JULEBANKO_USE_SQLITE"), "1", StringComparison.Ordinal))
+        {
+            // Preview/smoke path: skip SQL Server migrations and create schema directly.
+            await db.Database.EnsureCreatedAsync(cancellationToken);
+        }
+        else
+        {
+            await db.Database.MigrateAsync(cancellationToken);
+        }
+
 
         var hasher = new PasswordHasher<AdminUser>();
 
@@ -69,6 +78,7 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.ClaimNotifyTo, "banko@example.com");
         await EnsureSettingAsync(db, SettingKeys.MailFrom, "julebanko@example.com");
         await EnsureSettingAsync(db, SettingKeys.SeasonTitle, $"Julebanko {year}");
+        await EnsureSettingAsync(db, SettingKeys.PlayerSnowEnabled, "true");
 
         await db.SaveChangesAsync();
     }
