@@ -15,6 +15,7 @@ public class ThemeModel(SettingsService settings) : PageModel
     [BindProperty] public string SeasonTitle { get; set; } = "Julebanko";
     [BindProperty] public bool PlayerSnowEnabled { get; set; } = true;
     [BindProperty] public int PlayerSnowIntensity { get; set; } = 1;
+    [BindProperty] public bool PlayerNisseEnabled { get; set; } = true;
     public bool Saved { get; private set; }
 
     public async Task OnGetAsync()
@@ -38,7 +39,8 @@ public class ThemeModel(SettingsService settings) : PageModel
             [SettingKeys.AdminTextColor] = AdminTextColor,
             [SettingKeys.SeasonTitle] = SeasonTitle.Trim(),
             [SettingKeys.PlayerSnowEnabled] = PlayerSnowEnabled ? "true" : "false",
-            [SettingKeys.PlayerSnowIntensity] = PlayerSnowIntensity.ToString()
+            [SettingKeys.PlayerSnowIntensity] = PlayerSnowIntensity.ToString(),
+            [SettingKeys.PlayerNisseEnabled] = PlayerNisseEnabled ? "true" : "false"
         });
         Saved = true;
         await LoadAsync();
@@ -62,5 +64,7 @@ public class ThemeModel(SettingsService settings) : PageModel
         }
 
         PlayerSnowIntensity = level;
+        var nisse = await settings.GetAsync(SettingKeys.PlayerNisseEnabled, "true");
+        PlayerNisseEnabled = !string.Equals(nisse, "false", StringComparison.OrdinalIgnoreCase) && nisse != "0";
     }
 }

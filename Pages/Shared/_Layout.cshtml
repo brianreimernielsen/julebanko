@@ -15,6 +15,9 @@
     {
         snowIntensity = 1;
     }
+    var nisseRaw = await Settings.GetAsync(SettingKeys.PlayerNisseEnabled, "true");
+    var nisseEnabled = !string.Equals(nisseRaw, "false", StringComparison.OrdinalIgnoreCase)
+                       && nisseRaw != "0";
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 <!DOCTYPE html>
@@ -39,6 +42,38 @@
     @if (snowEnabled)
     {
         <div class="snow" data-snow data-intensity="@snowIntensity" aria-hidden="true"></div>
+    }
+    @if (nisseEnabled)
+    {
+        <div class="nisse-stage" data-nisse aria-hidden="true">
+            <div class="nisse" data-nisse-actor>
+                <div class="nisse-inner">
+                    <svg class="nisse-svg" viewBox="0 0 64 96" width="64" height="96" focusable="false">
+                        <ellipse class="nisse-shadow" cx="32" cy="90" rx="16" ry="4" fill="rgba(0,0,0,0.28)" />
+                        <path d="M20 78h24l-3 10H23z" fill="#3b2a1f" />
+                        <rect x="22" y="52" width="20" height="28" rx="6" fill="#6b7280" />
+                        <path d="M18 56c-4 8-5 16-2 20" stroke="#4b5563" stroke-width="5" stroke-linecap="round" fill="none" class="nisse-arm nisse-arm-l" />
+                        <path d="M46 56c4 8 5 16 2 20" stroke="#4b5563" stroke-width="5" stroke-linecap="round" fill="none" class="nisse-arm nisse-arm-r" />
+                        <circle cx="32" cy="40" r="14" fill="#f3d2b3" />
+                        <path d="M18 42c4 14 24 14 28 0" fill="#f8fafc" />
+                        <circle cx="27" cy="38" r="1.6" fill="#1f2937" class="nisse-eye" />
+                        <circle cx="37" cy="38" r="1.6" fill="#1f2937" class="nisse-eye" />
+                        <path d="M32 12 L44 40 H20 Z" fill="#b91c1c" />
+                        <circle cx="32" cy="12" r="3.2" fill="#f8fafc" />
+                        <g class="nisse-bowl" opacity="0">
+                            <ellipse cx="50" cy="66" rx="8" ry="3.5" fill="#e7e5e4" />
+                            <path d="M42 66v-3c0-2 3.5-3.5 8-3.5s8 1.5 8 3.5v3" fill="#d6d3d1" />
+                            <ellipse cx="50" cy="63" rx="7" ry="2.4" fill="#f5f5f4" />
+                            <circle cx="48" cy="62.5" r="1.1" fill="#fbbf24" />
+                            <circle cx="52" cy="63" r="0.9" fill="#f59e0b" />
+                        </g>
+                        <g class="nisse-rag" opacity="0">
+                            <path d="M48 58c6 1 8 6 5 9" stroke="#fde68a" stroke-width="3" stroke-linecap="round" fill="none" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
     }
     <div class="site-shell">
         <div class="topbar">

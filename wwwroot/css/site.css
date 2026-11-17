@@ -646,3 +646,140 @@ textarea {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Christmas nisse (elf) — transform/opacity only */
+.nisse-stage {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+}
+
+.nisse {
+  position: absolute;
+  left: -80px;
+  bottom: 12%;
+  width: 64px;
+  height: 96px;
+  opacity: 0;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+}
+
+.nisse.is-active {
+  opacity: 1;
+}
+
+.nisse-inner {
+  width: 100%;
+  height: 100%;
+  transform-origin: center bottom;
+}
+
+.nisse.is-flip .nisse-inner {
+  transform: scaleX(-1);
+}
+
+.nisse-svg {
+  display: block;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+.nisse[data-scene="cross"] {
+  animation: nisse-cross 9s linear forwards;
+}
+
+.nisse[data-scene="look"] {
+  animation: nisse-look 8s ease-in-out forwards;
+}
+
+.nisse[data-scene="polish"] {
+  animation: nisse-polish 9s ease-in-out forwards;
+}
+
+.nisse[data-scene="polish"] .nisse-rag {
+  opacity: 1;
+  animation: nisse-rag-wipe 0.55s ease-in-out 2.2s 6 alternate;
+}
+
+.nisse[data-scene="polish"] .nisse-arm-r {
+  transform-origin: 46px 56px;
+  animation: nisse-arm-polish 0.55s ease-in-out 2.2s 6 alternate;
+}
+
+.nisse[data-scene="porridge"] {
+  animation: nisse-porridge 10s ease-in-out forwards;
+}
+
+.nisse[data-scene="porridge"] .nisse-bowl {
+  opacity: 1;
+}
+
+.nisse[data-scene="porridge"] .nisse-arm-r {
+  transform-origin: 46px 56px;
+  animation: nisse-spoon 0.7s ease-in-out 3s 5 alternate;
+}
+
+.nisse[data-scene="look"] .nisse-svg {
+  animation: nisse-peek 1.2s ease-in-out 2.4s 3 alternate;
+}
+
+@keyframes nisse-cross {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translate3d(calc(100vw + 120px), 0, 0); opacity: 0; }
+}
+
+@keyframes nisse-look {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(18vw, 0, 0); }
+  35%  { transform: translate3d(28vw, -8px, 0); }
+  70%  { transform: translate3d(30vw, -4px, 0); }
+  88%  { opacity: 1; transform: translate3d(48vw, 0, 0); }
+  100% { transform: translate3d(calc(100vw + 120px), 0, 0); opacity: 0; }
+}
+
+@keyframes nisse-polish {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  14%  { opacity: 1; transform: translate3d(22vw, 0, 0); }
+  28%  { transform: translate3d(34vw, 10px, 0); }
+  75%  { transform: translate3d(36vw, 10px, 0); }
+  90%  { opacity: 1; transform: translate3d(55vw, 0, 0); }
+  100% { transform: translate3d(calc(100vw + 120px), 0, 0); opacity: 0; }
+}
+
+@keyframes nisse-porridge {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(20vw, 0, 0); }
+  28%  { transform: translate3d(42vw, 18px, 0); }
+  78%  { transform: translate3d(42vw, 18px, 0); }
+  90%  { opacity: 1; transform: translate3d(62vw, 0, 0); }
+  100% { transform: translate3d(calc(100vw + 120px), 0, 0); opacity: 0; }
+}
+
+@keyframes nisse-peek {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-8deg) translateY(-2px); }
+}
+
+@keyframes nisse-arm-polish {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(28deg); }
+}
+
+@keyframes nisse-rag-wipe {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(4px, -3px); }
+}
+
+@keyframes nisse-spoon {
+  from { transform: rotate(-8deg); }
+  to   { transform: rotate(18deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nisse-stage { display: none; }
+}
+
