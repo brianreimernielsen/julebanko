@@ -39,30 +39,35 @@
     layer.replaceChildren(frag);
   });
 
-  // Christmas nisse — Brian 8×3 sprite ark: bottom patrol + walk/eat/wave/polish.
+  // Christmas nisse — Brian 8×3 sprite ark: continuous bottom patrol.
   const stage = document.querySelector("[data-nisse]");
   if (stage && !reducedMotion) {
     const actor = stage.querySelector("[data-nisse-actor]");
     const sprite = actor.querySelector(".nisse-sprite");
     const anims = {
-      walk: { frames: [[0, 0], [1, 0], [2, 0], [3, 0]], ms: 160 },
+      // Slow cozy walk — longer frame hold + low px/s travel
+      walk: { frames: [[0, 0], [1, 0], [2, 0], [3, 0]], ms: 280 },
       eat: { frames: [[4, 0], [5, 0], [6, 0], [7, 0]], ms: 320 },
       wave: { frames: [[3, 1], [4, 1], [5, 1], [6, 1], [7, 1]], ms: 220 },
       polish: { frames: [[5, 2], [6, 2], [7, 2], [6, 2]], ms: 200 },
     };
+    // Keep eat + stop-and-wave + back-view polish
     const actions = ["eat", "wave", "polish"];
     let frameTimer = 0;
     let raf = 0;
     let running = true;
-    let x = -120;
-    let dir = 1; // 1 = right, -1 = left
+    let x = null; // set after layout
+    let dir = 1;
     let mode = "walk";
     let frameIdx = 0;
     let actionUntil = 0;
     let nextActionAt = 0;
+    let actionAnchorX = 0;
+    const speed = 14; // px/s — cozy curious visit, not a rush
+    let approachBoost = 0; // temporary faster approach for demos only (still continuous)
 
     const vw = () => window.innerWidth || 1200;
-    const nisseW = () => actor.offsetWidth || 95;
+    const nisseW = () => actor.offsetWidth || 55;
 
     const setFrame = (col, row) => {
       sprite.style.setProperty("--nisse-col", String(col));
@@ -96,31 +101,35 @@
       mode = "walk";
       actor.setAttribute("data-scene", "walk");
       setFlip(dir < 0);
+      // Keep current x — never teleport when resuming walk
+      if (x != null) setPos(x);
       playFrames("walk");
     };
 
     const startAction = (name) => {
       mode = name;
       actor.setAttribute("data-scene", name);
-      // eat/wave face forward (no flip); polish is back-view baked
+      // Freeze world X while action plays (eat frames stay planted).
+      actionAnchorX = x;
+      setPos(actionAnchorX);
       if (name === "eat" || name === "wave") {
         actor.style.setProperty("--nisse-flip", "1");
       }
       playFrames(name);
-      const cycles = name === "eat" ? 6 : name === "wave" ? 5 : 8;
+      // Linger on wave/polish so the stop reads clearly
+      const cycles = name === "eat" ? 6 : name === "wave" ? 7 : 10;
       actionUntil = performance.now() + anims[name].ms * anims[name].frames.length * cycles;
     };
 
     const scheduleAction = (now) => {
-      nextActionAt = now + 9000 + Math.random() * 11000;
+      nextActionAt = now + 7000 + Math.random() * 9000;
     };
 
     const trudge = (now, dt) => {
-      // Slow ground trudge (~28–38 px/s), no hop arcs.
-      const speed = 30 + Math.random() * 4;
-      const minX = -nisseW() * 0.35;
-      const maxX = vw() - nisseW() * 0.65;
-      let nx = x + dir * speed * (dt / 1000);
+      const minX = -nisseW() * 0.4;
+      const maxX = vw() - nisseW() * 0.6;
+      const pxPerSec = approachBoost > 0 ? approachBoost : speed;
+      let nx = x + dir * pxPerSec * (dt / 1000);
       if (nx >= maxX) {
         nx = maxX;
         dir = -1;
@@ -146,23 +155,28 @@
 
       if (mode === "walk") {
         trudge(now, dt);
-      } else if (now >= actionUntil) {
-        startWalk();
-        scheduleAction(now);
+      } else {
+        // Hold exact sit/wave/polish position — no drift while frames cycle.
+        setPos(actionAnchorX);
+        if (now >= actionUntil) {
+          startWalk();
+          scheduleAction(now);
+        }
       }
 
       raf = window.requestAnimationFrame(loop);
     };
 
-    // Boot
+    // Boot: enter from off-screen left, walk continuously (no mid-screen teleport).
     actor.classList.add("is-active");
-    setPos(-nisseW());
+    setPos(-nisseW() - 8);
     dir = 1;
+    setFlip(false);
     startWalk();
-    scheduleAction(performance.now() + 2500);
+    scheduleAction(performance.now() + 4500);
     raf = window.requestAnimationFrame(loop);
 
-    // Demo overrides: ?nisse=eat|wave|polish|walk|porridge|look|cross
+    // Demo: ?nisse=eat|wave|polish|walk — continue from current X (or walk in first).
     const params = new URLSearchParams(window.location.search);
     const forced = params.get("nisse");
     const map = {
@@ -175,26 +189,44 @@
       walk: "walk",
     };
     if (forced && map[forced]) {
+      const want = map[forced];
+      // Walk in continuously to ~40% then start action — never snap.
       window.setTimeout(() => {
-        setPos(vw() * 0.42);
-        if (map[forced] === "walk") {
-          startWalk();
-          scheduleAction(performance.now() + 20000);
-        } else {
-          startAction(map[forced]);
-          // After forced action, resume patrol
-          const resume = () => {
-            if (mode !== map[forced]) return;
-            if (performance.now() < actionUntil) {
-              window.setTimeout(resume, 200);
-              return;
-            }
-            startWalk();
-            scheduleAction(performance.now() + 8000);
-          };
-          window.setTimeout(resume, 200);
+        if (want === "walk") {
+          scheduleAction(performance.now() + 25000);
+          return;
         }
-      }, 350);
+        const target = vw() * 0.4;
+        approachBoost = 70; // continuous, just quicker for demos
+        const arrive = () => {
+          if (Math.abs(x - target) < 8) {
+            approachBoost = 0;
+            dir = 1;
+            setFlip(false);
+            setPos(target);
+            startAction(want);
+            const resume = () => {
+              if (mode !== want) return;
+              if (performance.now() < actionUntil) {
+                window.setTimeout(resume, 200);
+                return;
+              }
+              startWalk();
+              scheduleAction(performance.now() + 8000);
+            };
+            window.setTimeout(resume, 200);
+            return;
+          }
+          // Steer toward target without teleport
+          dir = x < target ? 1 : -1;
+          setFlip(dir < 0);
+          if (mode !== "walk") startWalk();
+          nextActionAt = performance.now() + 60000;
+          window.setTimeout(arrive, 100);
+        };
+        nextActionAt = performance.now() + 60000;
+        arrive();
+      }, 200);
     }
 
     document.addEventListener("visibilitychange", () => {
