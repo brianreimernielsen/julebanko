@@ -88,7 +88,9 @@ dotnet ef migrations add <Name>
 dotnet ef database update
 ```
 
-On startup the app runs `Migrate()` + seed (admins, active season, default theme/mail settings). If SQL is unreachable, the app still starts and logs a warning; DB pages will fail until SQL is available.
+**Alternatively**, run the ready T-SQL script `sql/001_CreateJulebanko.sql` in SSMS/sqlcmd (creates DB/tables/indexes, seeds admins + settings, marks the EF migration applied). Use the script **or** `dotnet ef database update` — not both for first create.
+
+On startup the app runs `Migrate()` + seed (admins, active season, default theme/mail settings). Seed is idempotent. If SQL is unreachable, the app still starts and logs a warning; DB pages will fail until SQL is available.
 
 ## IIS deploy
 
