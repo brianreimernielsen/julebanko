@@ -658,10 +658,10 @@ textarea {
 
 .nisse {
   position: absolute;
-  left: -80px;
-  bottom: 12%;
-  width: 64px;
-  height: 96px;
+  left: -100px;
+  bottom: 10%;
+  width: 78px;
+  height: 104px;
   opacity: 0;
   will-change: transform, opacity;
   transform: translate3d(0, 0, 0);
@@ -704,7 +704,7 @@ textarea {
 }
 
 .nisse[data-scene="polish"] .nisse-arm-r {
-  transform-origin: 46px 56px;
+  transform-origin: 82px 90px;
   animation: nisse-arm-polish 0.55s ease-in-out 2.2s 6 alternate;
 }
 
@@ -717,7 +717,7 @@ textarea {
 }
 
 .nisse[data-scene="porridge"] .nisse-arm-r {
-  transform-origin: 46px 56px;
+  transform-origin: 82px 90px;
   animation: nisse-spoon 0.7s ease-in-out 3s 5 alternate;
 }
 
