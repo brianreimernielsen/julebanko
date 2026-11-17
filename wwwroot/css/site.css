@@ -687,9 +687,9 @@ textarea {
   width: 100%;
   height: 100%;
   background-image: url("/img/nisse-sprite-ark.png");
-  background-size: 800% 300%;
+  /* Slightly oversize so we crop into padded gutters (kills subpixel red-arc bleed) */
+  background-size: 830% 315%;
   background-repeat: no-repeat;
-  /* Integer padded cells — gutters hide neighbor bleed / red arcs */
   background-position:
     calc(var(--nisse-col) * 100% / 7) calc(var(--nisse-row) * 100% / 2);
   /* No color filters that darken the white beard */
