@@ -27,6 +27,16 @@
             <input asp-for="PlayerSnowEnabled" type="checkbox" style="width:auto;" />
             Falling snow on player page
         </label>
+        <label>
+            Snow intensity (1 = light, 5 = high)
+            <select asp-for="PlayerSnowIntensity">
+                <option value="1">1 — Light</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5 — High</option>
+            </select>
+        </label>
         <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
     </form>
 </div>

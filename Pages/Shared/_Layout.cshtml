@@ -10,6 +10,11 @@
     var snowRaw = await Settings.GetAsync(SettingKeys.PlayerSnowEnabled, "true");
     var snowEnabled = !string.Equals(snowRaw, "false", StringComparison.OrdinalIgnoreCase)
                       && snowRaw != "0";
+    var intensityRaw = await Settings.GetAsync(SettingKeys.PlayerSnowIntensity, "1");
+    if (!int.TryParse(intensityRaw, out var snowIntensity) || snowIntensity < 1 || snowIntensity > 5)
+    {
+        snowIntensity = 1;
+    }
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 <!DOCTYPE html>
@@ -33,10 +38,7 @@
 <body class="@(ViewData["BodyClass"] as string)">
     @if (snowEnabled)
     {
-        <div class="snow" data-snow aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="snow" data-snow data-intensity="@snowIntensity" aria-hidden="true"></div>
     }
     <div class="site-shell">
         <div class="topbar">

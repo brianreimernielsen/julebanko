@@ -79,6 +79,7 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.MailFrom, "julebanko@example.com");
         await EnsureSettingAsync(db, SettingKeys.SeasonTitle, $"Julebanko {year}");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowEnabled, "true");
+        await EnsureSettingAsync(db, SettingKeys.PlayerSnowIntensity, "1");
 
         await db.SaveChangesAsync();
     }

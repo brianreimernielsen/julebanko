@@ -14,6 +14,7 @@ public class ThemeModel(SettingsService settings) : PageModel
     [BindProperty] public string AdminTextColor { get; set; } = "#F0F7F2";
     [BindProperty] public string SeasonTitle { get; set; } = "Julebanko";
     [BindProperty] public bool PlayerSnowEnabled { get; set; } = true;
+    [BindProperty] public int PlayerSnowIntensity { get; set; } = 1;
     public bool Saved { get; private set; }
 
     public async Task OnGetAsync()
@@ -23,6 +24,11 @@ public class ThemeModel(SettingsService settings) : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (PlayerSnowIntensity < 1 || PlayerSnowIntensity > 5)
+        {
+            PlayerSnowIntensity = 1;
+        }
+
         await settings.SetManyAsync(new Dictionary<string, string>
         {
             [SettingKeys.PlayerBgColor] = PlayerBgColor,
@@ -31,7 +37,8 @@ public class ThemeModel(SettingsService settings) : PageModel
             [SettingKeys.PlayerTextColor] = PlayerTextColor,
             [SettingKeys.AdminTextColor] = AdminTextColor,
             [SettingKeys.SeasonTitle] = SeasonTitle.Trim(),
-            [SettingKeys.PlayerSnowEnabled] = PlayerSnowEnabled ? "true" : "false"
+            [SettingKeys.PlayerSnowEnabled] = PlayerSnowEnabled ? "true" : "false",
+            [SettingKeys.PlayerSnowIntensity] = PlayerSnowIntensity.ToString()
         });
         Saved = true;
         await LoadAsync();
@@ -48,5 +55,12 @@ public class ThemeModel(SettingsService settings) : PageModel
         SeasonTitle = await settings.GetAsync(SettingKeys.SeasonTitle, SeasonTitle);
         var snow = await settings.GetAsync(SettingKeys.PlayerSnowEnabled, "true");
         PlayerSnowEnabled = !string.Equals(snow, "false", StringComparison.OrdinalIgnoreCase) && snow != "0";
+        var intensity = await settings.GetAsync(SettingKeys.PlayerSnowIntensity, "1");
+        if (!int.TryParse(intensity, out var level) || level < 1 || level > 5)
+        {
+            level = 1;
+        }
+
+        PlayerSnowIntensity = level;
     }
 }

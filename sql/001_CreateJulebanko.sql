@@ -230,7 +230,8 @@ USING (VALUES
     (N'ClaimNotifyTo',      N'banko@example.com'),
     (N'MailFrom',           N'julebanko@example.com'),
     (N'SeasonTitle',        CONCAT(N'Julebanko ', @Year)),
-    (N'PlayerSnowEnabled',  N'true')
+    (N'PlayerSnowEnabled',   N'true'),
+    (N'PlayerSnowIntensity', N'1')
 ) AS s([Key], Value)
 ON t.[Key] = s.[Key]
 WHEN NOT MATCHED THEN
