@@ -39,199 +39,177 @@
     layer.replaceChildren(frag);
   });
 
-  // Periodic Christmas nisse — 4-dir sprite, facing + hop walk, sit for julegrød.
+  // Christmas nisse — Brian 8×3 sprite ark: bottom patrol + walk/eat/wave/polish.
   const stage = document.querySelector("[data-nisse]");
   if (stage && !reducedMotion) {
     const actor = stage.querySelector("[data-nisse-actor]");
-    const rag = actor.querySelector(".nisse-rag");
-    const bowl = actor.querySelector(".nisse-bowl");
-    const scenes = ["cross", "look", "polish", "porridge"];
-    let busy = false;
-    let timer = 0;
+    const sprite = actor.querySelector(".nisse-sprite");
+    const anims = {
+      walk: { frames: [[0, 0], [1, 0], [2, 0], [3, 0]], ms: 160 },
+      eat: { frames: [[4, 0], [5, 0], [6, 0], [7, 0]], ms: 320 },
+      wave: { frames: [[3, 1], [4, 1], [5, 1], [6, 1], [7, 1]], ms: 220 },
+      polish: { frames: [[5, 2], [6, 2], [7, 2], [6, 2]], ms: 200 },
+    };
+    const actions = ["eat", "wave", "polish"];
+    let frameTimer = 0;
     let raf = 0;
+    let running = true;
+    let x = -120;
+    let dir = 1; // 1 = right, -1 = left
+    let mode = "walk";
+    let frameIdx = 0;
+    let actionUntil = 0;
+    let nextActionAt = 0;
 
     const vw = () => window.innerWidth || 1200;
-    const setPos = (x, y) => {
-      actor.style.setProperty("--nisse-x", `${x}px`);
-      actor.style.setProperty("--nisse-y", `${y}px`);
+    const nisseW = () => actor.offsetWidth || 95;
+
+    const setFrame = (col, row) => {
+      sprite.style.setProperty("--nisse-col", String(col));
+      sprite.style.setProperty("--nisse-row", String(row));
     };
-    const setFace = (face) => actor.setAttribute("data-face", face);
-    const setPose = (pose) => actor.setAttribute("data-pose", pose);
-    const faceFromDelta = (dx, dy) => {
-      if (Math.abs(dx) >= Math.abs(dy) * 0.55) {
-        return dx >= 0 ? "right" : "left";
+
+    const setFlip = (goingLeft) => {
+      actor.style.setProperty("--nisse-flip", goingLeft ? "-1" : "1");
+    };
+
+    const setPos = (nx) => {
+      x = nx;
+      actor.style.setProperty("--nisse-x", `${Math.round(x)}px`);
+    };
+
+    const playFrames = (name) => {
+      const anim = anims[name];
+      frameIdx = 0;
+      const tick = () => {
+        if (!running || mode !== name) return;
+        const [c, r] = anim.frames[frameIdx % anim.frames.length];
+        setFrame(c, r);
+        frameIdx += 1;
+        frameTimer = window.setTimeout(tick, anim.ms);
+      };
+      window.clearTimeout(frameTimer);
+      tick();
+    };
+
+    const startWalk = () => {
+      mode = "walk";
+      actor.setAttribute("data-scene", "walk");
+      setFlip(dir < 0);
+      playFrames("walk");
+    };
+
+    const startAction = (name) => {
+      mode = name;
+      actor.setAttribute("data-scene", name);
+      // eat/wave face forward (no flip); polish is back-view baked
+      if (name === "eat" || name === "wave") {
+        actor.style.setProperty("--nisse-flip", "1");
       }
-      return dy < 0 ? "back" : "front";
-    };
-    const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
-    const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-
-    const clearMotionClasses = () => {
-      actor.classList.remove(
-        "is-walking",
-        "is-landing",
-        "is-peeking",
-        "is-polishing",
-        "is-eating",
-        "is-sitting"
-      );
-      if (rag) rag.hidden = true;
-      if (bowl) bowl.hidden = true;
-      setPose("stand");
+      playFrames(name);
+      const cycles = name === "eat" ? 6 : name === "wave" ? 5 : 8;
+      actionUntil = performance.now() + anims[name].ms * anims[name].frames.length * cycles;
     };
 
-    const clearScene = () => {
-      window.cancelAnimationFrame(raf);
-      clearMotionClasses();
-      actor.classList.remove("is-active");
-      actor.removeAttribute("data-scene");
-      setFace("front");
-      setPos(-140, 0);
-      busy = false;
+    const scheduleAction = (now) => {
+      nextActionAt = now + 9000 + Math.random() * 11000;
     };
 
-    const hopTo = (fromX, fromY, toX, toY, durationMs) =>
-      new Promise((resolve) => {
-        const hops = Math.max(3, Math.round(durationMs / 380));
-        const start = performance.now();
-        actor.classList.add("is-walking");
-        actor.classList.remove("is-landing", "is-sitting");
-        setPose("stand");
+    const trudge = (now, dt) => {
+      // Slow ground trudge (~28–38 px/s), no hop arcs.
+      const speed = 30 + Math.random() * 4;
+      const minX = -nisseW() * 0.35;
+      const maxX = vw() - nisseW() * 0.65;
+      let nx = x + dir * speed * (dt / 1000);
+      if (nx >= maxX) {
+        nx = maxX;
+        dir = -1;
+        setFlip(true);
+      } else if (nx <= minX) {
+        nx = minX;
+        dir = 1;
+        setFlip(false);
+      }
+      setPos(nx);
 
-        const step = (now) => {
-          const t = Math.min(1, (now - start) / durationMs);
-          const e = easeInOut(t);
-          const x = fromX + (toX - fromX) * e;
-          const y = fromY + (toY - fromY) * e;
-          // Soft multi-hop arc timed with travel (less mechanical than linear slide).
-          const hopPhase = (t * hops) % 1;
-          const hopY = -Math.sin(hopPhase * Math.PI) * 10;
-          setPos(x, y + hopY);
-          setFace(faceFromDelta(toX - fromX, toY - fromY));
-          if (t < 1) {
-            raf = window.requestAnimationFrame(step);
-          } else {
-            actor.classList.remove("is-walking");
-            actor.classList.add("is-landing");
-            setPos(toX, toY);
-            window.setTimeout(() => actor.classList.remove("is-landing"), 220);
-            resolve();
-          }
-        };
-        raf = window.requestAnimationFrame(step);
-      });
-
-    const runCross = async () => {
-      const startX = -140;
-      const endX = vw() + 140;
-      const y = 8 + Math.random() * 24;
-      setPos(startX, y);
-      actor.classList.add("is-active");
-      await hopTo(startX, y, endX, y, 7800 + Math.random() * 1200);
+      if (now >= nextActionAt) {
+        const pick = actions[Math.floor(Math.random() * actions.length)];
+        startAction(pick);
+      }
     };
 
-    const runLook = async () => {
-      const enterX = vw() * 0.22;
-      const peekX = vw() * 0.3;
-      const exitX = vw() + 140;
-      setPos(-140, 20);
-      actor.classList.add("is-active");
-      await hopTo(-140, 20, enterX, 8, 2200);
-      await hopTo(enterX, 8, peekX, -6, 1400);
-      setFace("front");
-      actor.classList.add("is-peeking");
-      await wait(3200);
-      actor.classList.remove("is-peeking");
-      await hopTo(peekX, -6, exitX, 12, 2800);
-    };
+    let last = performance.now();
+    const loop = (now) => {
+      if (!running) return;
+      const dt = Math.min(48, now - last);
+      last = now;
 
-    const runPolish = async () => {
-      const spotX = vw() * 0.36;
-      const exitX = vw() + 140;
-      setPos(-140, 16);
-      actor.classList.add("is-active");
-      await hopTo(-140, 16, spotX, 14, 2600);
-      setFace("front");
-      if (rag) rag.hidden = false;
-      actor.classList.add("is-polishing");
-      await wait(3600);
-      actor.classList.remove("is-polishing");
-      if (rag) rag.hidden = true;
-      await hopTo(spotX, 14, exitX, 10, 2600);
-    };
-
-    const runPorridge = async () => {
-      // Walk in, sit with julegrød, eat, stand, walk out.
-      const sitX = vw() * 0.42;
-      const exitX = vw() + 140;
-      setPos(-140, 18);
-      actor.classList.add("is-active");
-      await hopTo(-140, 18, sitX, 18, 2800);
-      setFace("front");
-      actor.classList.add("is-landing");
-      await wait(180);
-      actor.classList.remove("is-landing");
-      setPose("sit");
-      actor.classList.add("is-sitting");
-      if (bowl) bowl.hidden = false;
-      await wait(280);
-      actor.classList.add("is-eating");
-      await wait(4800);
-      actor.classList.remove("is-eating");
-      if (bowl) bowl.hidden = true;
-      actor.classList.remove("is-sitting");
-      setPose("stand");
-      actor.classList.add("is-landing");
-      await wait(260);
-      actor.classList.remove("is-landing");
-      await hopTo(sitX, 18, exitX, 12, 2800);
-    };
-
-    const runners = {
-      cross: runCross,
-      look: runLook,
-      polish: runPolish,
-      porridge: runPorridge,
-    };
-
-    const playScene = async (forced) => {
-      if (busy || document.hidden) {
-        scheduleNext();
-        return;
+      if (mode === "walk") {
+        trudge(now, dt);
+      } else if (now >= actionUntil) {
+        startWalk();
+        scheduleAction(now);
       }
 
-      busy = true;
-      const scene = forced || scenes[Math.floor(Math.random() * scenes.length)];
-      clearMotionClasses();
-      actor.setAttribute("data-scene", scene);
-      setFace("front");
-      setPose("stand");
-
-      try {
-        await runners[scene]();
-      } catch (_) {
-        /* ignore aborted motion */
-      }
-
-      clearScene();
-      scheduleNext();
+      raf = window.requestAnimationFrame(loop);
     };
 
-    const scheduleNext = () => {
-      window.clearTimeout(timer);
-      const waitMs = 14000 + Math.floor(Math.random() * 16000);
-      timer = window.setTimeout(() => playScene(), waitMs);
-    };
+    // Boot
+    actor.classList.add("is-active");
+    setPos(-nisseW());
+    dir = 1;
+    startWalk();
+    scheduleAction(performance.now() + 2500);
+    raf = window.requestAnimationFrame(loop);
 
-    timer = window.setTimeout(() => playScene(), 1800);
-
-    // ?nisse=polish|look|porridge|cross
+    // Demo overrides: ?nisse=eat|wave|polish|walk|porridge|look|cross
     const params = new URLSearchParams(window.location.search);
     const forced = params.get("nisse");
-    if (forced && scenes.includes(forced)) {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => playScene(forced), 400);
+    const map = {
+      porridge: "eat",
+      eat: "eat",
+      look: "wave",
+      wave: "wave",
+      polish: "polish",
+      cross: "walk",
+      walk: "walk",
+    };
+    if (forced && map[forced]) {
+      window.setTimeout(() => {
+        setPos(vw() * 0.42);
+        if (map[forced] === "walk") {
+          startWalk();
+          scheduleAction(performance.now() + 20000);
+        } else {
+          startAction(map[forced]);
+          // After forced action, resume patrol
+          const resume = () => {
+            if (mode !== map[forced]) return;
+            if (performance.now() < actionUntil) {
+              window.setTimeout(resume, 200);
+              return;
+            }
+            startWalk();
+            scheduleAction(performance.now() + 8000);
+          };
+          window.setTimeout(resume, 200);
+        }
+      }, 350);
     }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        running = false;
+        window.cancelAnimationFrame(raf);
+        window.clearTimeout(frameTimer);
+      } else {
+        running = true;
+        last = performance.now();
+        if (mode === "walk") startWalk();
+        else playFrames(mode);
+        raf = window.requestAnimationFrame(loop);
+      }
+    });
   } else if (stage && reducedMotion) {
     stage.remove();
   }
