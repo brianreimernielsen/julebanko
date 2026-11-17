@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Brand" xml:space="preserve"><value>Julebanko</value></data>
+  <data name="TodaysNumbers" xml:space="preserve"><value>Today's numbers</value></data>
+  <data name="AllNumbersDrawOrder" xml:space="preserve"><value>All numbers (draw order)</value></data>
+  <data name="AllNumbersSorted" xml:space="preserve"><value>All numbers (sorted)</value></data>
+  <data name="HaveYouWon" xml:space="preserve"><value>Have you won?</value></data>
+  <data name="ClaimHint" xml:space="preserve"><value>Report it here — first come, first served.</value></data>
+  <data name="YourName" xml:space="preserve"><value>Your name</value></data>
+  <data name="WinType" xml:space="preserve"><value>Win type</value></data>
+  <data name="OneRow" xml:space="preserve"><value>1 row</value></data>
+  <data name="TwoRows" xml:space="preserve"><value>2 rows</value></data>
+  <data name="FullBoard" xml:space="preserve"><value>Full board</value></data>
+  <data name="Send" xml:space="preserve"><value>Send</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Confirmed winners</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>No confirmed winners yet.</value></data>
+  <data name="ClaimSubmitted" xml:space="preserve"><value>Thanks! Your claim was sent and awaits confirmation.</value></data>
+  <data name="NoNumbersYet" xml:space="preserve"><value>No numbers drawn yet.</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="AdminLogin" xml:space="preserve"><value>Admin login</value></data>
+  <data name="Username" xml:space="preserve"><value>Username</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Login" xml:space="preserve"><value>Log in</value></data>
+  <data name="Logout" xml:space="preserve"><value>Log out</value></data>
+  <data name="DrawNumbers" xml:space="preserve"><value>Draw numbers</value></data>
+  <data name="NumbersToDraw" xml:space="preserve"><value>Numbers to draw</value></data>
+  <data name="DrawTodays" xml:space="preserve"><value>Draw today's numbers</value></data>
+  <data name="PendingClaims" xml:space="preserve"><value>Pending claims</value></data>
+  <data name="Approve" xml:space="preserve"><value>Approve</value></data>
+  <data name="Reject" xml:space="preserve"><value>Reject</value></data>
+  <data name="Setup" xml:space="preserve"><value>Setup</value></data>
+  <data name="Theme" xml:space="preserve"><value>Theme</value></data>
+  <data name="Media" xml:space="preserve"><value>Images</value></data>
+  <data name="Passwords" xml:space="preserve"><value>Passwords</value></data>
+  <data name="ClaimEmail" xml:space="preserve"><value>Claim email</value></data>
+  <data name="SeasonReset" xml:space="preserve"><value>Season reset</value></data>
+  <data name="Winners" xml:space="preserve"><value>Winners</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="BackToPlayer" xml:space="preserve"><value>Player page</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="InvalidLogin" xml:space="preserve"><value>Invalid username or password.</value></data>
+  <data name="Drawn" xml:space="preserve"><value>Drawn</value></data>
+  <data name="NonePending" xml:space="preserve"><value>No pending claims.</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>This will clear all drawn numbers and claims for the active season after creating a backup. Continue?</value></data>
+  <data name="ResetSeason" xml:space="preserve"><value>Reset season</value></data>
+  <data name="UndoBackup" xml:space="preserve"><value>Restore backup</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Upload" xml:space="preserve"><value>Upload</value></data>
+  <data name="HeroImage" xml:space="preserve"><value>Hero image</value></data>
+  <data name="BackgroundImage" xml:space="preserve"><value>Background image</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Decoration image</value></data>
+  <data name="PlayerColors" xml:space="preserve"><value>Player colors</value></data>
+  <data name="AdminColors" xml:space="preserve"><value>Admin colors</value></data>
+  <data name="Accent" xml:space="preserve"><value>Accent</value></data>
+  <data name="NotifyTo" xml:space="preserve"><value>Claim notification To:</value></data>
+  <data name="MailFrom" xml:space="preserve"><value>Mail From:</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
+  <data name="Saved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+</root>

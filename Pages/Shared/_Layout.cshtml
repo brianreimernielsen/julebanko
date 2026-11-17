@@ -1,0 +1,49 @@
+﻿@using System.Globalization
+@using Julebanko.Data
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject Julebanko.Services.SettingsService Settings
+@{
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var playerBg = await Settings.GetAsync(SettingKeys.PlayerBgColor, "#8B1E1E");
+    var accent = await Settings.GetAsync(SettingKeys.AccentColor, "#D4A017");
+    var playerText = await Settings.GetAsync(SettingKeys.PlayerTextColor, "#FFF8F0");
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+<!DOCTYPE html>
+<html lang="@culture">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Julebanko</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --player-bg: @playerBg;
+            --accent: @accent;
+            --player-text: @playerText;
+        }
+    </style>
+</head>
+<body class="@(ViewData["BodyClass"] as string)">
+    <div class="snow" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="site-shell">
+        <div class="topbar">
+            <div class="lang-switch" aria-label="@Localizer["Language"]">
+                <a class="@(culture == "da" ? "active" : null)" href="/Culture?culture=da&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">DA</a>
+                <a class="@(culture == "en" ? "active" : null)" href="/Culture?culture=en&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">EN</a>
+                <a class="@(culture == "sv" ? "active" : null)" href="/Culture?culture=sv&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">SV</a>
+            </div>
+            <a class="top-link" href="/Admin">Admin</a>
+        </div>
+        @RenderBody()
+        <footer class="site-footer">Julebanko</footer>
+    </div>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

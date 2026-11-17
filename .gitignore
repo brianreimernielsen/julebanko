@@ -1,0 +1,25 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.DotSettings.user
+
+## Secrets / local
+appsettings.*.local.json
+secrets.json
+
+## Uploads & backups (keep folders via .gitkeep)
+App_Data/uploads/*
+!App_Data/uploads/.gitkeep
+App_Data/backups/*
+!App_Data/backups/.gitkeep
+
+## OS / IDE
+.DS_Store
+.idea/
+*.swp
+*~

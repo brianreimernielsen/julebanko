@@ -1,0 +1,45 @@
+@page
+@model Julebanko.Pages.Admin.ClaimsModel
+@{
+    ViewData["Title"] = Localizer["PendingClaims"].Value;
+}
+<div class="admin-card">
+    <h2>@Localizer["PendingClaims"]</h2>
+    @if (Model.Pending.Count == 0)
+    {
+        <p class="empty-note">@Localizer["NonePending"]</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Localizer["YourName"]</th>
+                    <th>@Localizer["WinType"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model.Pending)
+            {
+                <tr>
+                    <td>@c.PlayerName</td>
+                    <td>@Model.WinLabel(c.WinType)</td>
+                    <td>
+                        <div class="inline-actions">
+                            <form method="post" asp-page-handler="Approve">
+                                <input type="hidden" name="id" value="@c.Id" />
+                                <button class="btn btn-primary btn-small" type="submit">@Localizer["Approve"]</button>
+                            </form>
+                            <form method="post" asp-page-handler="Reject">
+                                <input type="hidden" name="id" value="@c.Id" />
+                                <button class="btn btn-danger btn-small" type="submit">@Localizer["Reject"]</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Brand" xml:space="preserve"><value>Julebanko</value></data>
+  <data name="TodaysNumbers" xml:space="preserve"><value>Dagens nummer</value></data>
+  <data name="AllNumbersDrawOrder" xml:space="preserve"><value>Alla nummer (dragningsordning)</value></data>
+  <data name="AllNumbersSorted" xml:space="preserve"><value>Alla nummer (sorterade)</value></data>
+  <data name="HaveYouWon" xml:space="preserve"><value>Har du vunnit?</value></data>
+  <data name="ClaimHint" xml:space="preserve"><value>Anmäl det här — först till kvarn.</value></data>
+  <data name="YourName" xml:space="preserve"><value>Ditt namn</value></data>
+  <data name="WinType" xml:space="preserve"><value>Vinsttyp</value></data>
+  <data name="OneRow" xml:space="preserve"><value>1 rad</value></data>
+  <data name="TwoRows" xml:space="preserve"><value>2 rader</value></data>
+  <data name="FullBoard" xml:space="preserve"><value>Full bricka</value></data>
+  <data name="Send" xml:space="preserve"><value>Skicka</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Bekräftade vinnare</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>Inga bekräftade vinnare ännu.</value></data>
+  <data name="ClaimSubmitted" xml:space="preserve"><value>Tack! Din anmälan har skickats och väntar på bekräftelse.</value></data>
+  <data name="NoNumbersYet" xml:space="preserve"><value>Inga nummer dragna ännu.</value></data>
+  <data name="Language" xml:space="preserve"><value>Språk</value></data>
+  <data name="AdminLogin" xml:space="preserve"><value>Admin-inloggning</value></data>
+  <data name="Username" xml:space="preserve"><value>Användarnamn</value></data>
+  <data name="Password" xml:space="preserve"><value>Lösenord</value></data>
+  <data name="Login" xml:space="preserve"><value>Logga in</value></data>
+  <data name="Logout" xml:space="preserve"><value>Logga ut</value></data>
+  <data name="DrawNumbers" xml:space="preserve"><value>Dra nummer</value></data>
+  <data name="NumbersToDraw" xml:space="preserve"><value>Antal nummer att dra</value></data>
+  <data name="DrawTodays" xml:space="preserve"><value>Dra dagens nummer</value></data>
+  <data name="PendingClaims" xml:space="preserve"><value>Väntande anmälningar</value></data>
+  <data name="Approve" xml:space="preserve"><value>Godkänn</value></data>
+  <data name="Reject" xml:space="preserve"><value>Avvisa</value></data>
+  <data name="Setup" xml:space="preserve"><value>Inställningar</value></data>
+  <data name="Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Media" xml:space="preserve"><value>Bilder</value></data>
+  <data name="Passwords" xml:space="preserve"><value>Lösenord</value></data>
+  <data name="ClaimEmail" xml:space="preserve"><value>Claim-e-post</value></data>
+  <data name="SeasonReset" xml:space="preserve"><value>Säsongsåterställning</value></data>
+  <data name="Winners" xml:space="preserve"><value>Vinnare</value></data>
+  <data name="Save" xml:space="preserve"><value>Spara</value></data>
+  <data name="BackToPlayer" xml:space="preserve"><value>Spelarsida</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Översikt</value></data>
+  <data name="InvalidLogin" xml:space="preserve"><value>Fel användarnamn eller lösenord.</value></data>
+  <data name="Drawn" xml:space="preserve"><value>Draget</value></data>
+  <data name="NonePending" xml:space="preserve"><value>Inga väntande anmälningar.</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar alla dragna nummer och claims för den aktiva säsongen efter backup. Fortsätt?</value></data>
+  <data name="ResetSeason" xml:space="preserve"><value>Återställ säsong</value></data>
+  <data name="UndoBackup" xml:space="preserve"><value>Återställ backup</value></data>
+  <data name="Edit" xml:space="preserve"><value>Redigera</value></data>
+  <data name="Delete" xml:space="preserve"><value>Radera</value></data>
+  <data name="Upload" xml:space="preserve"><value>Ladda upp</value></data>
+  <data name="HeroImage" xml:space="preserve"><value>Hero-bild</value></data>
+  <data name="BackgroundImage" xml:space="preserve"><value>Bakgrundsbild</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Dekoration</value></data>
+  <data name="PlayerColors" xml:space="preserve"><value>Spelarfärger</value></data>
+  <data name="AdminColors" xml:space="preserve"><value>Adminfärger</value></data>
+  <data name="Accent" xml:space="preserve"><value>Accent</value></data>
+  <data name="NotifyTo" xml:space="preserve"><value>Claim-mottagare (To:)</value></data>
+  <data name="MailFrom" xml:space="preserve"><value>Mail From:</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>Nytt lösenord</value></data>
+  <data name="Saved" xml:space="preserve"><value>Sparat.</value></data>
+  <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+</root>

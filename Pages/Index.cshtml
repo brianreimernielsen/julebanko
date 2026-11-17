@@ -1,0 +1,142 @@
+﻿@page
+@model Julebanko.Pages.IndexModel
+@{
+    ViewData["Title"] = Model.SeasonTitle;
+    ViewData["BodyClass"] = string.IsNullOrEmpty(Model.BackgroundUrl) ? "" : "has-bg-image";
+}
+@if (!string.IsNullOrEmpty(Model.BackgroundUrl))
+{
+    <style>
+        body.has-bg-image {
+            background-image:
+                linear-gradient(180deg, rgba(40, 8, 8, 0.55), rgba(40, 8, 8, 0.72)),
+                url('@Model.BackgroundUrl');
+        }
+    </style>
+}
+
+<section class="hero">
+    <div class="hero-media" style="@(string.IsNullOrEmpty(Model.HeroUrl) ? null : $"background-image:url('{Model.HeroUrl}');")"></div>
+    <div class="hero-content">
+        <p class="hero-kicker">@DateTime.Now.Year</p>
+        <h1 class="brand">@Localizer["Brand"]</h1>
+        <p class="hero-lead">@Model.SeasonTitle</p>
+        <div class="cta-row">
+            <a class="btn btn-primary" href="#numbers">@Localizer["TodaysNumbers"]</a>
+            <a class="btn btn-ghost" href="#claim">@Localizer["HaveYouWon"]</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="numbers">
+    <h2 class="section-title">@Localizer["TodaysNumbers"]</h2>
+    <p class="section-lead">@Localizer["AllNumbersDrawOrder"] &amp; @Localizer["AllNumbersSorted"]</p>
+    <div class="numbers-grid">
+        <div>
+            <div class="number-block" style="margin-bottom:1.25rem;">
+                <h3>@Localizer["TodaysNumbers"]</h3>
+                @if (Model.TodayNumbers.Count == 0)
+                {
+                    <p class="empty-note">@Localizer["NoNumbersYet"]</p>
+                }
+                else
+                {
+                    <div class="ball-row">
+                        @foreach (var n in Model.TodayNumbers)
+                        {
+                            <span class="ball">@n.Number</span>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="number-block" style="margin-bottom:1.25rem;">
+                <h3>@Localizer["AllNumbersDrawOrder"]</h3>
+                @if (Model.AllDrawOrder.Count == 0)
+                {
+                    <p class="empty-note">@Localizer["NoNumbersYet"]</p>
+                }
+                else
+                {
+                    <div class="ball-row">
+                        @foreach (var n in Model.AllDrawOrder)
+                        {
+                            <span class="ball muted">@n.Number</span>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="number-block">
+                <h3>@Localizer["AllNumbersSorted"]</h3>
+                @if (Model.AllSorted.Count == 0)
+                {
+                    <p class="empty-note">@Localizer["NoNumbersYet"]</p>
+                }
+                else
+                {
+                    <div class="ball-row">
+                        @foreach (var n in Model.AllSorted)
+                        {
+                            <span class="ball muted">@n</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div id="claim">
+            <div class="claim-panel" style="margin-bottom:1rem;">
+                <h2>@Localizer["HaveYouWon"]</h2>
+                <p class="section-lead" style="margin-bottom:1rem;">@Localizer["ClaimHint"]</p>
+                @if (Model.StatusMessage == "ok")
+                {
+                    <div class="alert alert-success">@Localizer["ClaimSubmitted"]</div>
+                }
+                else if (Model.StatusIsError)
+                {
+                    <div class="alert alert-error">@Localizer["YourName"]</div>
+                }
+                <form method="post" class="form-stack">
+                    <label>
+                        @Localizer["YourName"]
+                        <input asp-for="PlayerName" maxlength="120" required />
+                    </label>
+                    <label>
+                        @Localizer["WinType"]
+                        <select asp-for="WinType">
+                            <option value="@((int)WinType.OneRow)">@Localizer["OneRow"]</option>
+                            <option value="@((int)WinType.TwoRows)">@Localizer["TwoRows"]</option>
+                            <option value="@((int)WinType.FullBoard)">@Localizer["FullBoard"]</option>
+                        </select>
+                    </label>
+                    <button class="btn btn-primary" type="submit">@Localizer["Send"]</button>
+                </form>
+            </div>
+            <div class="winners-panel">
+                <h2>@Localizer["ConfirmedWinners"]</h2>
+                @if (Model.ApprovedWinners.Count == 0)
+                {
+                    <p class="empty-note">@Localizer["NoWinnersYet"]</p>
+                }
+                else
+                {
+                    <ul class="winner-list">
+                        @foreach (var w in Model.ApprovedWinners)
+                        {
+                            <li>
+                                <strong>@w.PlayerName</strong>
+                                <span>@Model.WinLabel(w.WinType)</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (!string.IsNullOrEmpty(Model.DecorationUrl))
+{
+    <div class="decoration-strip">
+        <img src="@Model.DecorationUrl" alt="" />
+    </div>
+}

@@ -1,0 +1,70 @@
+@using System.Globalization
+@using Julebanko.Data
+@using Julebanko.Services
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject Julebanko.Services.SettingsService Settings
+@{
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var adminBg = await Settings.GetAsync(SettingKeys.AdminBgColor, "#1B4332");
+    var accent = await Settings.GetAsync(SettingKeys.AccentColor, "#D4A017");
+    var adminText = await Settings.GetAsync(SettingKeys.AdminTextColor, "#F0F7F2");
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var isSetup = AdminAuthService.IsSetupAdmin(User);
+    var path = Context.Request.Path.Value ?? "";
+}
+<!DOCTYPE html>
+<html lang="@culture">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Julebanko Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --admin-bg: @adminBg;
+            --accent: @accent;
+            --admin-text: @adminText;
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="snow" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="site-shell">
+        <div class="admin-shell">
+            <div class="topbar" style="padding:0;">
+                <div class="lang-switch">
+                    <a class="@(culture == "da" ? "active" : null)" href="/Culture?culture=da&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">DA</a>
+                    <a class="@(culture == "en" ? "active" : null)" href="/Culture?culture=en&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">EN</a>
+                    <a class="@(culture == "sv" ? "active" : null)" href="/Culture?culture=sv&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">SV</a>
+                </div>
+                <a class="top-link" href="/">@Localizer["BackToPlayer"]</a>
+            </div>
+            <h1 class="admin-brand">@Localizer["AdminArea"]</h1>
+            <p class="muted">@User.Identity?.Name</p>
+            <nav class="admin-nav">
+                <a class="@(path.Equals("/Admin", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin">@Localizer["Dashboard"]</a>
+                <a class="@(path.StartsWith("/Admin/Draw", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Draw">@Localizer["DrawNumbers"]</a>
+                <a class="@(path.StartsWith("/Admin/Claims", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Claims">@Localizer["PendingClaims"]</a>
+                @if (isSetup)
+                {
+                    <a class="@(path.StartsWith("/Admin/Setup/Theme", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Theme">@Localizer["Theme"]</a>
+                    <a class="@(path.StartsWith("/Admin/Setup/Media", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Media">@Localizer["Media"]</a>
+                    <a class="@(path.StartsWith("/Admin/Setup/Email", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Email">@Localizer["ClaimEmail"]</a>
+                    <a class="@(path.StartsWith("/Admin/Setup/Passwords", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Passwords">@Localizer["Passwords"]</a>
+                    <a class="@(path.StartsWith("/Admin/Setup/Winners", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Winners">@Localizer["Winners"]</a>
+                    <a class="@(path.StartsWith("/Admin/Setup/Season", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Season">@Localizer["SeasonReset"]</a>
+                }
+                <a href="/Admin/Logout">@Localizer["Logout"]</a>
+            </nav>
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

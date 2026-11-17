@@ -1,0 +1,28 @@
+@page
+@model Julebanko.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = Localizer["Dashboard"].Value;
+}
+<div class="admin-grid two">
+    <div class="admin-card">
+        <h2>@Model.SeasonTitle</h2>
+        <p>@Localizer["Drawn"]: <strong>@Model.DrawnCount</strong></p>
+        <p>@Localizer["PendingClaims"]: <strong>@Model.PendingCount</strong></p>
+        <p>@Localizer["ConfirmedWinners"]: <strong>@Model.ApprovedCount</strong></p>
+        <div class="inline-actions" style="margin-top:1rem;">
+            <a class="btn btn-primary btn-small" href="/Admin/Draw">@Localizer["DrawTodays"]</a>
+            <a class="btn btn-ghost btn-small" href="/Admin/Claims">@Localizer["PendingClaims"]</a>
+        </div>
+    </div>
+    @if (Model.IsSetup)
+    {
+        <div class="admin-card">
+            <h2>@Localizer["Setup"]</h2>
+            <p class="muted">Theme, media, claim email, passwords, winners, season reset.</p>
+            <div class="inline-actions" style="margin-top:1rem;">
+                <a class="btn btn-ghost btn-small" href="/Admin/Setup/Theme">@Localizer["Theme"]</a>
+                <a class="btn btn-ghost btn-small" href="/Admin/Setup/Season">@Localizer["SeasonReset"]</a>
+            </div>
+        </div>
+    }
+</div>

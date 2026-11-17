@@ -1,0 +1,45 @@
+@page
+@model Julebanko.Pages.Admin.DrawModel
+@{
+    ViewData["Title"] = Localizer["DrawNumbers"].Value;
+}
+<div class="admin-card" style="margin-bottom:1rem;">
+    <h2>@Localizer["DrawTodays"]</h2>
+    @if (Model.Error is not null)
+    {
+        <div class="alert alert-error">@Model.Error</div>
+    }
+    @if (Model.Success is not null)
+    {
+        <div class="alert alert-success">@Localizer["Drawn"]: @string.Join(", ", Model.LastDrawn)</div>
+        <div class="ball-row" style="margin-bottom:1rem;">
+            @foreach (var n in Model.LastDrawn)
+            {
+                <span class="ball">@n</span>
+            }
+        </div>
+    }
+    <form method="post" class="form-stack" style="max-width:320px;">
+        <label>
+            @Localizer["NumbersToDraw"]
+            <input asp-for="Count" type="number" min="1" max="20" />
+        </label>
+        <button class="btn btn-primary" type="submit">@Localizer["DrawTodays"]</button>
+    </form>
+</div>
+<div class="admin-card">
+    <h2>@Localizer["AllNumbersDrawOrder"]</h2>
+    @if (Model.AllNumbers.Count == 0)
+    {
+        <p class="empty-note">@Localizer["NoNumbersYet"]</p>
+    }
+    else
+    {
+        <div class="ball-row">
+            @foreach (var n in Model.AllNumbers)
+            {
+                <span class="ball muted">@n.Number</span>
+            }
+        </div>
+    }
+</div>

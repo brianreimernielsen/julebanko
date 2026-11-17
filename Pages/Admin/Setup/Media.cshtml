@@ -1,0 +1,39 @@
+@page
+@model Julebanko.Pages.Admin.Setup.MediaModel
+@{
+    ViewData["Title"] = Localizer["Media"].Value;
+    var slots = new (MediaSlot Slot, string Label)[]
+    {
+        (MediaSlot.PlayerHero, Localizer["HeroImage"].Value),
+        (MediaSlot.PlayerBackground, Localizer["BackgroundImage"].Value),
+        (MediaSlot.PlayerDecoration, Localizer["DecorationImage"].Value)
+    };
+}
+<div class="admin-card">
+    <h2>@Localizer["Media"]</h2>
+    <p class="muted">jpg / png / webp / gif · max 2 MB</p>
+    @if (Model.Message is not null)
+    {
+        <div class="alert @(Model.IsError ? "alert-error" : "alert-success")">@Model.Message</div>
+    }
+    @foreach (var (slot, label) in slots)
+    {
+        <div style="margin:1.25rem 0; padding-top:1rem; border-top:1px solid var(--line);">
+            <h3>@label</h3>
+            @if (Model.Assets.TryGetValue(slot, out var asset))
+            {
+                <img class="media-preview" src="@asset.RelativePath" alt="@asset.FileName" />
+                <p class="muted">@asset.FileName</p>
+                <form method="post" asp-page-handler="Delete" style="margin-bottom:0.75rem;">
+                    <input type="hidden" name="slot" value="@((int)slot)" />
+                    <button class="btn btn-danger btn-small" type="submit">@Localizer["Delete"]</button>
+                </form>
+            }
+            <form method="post" enctype="multipart/form-data" asp-page-handler="Upload" class="form-stack" style="max-width:420px;">
+                <input type="hidden" name="slot" value="@((int)slot)" />
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/*" required />
+                <button class="btn btn-primary btn-small" type="submit">@Localizer["Upload"]</button>
+            </form>
+        </div>
+    }
+</div>

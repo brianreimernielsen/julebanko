@@ -1,0 +1,24 @@
+@page
+@model Julebanko.Pages.Admin.Setup.EmailModel
+@{
+    ViewData["Title"] = Localizer["ClaimEmail"].Value;
+}
+<div class="admin-card">
+    <h2>@Localizer["ClaimEmail"]</h2>
+    <p class="muted">SMTP: outbound12.electric.net:587 TLS (no password; IP allowlisted).</p>
+    @if (Model.Saved)
+    {
+        <div class="alert alert-success">@Localizer["Saved"]</div>
+    }
+    <form method="post" class="form-stack" style="max-width:420px;">
+        <label>
+            @Localizer["NotifyTo"]
+            <input asp-for="ClaimNotifyTo" type="email" required />
+        </label>
+        <label>
+            @Localizer["MailFrom"]
+            <input asp-for="MailFrom" type="email" required />
+        </label>
+        <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
+    </form>
+</div>
