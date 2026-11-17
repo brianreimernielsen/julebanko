@@ -15,6 +15,7 @@ public class ThemeModel(SettingsService settings) : PageModel
     [BindProperty] public string SeasonTitle { get; set; } = "Julebanko";
     [BindProperty] public bool PlayerSnowEnabled { get; set; } = true;
     [BindProperty] public int PlayerSnowIntensity { get; set; } = 1;
+    [BindProperty] public bool PlayerSnowGroundEnabled { get; set; } = true;
     [BindProperty] public bool PlayerNisseEnabled { get; set; } = true;
     public bool Saved { get; private set; }
 
@@ -30,6 +31,17 @@ public class ThemeModel(SettingsService settings) : PageModel
             PlayerSnowIntensity = 1;
         }
 
+        // Nisse requires the snow ground strip; never persist nisse-on without snow ground.
+        if (PlayerNisseEnabled)
+        {
+            PlayerSnowGroundEnabled = true;
+        }
+
+        if (!PlayerSnowGroundEnabled)
+        {
+            PlayerNisseEnabled = false;
+        }
+
         await settings.SetManyAsync(new Dictionary<string, string>
         {
             [SettingKeys.PlayerBgColor] = PlayerBgColor,
@@ -40,6 +52,7 @@ public class ThemeModel(SettingsService settings) : PageModel
             [SettingKeys.SeasonTitle] = SeasonTitle.Trim(),
             [SettingKeys.PlayerSnowEnabled] = PlayerSnowEnabled ? "true" : "false",
             [SettingKeys.PlayerSnowIntensity] = PlayerSnowIntensity.ToString(),
+            [SettingKeys.PlayerSnowGroundEnabled] = PlayerSnowGroundEnabled ? "true" : "false",
             [SettingKeys.PlayerNisseEnabled] = PlayerNisseEnabled ? "true" : "false"
         });
         Saved = true;
@@ -64,7 +77,14 @@ public class ThemeModel(SettingsService settings) : PageModel
         }
 
         PlayerSnowIntensity = level;
+        var snowGround = await settings.GetAsync(SettingKeys.PlayerSnowGroundEnabled, "true");
+        PlayerSnowGroundEnabled = !string.Equals(snowGround, "false", StringComparison.OrdinalIgnoreCase)
+                                  && snowGround != "0";
         var nisse = await settings.GetAsync(SettingKeys.PlayerNisseEnabled, "true");
         PlayerNisseEnabled = !string.Equals(nisse, "false", StringComparison.OrdinalIgnoreCase) && nisse != "0";
+        if (PlayerNisseEnabled && !PlayerSnowGroundEnabled)
+        {
+            PlayerNisseEnabled = false;
+        }
     }
 }

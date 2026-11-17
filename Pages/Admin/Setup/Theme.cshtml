@@ -9,7 +9,7 @@
     {
         <div class="alert alert-success">@Localizer["Saved"]</div>
     }
-    <form method="post" class="form-stack">
+    <form method="post" class="form-stack" id="theme-form">
         <label>
             Season title
             <input asp-for="SeasonTitle" maxlength="200" />
@@ -38,9 +38,51 @@
             </select>
         </label>
         <label style="display:flex; gap:0.55rem; align-items:center;">
-            <input asp-for="PlayerNisseEnabled" type="checkbox" style="width:auto;" />
+            <input asp-for="PlayerSnowGroundEnabled" type="checkbox" style="width:auto;" id="snow-ground-toggle" />
+            Snow ground strip on player page
+        </label>
+        <p class="form-hint" style="margin:0; opacity:0.85; font-size:0.92rem;">
+            The ground strip is a fixed feature image (not uploadable). The Christmas elf walks on it and requires the strip.
+        </p>
+        <label style="display:flex; gap:0.55rem; align-items:center;">
+            <input asp-for="PlayerNisseEnabled" type="checkbox" style="width:auto;" id="nisse-toggle" />
             Christmas elf (nisse) on player page
         </label>
+        <p class="form-hint" id="nisse-requires-snow" style="margin:0; opacity:0.85; font-size:0.92rem;">
+            Nisse requires the snow ground strip. Turning the strip off also turns the nisse off; enabling the nisse turns the strip on.
+        </p>
         <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
     </form>
 </div>
+@section Scripts {
+<script>
+(() => {
+  const snowGround = document.getElementById("snow-ground-toggle");
+  const nisse = document.getElementById("nisse-toggle");
+  if (!snowGround || !nisse) return;
+
+  const sync = () => {
+    if (!snowGround.checked) {
+      nisse.checked = false;
+      nisse.disabled = true;
+    } else {
+      nisse.disabled = false;
+    }
+  };
+
+  snowGround.addEventListener("change", () => {
+    if (!snowGround.checked) nisse.checked = false;
+    sync();
+  });
+
+  nisse.addEventListener("change", () => {
+    if (nisse.checked) {
+      snowGround.checked = true;
+      nisse.disabled = false;
+    }
+  });
+
+  sync();
+})();
+</script>
+}

@@ -15,9 +15,13 @@
     {
         snowIntensity = 1;
     }
+    var snowGroundRaw = await Settings.GetAsync(SettingKeys.PlayerSnowGroundEnabled, "true");
+    var snowGroundEnabled = !string.Equals(snowGroundRaw, "false", StringComparison.OrdinalIgnoreCase)
+                            && snowGroundRaw != "0";
     var nisseRaw = await Settings.GetAsync(SettingKeys.PlayerNisseEnabled, "true");
     var nisseEnabled = !string.Equals(nisseRaw, "false", StringComparison.OrdinalIgnoreCase)
-                       && nisseRaw != "0";
+                       && nisseRaw != "0"
+                       && snowGroundEnabled;
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 <!DOCTYPE html>
@@ -43,14 +47,14 @@
     {
         <div class="snow" data-snow data-intensity="@snowIntensity" aria-hidden="true"></div>
     }
+    @if (snowGroundEnabled)
+    {
+        <div class="snow-ground" aria-hidden="true"></div>
+    }
     @if (nisseEnabled)
     {
         <div class="nisse-stage" data-nisse aria-hidden="true">
-            <div class="nisse" data-nisse-actor>
-                <div class="nisse-inner">
-                    <div class="nisse-sprite" role="img" aria-label="Nisse"></div>
-                </div>
-            </div>
+            <div class="nisse" data-nisse-actor></div>
         </div>
     }
     <div class="site-shell">

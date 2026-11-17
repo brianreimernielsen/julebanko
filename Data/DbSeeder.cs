@@ -80,6 +80,7 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.SeasonTitle, $"Julebanko {year}");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowIntensity, "1");
+        await EnsureSettingAsync(db, SettingKeys.PlayerSnowGroundEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.PlayerNisseEnabled, "true");
 
         await db.SaveChangesAsync(cancellationToken);

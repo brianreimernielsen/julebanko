@@ -13,6 +13,7 @@
   --radius: 18px;
   --font-display: "Fraunces", "Palatino Linotype", Georgia, serif;
   --font-body: "Outfit", "Segoe UI", sans-serif;
+  --snow-ground-height: clamp(80px, 14vw, 140px);
 }
 
 *,
@@ -647,7 +648,22 @@ textarea {
   }
 }
 
-/* Christmas nisse — Brian 8×3 ark + tree/water strip */
+/* Fixed snow ground strip (separate from falling CSS snow flakes) */
+.snow-ground {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  height: var(--snow-ground-height);
+  background-image: url("/img/nisse/snow-strip.png");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 100% 100%;
+}
+
+/* Christmas nisse v3 — atlas player; feet sit on the snow strip */
 .nisse-stage {
   pointer-events: none;
   position: fixed;
@@ -657,68 +673,82 @@ textarea {
 }
 
 .nisse {
-  --nisse-x: -80px;
-  --nisse-flip: 1;
   position: absolute;
   left: 0;
-  bottom: 2%;
-  width: 55px;
-  height: 85px;
+  bottom: calc(var(--snow-ground-height, 110px) * 0.42);
+  width: min(230px, 65vw);
+  aspect-ratio: 384 / 320;
   opacity: 0;
-  will-change: transform, opacity;
-  transform: translate3d(var(--nisse-x), 0, 0);
-  transition: opacity 0.25s ease, width 0.2s ease, height 0.2s ease;
+  transform: translate3d(var(--nisse-x, -300px), 0, 0);
+  transition: opacity 0.2s;
+  will-change: transform;
 }
 
 .nisse.is-active {
   opacity: 1;
 }
 
-.nisse-inner {
+.nisse-inner,
+.nisse-sprite {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  transform: scaleX(var(--nisse-flip));
-  transform-origin: center bottom;
+}
+
+.nisse-inner {
+  transform: none !important;
 }
 
 .nisse-sprite {
-  --nisse-col: 0;
-  --nisse-row: 0;
+  background: none !important;
+  filter: drop-shadow(0 2px 2px #0002);
+}
+
+.nisse-frame {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/img/nisse-sprite-ark.png");
-  background-size: 830% 315%;
   background-repeat: no-repeat;
-  background-position:
-    calc(var(--nisse-col) * 100% / 7) calc(var(--nisse-row) * 100% / 2);
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  background-size: 400% 400%;
+  background-position: calc(var(--col, 0) * 100% / 3) calc(var(--row, 0) * 100% / 3);
 }
 
-/* Tree/water scene: 12-frame horizontal strip */
-.nisse[data-sheet="tree"] {
-  width: 96px;
-  height: 114px;
+.nisse-tree-frame,
+.nisse-grown-tree {
+  position: absolute;
+  max-width: none !important;
+  height: auto;
+  object-fit: contain;
 }
 
-.nisse[data-sheet="tree"] .nisse-sprite {
-  background-image: url("/img/nisse-tree-water.png");
-  background-size: 1200% 100%;
-  background-position: calc(var(--nisse-col) * 100% / 11) 0%;
+.nisse-grown-tree {
+  left: 37.5%;
+  top: 8%;
+  width: 41%;
+  transform-origin: 50% 93%;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 1.5s ease, opacity 0.4s;
 }
 
-@media (max-width: 640px) {
-  .nisse {
-    width: 42px;
-    height: 65px;
-  }
+.nisse-grown-tree.is-grown {
+  transform: scale(1);
+  opacity: 1;
+}
 
-  .nisse[data-sheet="tree"] {
-    width: 72px;
-    height: 86px;
-  }
+.nisse-frame[hidden],
+.nisse-tree-frame[hidden],
+.nisse-grown-tree[hidden] {
+  display: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nisse-stage { display: none; }
+  .nisse-stage,
+  .snow-ground {
+    display: none;
+  }
 }
 

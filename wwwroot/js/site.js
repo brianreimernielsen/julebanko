@@ -38,256 +38,168 @@
 
     layer.replaceChildren(frag);
   });
+})();
 
-  // Christmas nisse — visit: enter left → job → walk off RIGHT off-screen → return later.
-  const stage = document.querySelector("[data-nisse]");
-  if (stage && !reducedMotion) {
+(() => {
+  const script = document.currentScript;
+  const base = new URL("../img/nisse/", script.src);
+  const boot = async () => {
+    const stage = document.querySelector("[data-nisse]");
+    if (!stage || stage.dataset.nisseReady) return;
+    stage.dataset.nisseReady = "true";
+    stage.setAttribute("aria-hidden", "true");
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    if (motion.matches) return;
     const actor = stage.querySelector("[data-nisse-actor]");
-    const sprite = actor.querySelector(".nisse-sprite");
-    const arkAnims = {
-      walk: { frames: [[0, 0], [1, 0], [2, 0], [3, 0]], ms: 280 },
-      eat: { frames: [[4, 0], [5, 0], [6, 0], [7, 0]], ms: 320 },
-      wave: { frames: [[3, 1], [4, 1], [5, 1], [6, 1], [7, 1]], ms: 220 },
-      polish: { frames: [[5, 2], [6, 2], [7, 2], [6, 2]], ms: 200 },
-    };
-    // Tree/water strip indices (nisse-tree-water.png, 12 cols)
-    const treeSeq = {
-      // water ground → sprout → tree → linger
-      frames: [
-        [0, 420], // water-0
-        [1, 420],
-        [2, 420],
-        [3, 500], // sprout with nisse
-        [4, 400], // sprout only
-        [9, 700], // full tree
-        [6, 500], // idle linger
-        [8, 500], // cheer
-        [11, 900], // present with tree
-      ],
-    };
+    if (!actor) return;
+    actor.innerHTML =
+      '<div class="nisse-inner"><div class="nisse-sprite"><div class="nisse-frame"></div><img class="nisse-tree-frame" alt="" hidden><img class="nisse-grown-tree" alt="" hidden></div></div>';
+    const frame = actor.querySelector(".nisse-frame");
+    const water = actor.querySelector(".nisse-tree-frame");
+    const tree = actor.querySelector(".nisse-grown-tree");
+    const files = [
+      "nisse-actions.png",
+      "nisse-walk.png",
+      "nisse-wave.png",
+      "nisse-polish.png",
+      "tree-water-0.png",
+      "tree-water-1.png",
+      "tree-water-2.png",
+      "tree-sprout-nisse.png",
+      "tree-full.png",
+    ];
+    const assets = new Map();
+    try {
+      await Promise.all(
+        files.map(async (file) => {
+          const img = new Image();
+          img.src = new URL(file, base).href;
+          await img.decode();
+          assets.set(file, img);
+        })
+      );
+    } catch (error) {
+      console.error("Nisse: et billede kunne ikke indlæses", error);
+      return;
+    }
+    frame.style.backgroundImage = `url("${assets.get(files[0]).src}")`;
+    tree.src = assets.get("tree-full.png").src;
+    const durations = { walk: 160, eat: 320, wave: 125, polish: 145 };
+    const counts = { walk: 8, eat: 4, wave: 8, polish: 8 };
     const jobs = ["eat", "wave", "polish", "tree"];
-    let frameTimer = 0;
-    let raf = 0;
-    let running = true;
+    let forced = new URLSearchParams(location.search).get("nisse");
+    forced = ({ water: "tree", porridge: "eat", cross: "walk" })[forced] || forced;
+    if (![ "walk", ...jobs ].includes(forced)) forced = null;
+    let mode = "enter";
+    let job = forced || jobs[Math.floor(Math.random() * jobs.length)];
     let x = 0;
-    let mode = "enter"; // enter | job | exit | wait
-    let job = "wave";
-    let loopName = "";
-    let frameIdx = 0;
-    let actionAnchorX = 0;
-    let phaseUntil = 0;
-    const speed = 14; // cozy
-    let approachBoost = 0;
-    let demoForce = null;
-
-    const vw = () => window.innerWidth || 1200;
-    const nisseW = () => actor.offsetWidth || 55;
-    const offLeft = () => -nisseW() - 20;
-    const offRight = () => vw() + 20;
-
-    const setSheet = (sheet) => {
-      if (sheet === "tree") actor.setAttribute("data-sheet", "tree");
-      else actor.removeAttribute("data-sheet");
+    let elapsed = 0;
+    let prev = 0;
+    let raf = 0;
+    let targetRatio = 0.4;
+    const width = () => stage.clientWidth;
+    const size = () => actor.getBoundingClientRect().width;
+    // x tracks the left of a FIXED scene canvas. Foot anchor remains 1/3 across it.
+    const target = () =>
+      Math.max(8, Math.min(width() - size() - 8, width() * targetRatio - size() / 3));
+    const showAction = (name, t) => {
+      water.hidden = true;
+      frame.hidden = false;
+      const speed = forced ? 72 : 36;
+      // One cycle covers about 80 logical canvas pixels; speed and scale set the cadence.
+      const frameMs =
+        name === "walk" ? (((80 * size()) / 384 / speed) * 1000) / 8 : durations[name];
+      const index = Math.floor(t / frameMs) % counts[name];
+      frame.style.backgroundImage = `url("${assets.get(
+        name === "eat" ? "nisse-actions.png" : `nisse-${name}.png`
+      ).src}")`;
+      frame.style.backgroundSize = name === "eat" ? "400% 400%" : "400% 200%";
+      const row = name === "eat" ? 1 : Math.floor(index / 4);
+      frame.style.backgroundPosition = `${(index % 4) * 100 / 3}% ${
+        name === "eat" ? 100 / 3 : row * 100
+      }%`;
+      frame.style.setProperty("--row", row);
+      frame.style.setProperty("--col", index % 4);
     };
-
-    const setFrame = (col, row) => {
-      sprite.style.setProperty("--nisse-col", String(col));
-      sprite.style.setProperty("--nisse-row", String(row || 0));
+    // Existing water images are intact; align the gnome's feet and body, not each PNG's bounding box.
+    const waterGeometry = [
+      [110, 320, 0.77],
+      [117, 320, 0.77],
+      [120, 313, 0.8],
+      [112, 320, 0.77],
+    ];
+    const showWater = (index) => {
+      frame.hidden = true;
+      water.hidden = false;
+      const key = index === 3 ? "tree-sprout-nisse.png" : `tree-water-${index}.png`;
+      const [cx, ground, scale] = waterGeometry[index];
+      water.src = assets.get(key).src;
+      water.style.width = `${(332 * scale) / 384 * 100}%`;
+      water.style.left = `${((128 - cx * scale) / 384) * 100}%`;
+      water.style.top = `${((288 - ground * scale) / 320) * 100}%`;
     };
-
-    const setFlip = (goingLeft) => {
-      actor.style.setProperty("--nisse-flip", goingLeft ? "-1" : "1");
+    const begin = (next) => {
+      mode = next;
+      elapsed = 0;
     };
-
-    const setPos = (nx) => {
-      x = nx;
-      actor.style.setProperty("--nisse-x", `${Math.round(x)}px`);
-    };
-
-    const stopFrames = () => window.clearTimeout(frameTimer);
-
-    const playArkLoop = (name) => {
-      setSheet("ark");
-      loopName = name;
-      const anim = arkAnims[name];
-      frameIdx = 0;
-      const tick = () => {
-        if (!running || loopName !== name) return;
-        const [c, r] = anim.frames[frameIdx % anim.frames.length];
-        setFrame(c, r);
-        frameIdx += 1;
-        frameTimer = window.setTimeout(tick, anim.ms);
-      };
-      stopFrames();
-      tick();
-    };
-
-    const playTreeSequence = () =>
-      new Promise((resolve) => {
-        setSheet("tree");
-        setFlip(false);
-        let i = 0;
-        const step = () => {
-          if (!running || mode !== "job" || job !== "tree") {
-            resolve();
-            return;
-          }
-          if (i >= treeSeq.frames.length) {
-            resolve();
-            return;
-          }
-          const [col, hold] = treeSeq.frames[i];
-          setFrame(col, 0);
-          i += 1;
-          frameTimer = window.setTimeout(step, hold);
-        };
-        stopFrames();
-        step();
-      });
-
-    const startEnter = (targetX, thenJob) => {
-      mode = "enter";
-      job = thenJob;
-      actor.setAttribute("data-scene", "walk");
-      setSheet("ark");
-      setPos(offLeft());
-      setFlip(false);
-      actor.classList.add("is-active");
-      playArkLoop("walk");
-      actionAnchorX = targetX;
-    };
-
-    const startJob = async () => {
-      mode = "job";
-      actor.setAttribute("data-scene", job);
-      setPos(actionAnchorX);
-      setFlip(false);
-      stopFrames();
-
-      if (job === "tree") {
-        await playTreeSequence();
-        if (mode === "job") startExit();
-        return;
-      }
-
-      playArkLoop(job);
-      const cycles = job === "eat" ? 6 : job === "wave" ? 7 : 10;
-      const anim = arkAnims[job];
-      phaseUntil = performance.now() + anim.ms * anim.frames.length * cycles;
-    };
-
-    const startExit = () => {
-      mode = "exit";
-      actor.setAttribute("data-scene", "walk");
-      setSheet("ark");
-      setFlip(false); // always exit to the right
-      // Demo only: a bit quicker exit so recordings can show off-screen leave
-      if (demoForce) approachBoost = 48;
-      playArkLoop("walk");
-    };
-
-    const startWait = () => {
-      mode = "wait";
-      stopFrames();
-      actor.classList.remove("is-active");
-      setPos(offLeft());
-      const pause = 5000 + Math.random() * 8000;
-      phaseUntil = performance.now() + pause;
-    };
-
-    const pickJob = () => jobs[Math.floor(Math.random() * jobs.length)];
-
-    let last = performance.now();
-    const loop = (now) => {
-      if (!running) return;
-      const dt = Math.min(48, now - last);
-      last = now;
-      const pxPerSec = approachBoost > 0 ? approachBoost : speed;
-
+    const tick = (now) => {
+      const dt = prev ? Math.min(now - prev, 80) : 0;
+      prev = now;
+      elapsed += dt;
+      const speed = forced ? 72 : 36;
       if (mode === "enter") {
-        const nx = x + pxPerSec * (dt / 1000);
-        if (nx >= actionAnchorX) {
-          setPos(actionAnchorX);
-          approachBoost = 0;
-          startJob();
-        } else {
-          setPos(nx);
-        }
+        x = Math.min(target(), x + (speed * dt) / 1000);
+        showAction("walk", elapsed);
+        if (x >= target()) begin(forced === "walk" ? "exit" : "job");
       } else if (mode === "job") {
-        setPos(actionAnchorX);
-        if (job !== "tree" && now >= phaseUntil) {
-          startExit();
+        x = target();
+        if (job === "tree") {
+          if (elapsed < 3800) showWater(elapsed < 2200 ? Math.floor(elapsed / 340) % 3 : 3);
+          else showAction("wave", elapsed - 3800);
+          tree.hidden = false;
+          tree.classList.toggle("is-grown", elapsed >= 2600);
+          if (elapsed >= 6500) begin("exit");
+        } else {
+          showAction(job, elapsed);
+          if (elapsed >= durations[job] * counts[job] * (job === "eat" ? 5 : 4)) begin("exit");
         }
       } else if (mode === "exit") {
-        const nx = x + pxPerSec * (dt / 1000);
-        if (nx >= offRight()) {
-          setPos(offRight());
-          startWait();
-        } else {
-          setPos(nx);
+        // Keep the tree at the planting location while the gnome walks away.
+        x += (speed * dt) / 1000;
+        if (!tree.hidden) tree.style.translate = `${target() - x}px 0`;
+        showAction("walk", elapsed);
+        if (x > width() + size()) {
+          actor.classList.remove("is-active");
+          begin("wait");
         }
-      } else if (mode === "wait") {
-        if (now >= phaseUntil) {
-          startEnter(vw() * (0.32 + Math.random() * 0.2), pickJob());
-        }
+      } else if (elapsed >= (forced ? 1500 : 7000)) {
+        tree.hidden = true;
+        tree.classList.remove("is-grown");
+        tree.style.translate = "";
+        job = forced || jobs[Math.floor(Math.random() * jobs.length)];
+        targetRatio = 0.25 + Math.random() * 0.4;
+        x = -size() - 16;
+        actor.classList.add("is-active");
+        begin("enter");
       }
-
-      raf = window.requestAnimationFrame(loop);
+      actor.style.setProperty("--nisse-x", `${x}px`);
+      raf = requestAnimationFrame(tick);
     };
-
-    // Boot visit
+    x = -size() - 16;
     actor.classList.add("is-active");
-    startEnter(vw() * 0.4, pickJob());
-    raf = window.requestAnimationFrame(loop);
-
-    // Demo: ?nisse=eat|wave|polish|tree|walk
-    const params = new URLSearchParams(window.location.search);
-    const forced = params.get("nisse");
-    const map = {
-      porridge: "eat",
-      eat: "eat",
-      look: "wave",
-      wave: "wave",
-      polish: "polish",
-      tree: "tree",
-      water: "tree",
-      cross: "walk",
-      walk: "walk",
-    };
-    if (forced && map[forced]) {
-      const want = map[forced];
-      demoForce = want;
-      window.setTimeout(() => {
-        approachBoost = 70;
-        if (want === "walk") {
-          // Full traverse: enter mid-screen then exit right off-screen
-          startEnter(vw() * 0.45, "wave");
-          const watch = setInterval(() => {
-            if (mode === "job") {
-              clearInterval(watch);
-              startExit();
-            }
-          }, 50);
-          return;
-        }
-        startEnter(vw() * 0.4, want);
-      }, 150);
-    }
-
+    raf = requestAnimationFrame(tick);
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        running = false;
-        window.cancelAnimationFrame(raf);
-        stopFrames();
-      } else {
-        running = true;
-        last = performance.now();
-        if (mode === "enter" || mode === "exit") playArkLoop("walk");
-        else if (mode === "job" && job !== "tree") playArkLoop(job);
-        raf = window.requestAnimationFrame(loop);
-      }
+      cancelAnimationFrame(raf);
+      prev = 0;
+      if (!document.hidden && !motion.matches) raf = requestAnimationFrame(tick);
     });
-  } else if (stage && reducedMotion) {
-    stage.remove();
-  }
+    motion.addEventListener("change", () => {
+      cancelAnimationFrame(raf);
+      prev = 0;
+      stage.hidden = motion.matches;
+      if (!motion.matches && !document.hidden) raf = requestAnimationFrame(tick);
+    });
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
 })();
