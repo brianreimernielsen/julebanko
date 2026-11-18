@@ -16,8 +16,8 @@
   <data name="TwoRows" xml:space="preserve"><value>2 rader</value></data>
   <data name="FullBoard" xml:space="preserve"><value>Full bricka</value></data>
   <data name="Send" xml:space="preserve"><value>Skicka</value></data>
-  <data name="ConfirmedWinners" xml:space="preserve"><value>Bekräftade vinnare</value></data>
-  <data name="NoWinnersYet" xml:space="preserve"><value>Inga bekräftade vinnare ännu.</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Vinnare</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>Inga vinnare ännu.</value></data>
   <data name="ClaimSubmitted" xml:space="preserve"><value>Tack! Din anmälan har skickats och väntar på bekräftelse.</value></data>
   <data name="NoNumbersYet" xml:space="preserve"><value>Inga nummer dragna ännu.</value></data>
   <data name="Language" xml:space="preserve"><value>Språk</value></data>
@@ -52,8 +52,9 @@
   <data name="Delete" xml:space="preserve"><value>Radera</value></data>
   <data name="Upload" xml:space="preserve"><value>Ladda upp</value></data>
   <data name="HeroImage" xml:space="preserve"><value>Hero-bild</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero-logotyp (till höger om Julebanko)</value></data>
   <data name="BackgroundImage" xml:space="preserve"><value>Bakgrundsbild</value></data>
-  <data name="DecorationImage" xml:space="preserve"><value>Dekoration</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Dekoration (används inte på spelsidan)</value></data>
   <data name="PlayerColors" xml:space="preserve"><value>Spelarfärger</value></data>
   <data name="AdminColors" xml:space="preserve"><value>Adminfärger</value></data>
   <data name="Accent" xml:space="preserve"><value>Accent</value></data>

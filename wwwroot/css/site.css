@@ -13,7 +13,6 @@
   --radius: 18px;
   --font-display: "Fraunces", "Palatino Linotype", Georgia, serif;
   --font-body: "Outfit", "Segoe UI", sans-serif;
-  --snow-ground-height: clamp(80px, 14vw, 140px);
 }
 
 *,
@@ -109,6 +108,7 @@ img {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-bottom: clamp(88px, 14vh, 140px);
 }
 
 .topbar {
@@ -194,20 +194,44 @@ img {
   width: 100%;
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.1rem;
+  margin: 0 0 0.75rem;
+}
+
 .brand {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(3.2rem, 10vw, 6.5rem);
   line-height: 0.95;
   letter-spacing: -0.02em;
-  margin: 0 0 0.75rem;
+  margin: 0;
   text-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
   animation: brandIn 0.9s ease-out both;
 }
 
+.hero-logo {
+  display: block;
+  width: auto;
+  height: clamp(2.6rem, 8vw, 4.4rem);
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
+  animation: brandIn 0.9s ease-out 0.08s both;
+}
+
+.hero-compact .brand-row {
+  margin: 0 0 0.35rem;
+}
+
 .hero-compact .brand {
   font-size: clamp(2.4rem, 7vw, 4rem);
-  margin: 0 0 0.35rem;
+}
+
+.hero-compact .hero-logo {
+  height: clamp(2.1rem, 6vw, 3.35rem);
 }
 
 .hero-compact .hero-lead {
@@ -306,7 +330,7 @@ img {
 
 .section.section-player {
   max-width: 1240px;
-  padding: 1.25rem 1.5rem 2.25rem;
+  padding: 1.25rem 1.5rem 1.5rem;
 }
 
 .section-title {
@@ -321,28 +345,19 @@ img {
   max-width: 40rem;
 }
 
-.numbers-grid {
-  display: grid;
-  gap: 1.25rem 1.75rem;
-  align-items: start;
+.julebanko-paneler.numbers-grid {
+  /* pack grid; slightly roomier for framed panels */
+  gap: clamp(22px, 3vw, 36px);
 }
 
-@media (min-width: 900px) {
-  .numbers-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-    justify-content: space-between;
-    column-gap: 2.5rem;
-  }
-
-  .claim-col {
-    justify-self: end;
-    width: 100%;
-    max-width: 340px;
-  }
-}
-
-.numbers-col {
+.player-panel {
   min-width: 0;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--gran-bredde, 28px) + 12px);
+  backdrop-filter: blur(8px);
 }
 
 .number-block {
@@ -355,6 +370,7 @@ img {
 
 .block-heading,
 .number-block h3,
+.player-panel h2,
 .claim-panel h2,
 .winners-panel h2 {
   margin: 0 0 0.55rem;
@@ -430,12 +446,6 @@ img {
   font-style: italic;
 }
 
-.claim-col {
-  display: grid;
-  gap: 0.85rem;
-  align-content: start;
-}
-
 .claim-panel,
 .winners-panel,
 .admin-card {
@@ -444,6 +454,11 @@ img {
   border-radius: var(--radius);
   padding: 1.15rem 1.2rem;
   backdrop-filter: blur(8px);
+}
+
+.player-panel.claim-panel,
+.player-panel.winners-panel {
+  padding: calc(var(--gran-bredde, 28px) + 12px);
 }
 
 .form-stack {
@@ -505,38 +520,23 @@ textarea {
   border-bottom: 1px solid var(--line);
 }
 
-.decoration-strip {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 2.75rem;
-  padding: 1.25rem 0 3.5rem;
-}
-
-.decoration-strip img {
-  display: block;
-  width: min(1120px, 96vw);
-  max-width: 100%;
-  height: auto;
-  max-height: 140px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 10px;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.4));
-  animation: garlandFloat 5.5s ease-in-out infinite;
-}
-
-@keyframes garlandFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
-}
+/* Decoration image is no longer shown as a player-page garland/bar;
+   juleramme framing replaces that role for the three panels. */
 
 .site-footer {
-  margin-top: 0;
-  padding: 0.75rem 1.5rem 1.75rem;
-  text-align: center;
-  opacity: 0.7;
-  font-size: 0.85rem;
+  position: fixed;
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  bottom: clamp(0.35rem, 1.2vh, 0.85rem);
+  z-index: 12;
+  margin: 0;
+  padding: 0;
+  text-align: right;
+  color: #9ec4e8;
+  opacity: 0.82;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(8, 16, 32, 0.35);
 }
 
 /* Admin */
@@ -648,101 +648,37 @@ textarea {
   }
 }
 
-/* Fixed snow ground strip (separate from falling CSS snow flakes) */
-.snow-ground {
-  pointer-events: none;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9;
-  height: var(--snow-ground-height);
-  background-image: url("/img/nisse/snow-strip.png");
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: 100% 100%;
-}
+/* Christmas nisse v5 juleaften — night gradient, layered snow-banner, depth */
+.nisse-stage{position:fixed;inset:0;z-index:8;pointer-events:none;overflow:hidden}
+.nisse{position:absolute;left:0;bottom:max(12px,env(safe-area-inset-bottom));width:min(230px,65vw);aspect-ratio:384/320;opacity:0;transform:translate3d(var(--nisse-x,-300px),0,0);transition:opacity .2s;will-change:transform}
+.nisse.is-active{opacity:1}
+.nisse-inner,.nisse-sprite{position:absolute;inset:0;width:100%;height:100%}
+.nisse-inner{transform:none!important}
+.nisse-sprite{background:none!important;filter:drop-shadow(0 2px 2px #0002)}
+.nisse-frame{position:absolute;left:0;top:18.75%;width:66.666667%;height:80%;background-repeat:no-repeat;background-size:400% 400%;background-position:calc(var(--col,0)*100%/3) calc(var(--row,0)*100%/3)}
+.nisse-tree-frame{position:absolute;max-width:none!important;height:auto;object-fit:contain}
+.nisse-frame[hidden],.nisse-tree-frame[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.nisse-stage{display:none}}
+/* Atlas cells are normalized to the same 384 × 320 canvas. */
+.nisse-frame{left:0;top:0;width:100%;height:100%}
 
-/* Christmas nisse v5 — multi-stop visits, decorations, Scrooge; feet on snow strip */
 .nisse-stage {
   --nisse-width: min(230px, 65vw);
-  --nisse-bottom: calc(var(--snow-ground-height, 110px) * 0.42);
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 8;
-  overflow: hidden;
+  --nisse-bottom: max(12px, env(safe-area-inset-bottom));
 }
-
-.nisse {
-  position: absolute;
-  left: 0;
-  bottom: var(--nisse-bottom);
-  z-index: 1;
-  width: var(--nisse-width);
-  aspect-ratio: 384 / 320;
-  opacity: 0;
-  transform: translate3d(var(--nisse-x, -300px), 0, 0);
-  transition: opacity 0.2s;
-  will-change: transform;
-}
-
-.nisse.is-active {
-  opacity: 1;
-}
-
-.nisse-inner,
-.nisse-sprite {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.nisse-inner {
-  transform: none !important;
-}
-
-.nisse-sprite {
-  background: none !important;
-  filter: drop-shadow(0 2px 2px #0002);
-}
-
+.nisse { width: var(--nisse-width); bottom: var(--nisse-bottom); z-index: 1; }
 .nisse-frame {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: 400% 400%;
-  background-position: calc(var(--col, 0) * 100% / 3) calc(var(--row, 0) * 100% / 3);
   transform-origin: 33.333333% 90%;
   transform: rotate(var(--nisse-lean, 0deg)) scaleX(var(--nisse-facing, 1));
 }
-
-.nisse-tree-frame {
-  position: absolute;
-  max-width: none !important;
-  height: auto;
-  object-fit: contain;
-}
-
-.nisse-frame[hidden],
-.nisse-tree-frame[hidden] {
-  display: none !important;
-}
-
 .nisse-decoration {
   position: absolute;
   left: var(--plant-x);
   bottom: var(--nisse-bottom);
-  z-index: 0;
   width: var(--nisse-decoration-width, var(--nisse-width));
   aspect-ratio: 384 / 320;
   transform: translateX(-56.5%) translateX(var(--drag-x, 0px));
 }
-
 .nisse-decoration img {
   position: absolute;
   left: 56.5%;
@@ -751,66 +687,33 @@ textarea {
   max-width: none;
   transform: translateX(-50%);
 }
-
 .nisse-decoration--tree img {
   width: 41%;
   bottom: 7.48%;
   transform-origin: 50% 95.62%;
   animation: nisse-tree-grow 1.65s ease-out both;
 }
-
 @keyframes nisse-tree-grow {
-  from { transform: translateX(-50%) scale(0.27); }
+  from { transform: translateX(-50%) scale(.27); }
   to { transform: translateX(-50%) scale(1); }
 }
-
 .nisse-decoration--snowman img {
   width: 32%;
   animation: nisse-build-snowman 1.3s steps(3, end) both;
 }
-
 @keyframes nisse-build-snowman {
   from { clip-path: inset(100% 0 0); }
   to { clip-path: inset(0 0 0); }
 }
-
 .nisse-decoration--lantern img {
   width: 20%;
   animation: nisse-light-lantern 1.2s ease-out both;
 }
-
 @keyframes nisse-light-lantern {
-  0% { opacity: 0; filter: brightness(0.65); }
-  25% { opacity: 1; filter: brightness(0.65); }
+  0% { opacity: 0; filter: brightness(.65); }
+  25% { opacity: 1; filter: brightness(.65); }
   100% { opacity: 1; filter: drop-shadow(0 0 7px #ffd378); }
 }
-
-.nisse-decoration--heart img {
-  width: 23%;
-  transform-origin: 50% 96%;
-  animation: nisse-set-heart 0.8s ease-out both;
-}
-
-@keyframes nisse-set-heart {
-  0% { transform: translateX(-50%) rotate(-14deg); opacity: 0; }
-  55% { transform: translateX(-50%) rotate(7deg); opacity: 1; }
-  100% { transform: translateX(-50%) rotate(0deg); opacity: 1; }
-}
-
-.nisse-decoration--gift img {
-  width: 26%;
-  animation: nisse-set-gift 0.45s ease-out both;
-}
-
-@keyframes nisse-set-gift {
-  from { transform: translate(-50%, -20%); opacity: 0; }
-  to { transform: translate(-50%, 0); opacity: 1; }
-}
-
-.nisse-decoration.is-dragged img {
-  rotate: -8deg;
-}
-
 .nisse.is-skiing::after {
   content: "";
   position: absolute;
@@ -820,16 +723,14 @@ textarea {
   width: 31%;
   height: 7%;
   background: radial-gradient(ellipse at right, #fffc, transparent 73%);
-  animation: nisse-ski-snow 0.45s ease-out infinite;
-  scale: var(--nisse-ski-direction, 1) 1;
-  transform-origin: 44% center;
+  animation: nisse-ski-snow .45s ease-out infinite;
 }
-
 @keyframes nisse-ski-snow {
-  from { transform: translateX(8%); opacity: 0.9; }
+  from { transform: translateX(8%); opacity: .9; }
   to { transform: translateX(-12%); opacity: 0; }
 }
 
+.nisse-decoration.is-dragged img { rotate: -8deg; }
 .nisse-scrooge {
   position: absolute;
   z-index: 2;
@@ -842,11 +743,131 @@ textarea {
   transform-origin: 33.333333% 90%;
   transform: translateX(var(--scrooge-x, -300px)) scaleX(var(--scrooge-facing, 1));
 }
+.nisse.is-skiing::after { scale: var(--nisse-ski-direction, 1) 1; transform-origin: 44% center; }
 
+
+.nisse-decoration--heart img {
+  width: 23%;
+  transform-origin: 50% 96%;
+  animation: nisse-set-heart .8s ease-out both;
+}
+@keyframes nisse-set-heart {
+  0% { transform: translateX(-50%) rotate(-14deg); opacity: 0; }
+  55% { transform: translateX(-50%) rotate(7deg); opacity: 1; }
+  100% { transform: translateX(-50%) rotate(0deg); opacity: 1; }
+}
+.nisse-decoration--gift img {
+  width: 26%;
+  animation: nisse-set-gift .45s ease-out both;
+}
+@keyframes nisse-set-gift {
+  from { transform: translate(-50%, -20%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Overgangen lægges bag sidens indhold og den eksisterende røde baggrund
+   skinner uhindret igennem over 66 % af vinduets højde. */
+body.nisse-night {
+  isolation: isolate;
+}
+body.nisse-night::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 66%,
+    rgb(22 19 42 / .34) 75%,
+    rgb(12 19 39 / .86) 90%,
+    #070d1a 100%
+  );
+}
+
+/* Billedets øverste del er transparent. Sneens synlige kant ligger
+   omkring den fælles jordlinje, uanset skærmens billedformat. */
+.nisse-stage[data-nisse-snow] {
+  --nisse-snow-line: clamp(53px, 7.8vh, 108px);
+  --nisse-bottom: max(12px, calc(var(--nisse-snow-line) - 25px));
+  --nisse-front-drop: clamp(15px, 2.2vh, 26px);
+}
+.nisse-stage[data-nisse-snow]::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  height: calc(var(--nisse-snow-line) * 1.48);
+  background: url("../img/nisse/snow-banner.png") center bottom / 100% 100% no-repeat;
+}
+.nisse-stage[data-nisse-snow] .nisse-scrooge { z-index: 1; }
+.nisse-decoration.snow-front { z-index: 3; }
+.nisse-decoration.snow-back { z-index: 0; }
+.nisse-stage[data-nisse-snow] .snow-front {
+  bottom: calc(var(--nisse-bottom) - var(--nisse-front-drop));
+}
+.nisse-decoration--gift.snow-front {
+  margin-bottom: 8px;
+}
+.nisse-stage[data-nisse-snow] .nisse-decoration--gift.snow-front {
+  margin-bottom: 12px;
+}
+.nisse-decoration img { z-index: 1; }
+.nisse-decoration.snow-front::before,
+.nisse-decoration--lantern::after,
+.nisse-decoration--tree::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.nisse-decoration.snow-front::before {
+  left: 56.5%;
+  bottom: 7.8%;
+  width: 38%;
+  height: 5.2%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgb(35 54 83 / .26), rgb(50 82 115 / .08) 52%, transparent 72%);
+}
+.nisse-decoration--tree img {
+  filter: saturate(.91) brightness(.96) drop-shadow(0 1px 2px #1224316b);
+}
+.nisse-decoration--tree::after {
+  z-index: 2;
+  left: 56.5%;
+  bottom: 23%;
+  width: 29%;
+  height: 67%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle closest-side at 52% 16%, #ffe9a071, transparent 100%),
+    radial-gradient(circle closest-side at 45% 46%, #ffc27a65, transparent 43%),
+    radial-gradient(circle closest-side at 63% 68%, #ffcf7b65, transparent 40%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: nisse-juleglimt 6.8s 1.55s ease-in-out infinite;
+}
+.nisse-decoration--lantern::after {
+  z-index: 0;
+  left: 56.5%;
+  bottom: 3%;
+  width: 70%;
+  height: 34%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(ellipse 55% 28% at 50% 80%, #ffc66d77, transparent 82%),
+    radial-gradient(ellipse 37% 62% at 50% 47%, #ffb65c52, transparent 90%);
+  opacity: 0;
+  animation: nisse-juleglimt 5.7s .8s ease-in-out infinite;
+}
+.nisse-decoration--lantern:nth-of-type(even)::after { animation-duration: 7.4s; }
+@keyframes nisse-juleglimt {
+  0%, 100% { opacity: .63; }
+  36% { opacity: .9; }
+  66% { opacity: .71; }
+  84% { opacity: .8; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .nisse-stage,
-  .snow-ground {
-    display: none;
-  }
+  .nisse-stage[data-nisse-snow] { display: block; }
+  .nisse-stage .nisse-decoration::after { animation: none; opacity: .72; }
 }
 

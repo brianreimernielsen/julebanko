@@ -27,7 +27,7 @@ public class IndexModel(
     public IReadOnlyList<Claim> ApprovedWinners { get; private set; } = Array.Empty<Claim>();
     public string? HeroUrl { get; private set; }
     public string? BackgroundUrl { get; private set; }
-    public string? DecorationUrl { get; private set; }
+    public string? LogoUrl { get; private set; }
     public string? StatusMessage { get; private set; }
     public bool StatusIsError { get; private set; }
 
@@ -73,9 +73,9 @@ public class IndexModel(
             BackgroundUrl = bg.RelativePath;
         }
 
-        if (assets.TryGetValue(MediaSlot.PlayerDecoration, out var deco))
+        if (assets.TryGetValue(MediaSlot.PlayerHeroLogo, out var logo))
         {
-            DecorationUrl = deco.RelativePath;
+            LogoUrl = logo.RelativePath;
         }
     }
 

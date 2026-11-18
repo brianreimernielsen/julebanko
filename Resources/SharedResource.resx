@@ -16,8 +16,8 @@
   <data name="TwoRows" xml:space="preserve"><value>2 rows</value></data>
   <data name="FullBoard" xml:space="preserve"><value>Full board</value></data>
   <data name="Send" xml:space="preserve"><value>Send</value></data>
-  <data name="ConfirmedWinners" xml:space="preserve"><value>Confirmed winners</value></data>
-  <data name="NoWinnersYet" xml:space="preserve"><value>No confirmed winners yet.</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Winners</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>No winners yet.</value></data>
   <data name="ClaimSubmitted" xml:space="preserve"><value>Thanks! Your claim was sent and awaits confirmation.</value></data>
   <data name="NoNumbersYet" xml:space="preserve"><value>No numbers drawn yet.</value></data>
   <data name="Language" xml:space="preserve"><value>Language</value></data>
@@ -52,8 +52,9 @@
   <data name="Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>
   <data name="HeroImage" xml:space="preserve"><value>Hero image</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero logo (right of Julebanko)</value></data>
   <data name="BackgroundImage" xml:space="preserve"><value>Background image</value></data>
-  <data name="DecorationImage" xml:space="preserve"><value>Decoration image</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Decoration image (unused on player page)</value></data>
   <data name="PlayerColors" xml:space="preserve"><value>Player colors</value></data>
   <data name="AdminColors" xml:space="preserve"><value>Admin colors</value></data>
   <data name="Accent" xml:space="preserve"><value>Accent</value></data>

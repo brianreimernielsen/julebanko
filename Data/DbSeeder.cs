@@ -107,18 +107,19 @@ public static class DbSeeder
         ILogger logger,
         CancellationToken cancellationToken)
     {
-        var samples = new (MediaSlot Slot, string FileName)[]
+        var samples = new (MediaSlot Slot, string FileName, string ContentType)[]
         {
-            (MediaSlot.PlayerHero, "hero.jpg"),
-            (MediaSlot.PlayerBackground, "background.jpg"),
-            (MediaSlot.PlayerDecoration, "decoration.jpg")
+            (MediaSlot.PlayerHero, "hero.jpg", "image/jpeg"),
+            (MediaSlot.PlayerBackground, "background.jpg", "image/jpeg"),
+            (MediaSlot.PlayerDecoration, "decoration.jpg", "image/jpeg"),
+            (MediaSlot.PlayerHeroLogo, "hero-logo.png", "image/png")
         };
 
         var sampleRoot = Path.Combine(env.WebRootPath, "sample-media");
         var uploadRoot = Path.Combine(env.ContentRootPath, "App_Data", "uploads");
         Directory.CreateDirectory(uploadRoot);
 
-        foreach (var (slot, fileName) in samples)
+        foreach (var (slot, fileName, contentType) in samples)
         {
             if (await db.MediaAssets.AnyAsync(m => m.Slot == slot, cancellationToken))
             {
@@ -140,7 +141,7 @@ public static class DbSeeder
             {
                 Slot = slot,
                 FileName = fileName,
-                ContentType = "image/jpeg",
+                ContentType = contentType,
                 RelativePath = $"/uploads/{destName}",
                 UploadedAt = DateTime.UtcNow
             });

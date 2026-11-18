@@ -1,4 +1,4 @@
-﻿@using System.Globalization
+@using System.Globalization
 @using Julebanko.Data
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject Julebanko.Services.SettingsService Settings
@@ -15,14 +15,12 @@
     {
         snowIntensity = 1;
     }
-    var snowGroundRaw = await Settings.GetAsync(SettingKeys.PlayerSnowGroundEnabled, "true");
-    var snowGroundEnabled = !string.Equals(snowGroundRaw, "false", StringComparison.OrdinalIgnoreCase)
-                            && snowGroundRaw != "0";
+    // Snow ground is always on for the player page (locked); flakes remain optional.
     var nisseRaw = await Settings.GetAsync(SettingKeys.PlayerNisseEnabled, "true");
     var nisseEnabled = !string.Equals(nisseRaw, "false", StringComparison.OrdinalIgnoreCase)
-                       && nisseRaw != "0"
-                       && snowGroundEnabled;
+                       && nisseRaw != "0";
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var bodyExtra = ViewData["BodyClass"] as string;
 }
 <!DOCTYPE html>
 <html lang="@culture">
@@ -34,6 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/julerammer/julerammer.css" asp-append-version="true" />
     <style>
         :root {
             --player-bg: @playerBg;
@@ -42,21 +41,17 @@
         }
     </style>
 </head>
-<body class="@(ViewData["BodyClass"] as string)">
+<body class="nisse-night@(string.IsNullOrWhiteSpace(bodyExtra) ? "" : " " + bodyExtra)">
     @if (snowEnabled)
     {
         <div class="snow" data-snow data-intensity="@snowIntensity" aria-hidden="true"></div>
     }
-    @if (snowGroundEnabled)
-    {
-        <div class="snow-ground" aria-hidden="true"></div>
-    }
-    @if (nisseEnabled)
-    {
-        <div class="nisse-stage" data-nisse aria-hidden="true">
+    <div class="nisse-stage" data-nisse data-nisse-snow aria-hidden="true">
+        @if (nisseEnabled)
+        {
             <div class="nisse" data-nisse-actor></div>
-        </div>
-    }
+        }
+    </div>
     <div class="site-shell">
         <div class="topbar">
             <div class="lang-switch" aria-label="@Localizer["Language"]">
@@ -67,8 +62,8 @@
             <a class="top-link" href="/Admin">Admin</a>
         </div>
         @RenderBody()
-        <footer class="site-footer">Julebanko</footer>
     </div>
+    <footer class="site-footer">Julebanko © Brian Reimer-Nielsen</footer>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

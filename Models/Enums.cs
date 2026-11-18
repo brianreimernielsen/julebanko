@@ -24,5 +24,6 @@ public enum MediaSlot
 {
     PlayerHero = 1,
     PlayerBackground = 2,
-    PlayerDecoration = 3
+    PlayerDecoration = 3,
+    PlayerHeroLogo = 4
 }

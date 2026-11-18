@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model Julebanko.Pages.IndexModel
 @{
     ViewData["Title"] = Model.SeasonTitle;
@@ -19,7 +19,13 @@
     <div class="hero-media"@if (!string.IsNullOrEmpty(Model.HeroUrl)) { <text> style="background-image:url(@Model.HeroUrl);" </text> }></div>
     <div class="hero-content">
         <p class="hero-kicker">@DateTime.Now.Year</p>
-        <h1 class="brand">@Localizer["Brand"]</h1>
+        <div class="brand-row">
+            <h1 class="brand">@Localizer["Brand"]</h1>
+            @if (!string.IsNullOrEmpty(Model.LogoUrl))
+            {
+                <img class="hero-logo" src="@Model.LogoUrl" alt="" />
+            }
+        </div>
         <p class="hero-lead">@Model.SeasonTitle</p>
         <div class="cta-row">
             <a class="btn btn-primary" href="#numbers">@Localizer["TodaysNumbers"]</a>
@@ -29,8 +35,8 @@
 </section>
 
 <section class="section section-player" id="numbers">
-    <div class="numbers-grid">
-        <div class="numbers-col">
+    <div class="julebanko-paneler numbers-grid">
+        <div class="player-panel number-panel juleramme juleramme--glimt">
             <div class="number-block">
                 <h2 class="block-heading">@Localizer["TodaysNumbers"]</h2>
                 @if (Model.TodayNumbers.Count == 0)
@@ -83,60 +89,52 @@
             </div>
         </div>
 
-        <aside class="claim-col" id="claim">
-            <div class="claim-panel">
-                <h2>@Localizer["HaveYouWon"]</h2>
-                <p class="claim-hint">@Localizer["ClaimHint"]</p>
-                @if (Model.StatusMessage == "ok")
-                {
-                    <div class="alert alert-success">@Localizer["ClaimSubmitted"]</div>
-                }
-                else if (Model.StatusIsError)
-                {
-                    <div class="alert alert-error">@Localizer["YourName"]</div>
-                }
-                <form method="post" class="form-stack">
-                    <label>
-                        @Localizer["YourName"]
-                        <input asp-for="PlayerName" maxlength="120" required />
-                    </label>
-                    <label>
-                        @Localizer["WinType"]
-                        <select asp-for="WinType">
-                            <option value="@((int)WinType.OneRow)">@Localizer["OneRow"]</option>
-                            <option value="@((int)WinType.TwoRows)">@Localizer["TwoRows"]</option>
-                            <option value="@((int)WinType.FullBoard)">@Localizer["FullBoard"]</option>
-                        </select>
-                    </label>
-                    <button class="btn btn-primary" type="submit">@Localizer["Send"]</button>
-                </form>
-            </div>
-            <div class="winners-panel">
-                <h2>@Localizer["ConfirmedWinners"]</h2>
-                @if (Model.ApprovedWinners.Count == 0)
-                {
-                    <p class="empty-note">@Localizer["NoWinnersYet"]</p>
-                }
-                else
-                {
-                    <ul class="winner-list">
-                        @foreach (var w in Model.ApprovedWinners)
-                        {
-                            <li>
-                                <strong>@w.PlayerName</strong>
-                                <span>@Model.WinLabel(w.WinType)</span>
-                            </li>
-                        }
-                    </ul>
-                }
-            </div>
-        </aside>
+        <div class="player-panel claim-panel juleramme juleramme--glimt" id="claim">
+            <h2>@Localizer["HaveYouWon"]</h2>
+            <p class="claim-hint">@Localizer["ClaimHint"]</p>
+            @if (Model.StatusMessage == "ok")
+            {
+                <div class="alert alert-success">@Localizer["ClaimSubmitted"]</div>
+            }
+            else if (Model.StatusIsError)
+            {
+                <div class="alert alert-error">@Localizer["YourName"]</div>
+            }
+            <form method="post" class="form-stack">
+                <label>
+                    @Localizer["YourName"]
+                    <input asp-for="PlayerName" maxlength="120" required />
+                </label>
+                <label>
+                    @Localizer["WinType"]
+                    <select asp-for="WinType">
+                        <option value="@((int)WinType.OneRow)">@Localizer["OneRow"]</option>
+                        <option value="@((int)WinType.TwoRows)">@Localizer["TwoRows"]</option>
+                        <option value="@((int)WinType.FullBoard)">@Localizer["FullBoard"]</option>
+                    </select>
+                </label>
+                <button class="btn btn-primary" type="submit">@Localizer["Send"]</button>
+            </form>
+        </div>
+
+        <div class="player-panel winners-panel juleramme juleramme--glimt">
+            <h2>@Localizer["Winners"]</h2>
+            @if (Model.ApprovedWinners.Count == 0)
+            {
+                <p class="empty-note">@Localizer["NoWinnersYet"]</p>
+            }
+            else
+            {
+                <ul class="winner-list">
+                    @foreach (var w in Model.ApprovedWinners)
+                    {
+                        <li>
+                            <strong>@w.PlayerName</strong>
+                            <span>@Model.WinLabel(w.WinType)</span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
     </div>
 </section>
-
-@if (!string.IsNullOrEmpty(Model.DecorationUrl))
-{
-    <div class="decoration-strip">
-        <img src="@Model.DecorationUrl" alt="" />
-    </div>
-}

@@ -1,0 +1,79 @@
+/* Sæt klassen på selve panelet. Rammen følger panelets naturlige højde. */
+.juleramme {
+  --gran-bredde: clamp(14px, 2vw, 22px);
+  --gran-udskaering: 14%;
+  --gran-outset: 4px;
+  position: relative;
+}
+
+.juleramme::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border: var(--gran-bredde) solid transparent;
+  border-image-source: var(--gran-billede);
+  border-image-slice: var(--gran-udskaering);
+  border-image-width: 1;
+  border-image-outset: var(--gran-outset);
+  border-image-repeat: round;
+  pointer-events: none;
+}
+
+.juleramme--lys { --gran-billede: url("grafik/gran-med-lys.png"); }
+/* Bevar de større kogler og bær i hjørnernes udsnit. */
+.juleramme--baer,
+.juleramme--glimt,
+.juleramme--baer-lys {
+  --gran-bredde: clamp(23px, 3vw, 36px);
+  --gran-udskaering: 25%;
+  --gran-billede: url("grafik/gran-med-baer.png");
+}
+.juleramme--baer-lys {
+  --gran-billede: url("grafik/gran-med-baer-og-lys.png");
+}
+/* Player panels: glimt lights + stretchable baer-og-lys graphic */
+.juleramme--glimt {
+  --gran-billede: url("grafik/gran-med-baer-og-lys.png");
+}
+
+/* En separat lysrække kan fylde kanten i alle panelstørrelser. */
+.juleramme--glimt::after {
+  --lys-offset: calc(var(--gran-bredde) * .23);
+  --lys-stribe: calc(var(--lys-offset) * 2);
+  --paere: radial-gradient(circle, #fff6d0 0 1px, #ffda84 1.6px, #ffc66570 3px, transparent 7px);
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--gran-outset));
+  pointer-events: none;
+  background:
+    var(--paere) left top / 56px var(--lys-stribe) round no-repeat,
+    var(--paere) right top / var(--lys-stribe) 60px no-repeat round,
+    var(--paere) left bottom / 68px var(--lys-stribe) round no-repeat,
+    var(--paere) left top / var(--lys-stribe) 73px no-repeat round;
+  opacity: .88;
+  animation: juleramme-glimt 4.8s ease-in-out infinite;
+}
+.juleramme--glimt:nth-child(2)::after { animation-delay: -1.6s; }
+.juleramme--glimt:nth-child(3)::after { animation-delay: -3.1s; }
+
+@keyframes juleramme-glimt {
+  0%, 100% { opacity: .72; }
+  37% { opacity: 1; }
+  72% { opacity: .82; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .juleramme--glimt::after { animation: none; }
+}
+
+/* Hold panelerne på samme række uden at tvinge dem til samme højde. */
+.julebanko-paneler {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
+  gap: clamp(22px, 3vw, 36px);
+  align-items: start;
+}
+
+@media (max-width: 750px) {
+  .julebanko-paneler { grid-template-columns: minmax(0, 1fr); }
+}
