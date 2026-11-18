@@ -52,7 +52,7 @@
   <data name="Delete" xml:space="preserve"><value>Slet</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>
   <data name="HeroImage" xml:space="preserve"><value>Hero-billede</value></data>
-  <data name="HeroLogo" xml:space="preserve"><value>Hero-logo (til højre for Julebanko)</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero-logo (til venstre for Julebanko)</value></data>
   <data name="BackgroundImage" xml:space="preserve"><value>Baggrundsbillede</value></data>
   <data name="DecorationImage" xml:space="preserve"><value>Dekoration (bruges ikke på spillersiden)</value></data>
   <data name="PlayerColors" xml:space="preserve"><value>Spillerfarver</value></data>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Julebanko · Granrammer</title>
+  <link rel="stylesheet" href="julerammer.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: radial-gradient(ellipse at 40% 0%, #671d18, #2b100e 50%, #1e0c0b);
+      color: #fff3e1; font: 16px/1.45 system-ui, sans-serif;
+    }
+    main { max-width: 1050px; margin: auto; padding: 36px 28px 64px; }
+    h1 { font: bold clamp(2.5rem, 7vw, 4rem)/1 Georgia, serif; margin: 0 0 24px; }
+    h2 { font: bold 1.4rem Georgia, serif; margin: 32px 0 16px; }
+    h3 { font-size: 1rem; margin: 0 0 10px; }
+    h4 { font-size: .75rem; margin: 14px 0 6px; letter-spacing: .04em; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+    article {
+      color: #fff3e1; padding: calc(var(--gran-bredde) + 9px);
+      border-radius: 16px; background: #fff1;
+    }
+    .balls { display: flex; flex-wrap: wrap; gap: 5px; margin: 0; }
+    .ball {
+      display: grid; place-items: center; min-width: 25px; height: 25px;
+      padding: 0 4px; border-radius: 100%; background: #f5e8d2; color: #302018;
+      font-weight: 700; font-size: .72rem;
+    }
+    [data-today] .ball { background: #dcb353; width: 31px; height: 31px; }
+    button, input, select { font: inherit; border: 0; border-radius: 10px; padding: 8px 12px; }
+    button { color: #2d200e; background: #dfb64d; cursor: pointer; }
+    label { display: grid; gap: 3px; font-size: .85rem; }
+    form { display: grid; gap: 10px; }
+    input, select { width: 100%; background: #fff6ed; color: #302018; }
+    .pause-lys .juleramme--glimt::after { animation-play-state: paused; }
+    ul { margin: 0; padding-inline-start: 19px; }
+    p { margin: 0 0 8px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Julebanko</h1>
+    <div class="controls">
+      <button type="button" id="numbers">Tilføj tal</button>
+      <button type="button" id="winners">Tilføj vindere</button>
+      <button type="button" id="lights" aria-pressed="false">Pause lys</button>
+      <button type="button" id="reset">Nulstil</button>
+    </div>
+    <section aria-labelledby="lys">
+      <h2 id="lys">Gran med gyldne lys</h2>
+      <div class="julebanko-paneler" data-style="lys"></div>
+    </section>
+    <section aria-labelledby="baer">
+      <h2 id="baer">Gran med røde bær</h2>
+      <div class="julebanko-paneler" data-style="baer"></div>
+    </section>
+    <section aria-labelledby="glimt">
+      <h2 id="glimt">Gran med bær og levende julelys</h2>
+      <div class="julebanko-paneler" data-style="glimt"></div>
+    </section>
+  </main>
+  <template id="cards">
+    <article class="juleramme">
+      <h3>Today’s numbers</h3>
+      <div class="balls" data-today></div>
+      <h4>ALL NUMBERS (DRAW ORDER)</h4>
+      <div class="balls" data-order></div>
+      <h4>ALL NUMBERS (SORTED)</h4>
+      <div class="balls" data-sorted></div>
+    </article>
+    <article class="juleramme">
+      <h3>Have you won?</h3>
+      <p>Report it here.</p>
+      <form>
+        <label>Your name <input autocomplete="off"></label>
+        <label>Win type <select><option>1 row</option><option>2 rows</option></select></label>
+        <button type="submit">Send</button>
+      </form>
+    </article>
+    <article class="juleramme">
+      <h3>Confirmed winners</h3>
+      <p data-empty>No confirmed winners yet.</p>
+      <ul data-winners hidden></ul>
+    </article>
+  </template>
+  <script>
+    const panels = [...document.querySelectorAll('[data-style]')];
+    const initialNumbers = [37, 93, 85, 83, 47];
+    const names = ['Agnes', 'Sofie', 'Emil', 'Ida', 'Mikkel', 'Alma', 'Viggo', 'Noah'];
+    let numbers = [...initialNumbers];
+    let winnerCount = 0;
+
+    for (const panel of panels) {
+      const cards = document.querySelector('#cards').content.cloneNode(true);
+      for (const card of cards.querySelectorAll('.juleramme')) {
+        card.classList.add('juleramme--' + panel.dataset.style);
+      }
+      cards.querySelector('form').addEventListener('submit', event => event.preventDefault());
+      panel.append(cards);
+    }
+
+    function balls(target, values) {
+      target.replaceChildren(...values.map(value => {
+        const ball = document.createElement('span');
+        ball.className = 'ball';
+        ball.textContent = value;
+        return ball;
+      }));
+    }
+
+    function render() {
+      for (const panel of panels) {
+        balls(panel.querySelector('[data-today]'), numbers.slice(-3));
+        balls(panel.querySelector('[data-order]'), numbers);
+        balls(panel.querySelector('[data-sorted]'), [...numbers].sort((a, b) => a - b));
+        panel.querySelector('[data-empty]').hidden = winnerCount > 0;
+        const winners = panel.querySelector('[data-winners]');
+        winners.hidden = winnerCount === 0;
+        winners.replaceChildren(...names.slice(0, winnerCount).map(name => {
+          const item = document.createElement('li');
+          item.textContent = name + ' · 1 row';
+          return item;
+        }));
+      }
+    }
+
+    document.querySelector('#numbers').addEventListener('click', () => {
+      const unused = Array.from({length: 99}, (_, i) => i + 1).filter(n => !numbers.includes(n));
+      numbers = numbers.concat(unused.slice(0, 12));
+      render();
+    });
+    document.querySelector('#winners').addEventListener('click', () => {
+      winnerCount = Math.min(names.length, winnerCount + 2);
+      render();
+    });
+    const lights = document.querySelector('#lights');
+    lights.addEventListener('click', () => {
+      const paused = document.body.classList.toggle('pause-lys');
+      lights.setAttribute('aria-pressed', paused);
+      lights.textContent = paused ? 'Start lys' : 'Pause lys';
+    });
+    document.querySelector('#reset').addEventListener('click', () => {
+      numbers = [...initialNumbers];
+      winnerCount = 0;
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>

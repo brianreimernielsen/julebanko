@@ -32,35 +32,49 @@
 .juleramme--baer-lys {
   --gran-billede: url("grafik/gran-med-baer-og-lys.png");
 }
-/* Player panels: glimt lights + stretchable baer-og-lys graphic */
+/* Player panels: blinking CSS lights on the lit baer-og-lys chain. */
 .juleramme--glimt {
   --gran-billede: url("grafik/gran-med-baer-og-lys.png");
 }
 
-/* En separat lysrække kan fylde kanten i alle panelstørrelser. */
+/* Faste, varme pærer med en ujævn og blid ændring i lysstyrken. */
 .juleramme--glimt::after {
   --lys-offset: calc(var(--gran-bredde) * .23);
   --lys-stribe: calc(var(--lys-offset) * 2);
-  --paere: radial-gradient(circle, #fff6d0 0 1px, #ffda84 1.6px, #ffc66570 3px, transparent 7px);
+  --bulb-a: #fff4cf;
+  --halo-a: #ffb85295;
+  --bulb-b: #ffe9b4;
+  --halo-b: #ffb65e77;
+  --top-a: radial-gradient(circle at 25% 50%, var(--bulb-a) 0 1.7px, var(--halo-a) 3.7px, transparent 7px);
+  --top-b: radial-gradient(circle at 75% 50%, var(--bulb-b) 0 1.7px, var(--halo-b) 3.7px, transparent 7px);
+  --side-a: radial-gradient(circle at 50% 25%, var(--bulb-a) 0 1.7px, var(--halo-a) 3.7px, transparent 7px);
+  --side-b: radial-gradient(circle at 50% 75%, var(--bulb-b) 0 1.7px, var(--halo-b) 3.7px, transparent 7px);
   content: "";
   position: absolute;
   inset: calc(-1 * var(--gran-outset));
   pointer-events: none;
   background:
-    var(--paere) left top / 56px var(--lys-stribe) round no-repeat,
-    var(--paere) right top / var(--lys-stribe) 60px no-repeat round,
-    var(--paere) left bottom / 68px var(--lys-stribe) round no-repeat,
-    var(--paere) left top / var(--lys-stribe) 73px no-repeat round;
-  opacity: .88;
-  animation: juleramme-glimt 4.8s ease-in-out infinite;
+    var(--top-a) left top / 76px var(--lys-stribe) round no-repeat,
+    var(--top-b) left top / 76px var(--lys-stribe) round no-repeat,
+    var(--side-a) right top / var(--lys-stribe) 76px no-repeat round,
+    var(--side-b) right top / var(--lys-stribe) 76px no-repeat round,
+    var(--top-b) left bottom / 76px var(--lys-stribe) round no-repeat,
+    var(--top-a) left bottom / 76px var(--lys-stribe) round no-repeat,
+    var(--side-b) left top / var(--lys-stribe) 76px no-repeat round,
+    var(--side-a) left top / var(--lys-stribe) 76px no-repeat round;
+  opacity: .89;
+  animation: juleramme-lysflamme 5.6s ease-in-out infinite;
 }
-.juleramme--glimt:nth-child(2)::after { animation-delay: -1.6s; }
-.juleramme--glimt:nth-child(3)::after { animation-delay: -3.1s; }
-
-@keyframes juleramme-glimt {
-  0%, 100% { opacity: .72; }
-  37% { opacity: 1; }
-  72% { opacity: .82; }
+.juleramme--glimt:nth-child(2)::after { animation-delay: -.9s; animation-duration: 6.5s; }
+.juleramme--glimt:nth-child(3)::after { animation-delay: -2.1s; animation-duration: 5.1s; }
+@keyframes juleramme-lysflamme {
+  0%, 100% { opacity: .89; filter: brightness(1); }
+  16% { opacity: .98; filter: brightness(1.12); }
+  33% { opacity: .78; filter: brightness(.94); }
+  43% { opacity: .94; filter: brightness(1.06); }
+  62% { opacity: .83; filter: brightness(.98); }
+  73% { opacity: 1; filter: brightness(1.13); }
+  91% { opacity: .86; filter: brightness(.99); }
 }
 @media (prefers-reduced-motion: reduce) {
   .juleramme--glimt::after { animation: none; }

@@ -648,7 +648,7 @@ textarea {
   }
 }
 
-/* Christmas nisse v5 juleaften — night gradient, layered snow-banner, depth */
+/* Christmas nisse v6 — full pack nisse.css (all animations/decorations) */
 .nisse-stage{position:fixed;inset:0;z-index:8;pointer-events:none;overflow:hidden}
 .nisse{position:absolute;left:0;bottom:max(12px,env(safe-area-inset-bottom));width:min(230px,65vw);aspect-ratio:384/320;opacity:0;transform:translate3d(var(--nisse-x,-300px),0,0);transition:opacity .2s;will-change:transform}
 .nisse.is-active{opacity:1}
@@ -656,8 +656,7 @@ textarea {
 .nisse-inner{transform:none!important}
 .nisse-sprite{background:none!important;filter:drop-shadow(0 2px 2px #0002)}
 .nisse-frame{position:absolute;left:0;top:18.75%;width:66.666667%;height:80%;background-repeat:no-repeat;background-size:400% 400%;background-position:calc(var(--col,0)*100%/3) calc(var(--row,0)*100%/3)}
-.nisse-tree-frame{position:absolute;max-width:none!important;height:auto;object-fit:contain}
-.nisse-frame[hidden],.nisse-tree-frame[hidden]{display:none!important}
+.nisse-frame[hidden]{display:none!important}
 @media(prefers-reduced-motion:reduce){.nisse-stage{display:none}}
 /* Atlas cells are normalized to the same 384 × 320 canvas. */
 .nisse-frame{left:0;top:0;width:100%;height:100%}
@@ -669,7 +668,7 @@ textarea {
 .nisse { width: var(--nisse-width); bottom: var(--nisse-bottom); z-index: 1; }
 .nisse-frame {
   transform-origin: 33.333333% 90%;
-  transform: rotate(var(--nisse-lean, 0deg)) scaleX(var(--nisse-facing, 1));
+  transform: translateY(var(--nisse-hop, 0px)) rotate(var(--nisse-lean, 0deg)) scaleX(var(--nisse-facing, 1));
 }
 .nisse-decoration {
   position: absolute;
@@ -688,31 +687,26 @@ textarea {
   transform: translateX(-50%);
 }
 .nisse-decoration--tree img {
-  width: 41%;
-  bottom: 7.48%;
+  width: 43%;
+  scale: 1 var(--nisse-tree-height-scale, 1.23);
+  bottom: 7.36%;
   transform-origin: 50% 95.62%;
   animation: nisse-tree-grow 1.65s ease-out both;
 }
+/* The tree opens out from its existing root. The branch tiers expand
+   at slightly different rates in height and width, then settle. */
 @keyframes nisse-tree-grow {
-  from { transform: translateX(-50%) scale(.27); }
-  to { transform: translateX(-50%) scale(1); }
+  0% { transform: translateX(-50%) scale(.19); }
+  28% { transform: translateX(-50%) rotate(-.8deg) scale(.42, .53); }
+  60% { transform: translateX(-50%) rotate(.6deg) scale(.76, .88); }
+  85% { transform: translateX(-50%) rotate(-.4deg) scale(1, 1.012); }
+  100% { transform: translateX(-50%) scale(1); }
 }
-.nisse-decoration--snowman img {
-  width: 32%;
-  animation: nisse-build-snowman 1.3s steps(3, end) both;
-}
-@keyframes nisse-build-snowman {
-  from { clip-path: inset(100% 0 0); }
-  to { clip-path: inset(0 0 0); }
-}
+.nisse-decoration--snowman img { width: 32%; }
 .nisse-decoration--lantern img {
   width: 20%;
-  animation: nisse-light-lantern 1.2s ease-out both;
-}
-@keyframes nisse-light-lantern {
-  0% { opacity: 0; filter: brightness(.65); }
-  25% { opacity: 1; filter: brightness(.65); }
-  100% { opacity: 1; filter: drop-shadow(0 0 7px #ffd378); }
+  transition: filter .42s ease;
+  filter: drop-shadow(0 0 6px #ffd37875);
 }
 .nisse.is-skiing::after {
   content: "";
@@ -731,6 +725,45 @@ textarea {
 }
 
 .nisse-decoration.is-dragged img { rotate: -8deg; }
+.nisse-decoration.is-dragged.has-tow-chain:is(.nisse-decoration--gift, .nisse-decoration--lantern) > img:first-child {
+  rotate: none;
+  animation: none;
+  transform: translateX(-50%) rotate(-8deg);
+}
+.nisse-tow-chain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.nisse-tow-link,
+.nisse-tow-hook {
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  color: #a5a0a0;
+  filter: drop-shadow(0 1px 1px #09090ebf);
+}
+.nisse-tow-link[hidden] { display: none; }
+.nisse-tow-link {
+  height: 4px;
+  border: 1px solid currentColor;
+  border-radius: 70%;
+}
+.nisse-tow-link:nth-child(even) {
+  height: 2px;
+  color: #747176;
+}
+.nisse-tow-hook {
+  width: 7px;
+  height: 6px;
+  border: 1.3px solid #b6ada2;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 50%;
+}
 .nisse-scrooge {
   position: absolute;
   z-index: 2;
@@ -739,22 +772,39 @@ textarea {
   width: var(--nisse-width);
   aspect-ratio: 384 / 320;
   background-repeat: no-repeat;
-  background-size: 200% 200%;
+  background-size: 400% 200%;
   transform-origin: 33.333333% 90%;
   transform: translateX(var(--scrooge-x, -300px)) scaleX(var(--scrooge-facing, 1));
 }
 .nisse.is-skiing::after { scale: var(--nisse-ski-direction, 1) 1; transform-origin: 44% center; }
 
 
-.nisse-decoration--heart img {
-  width: 23%;
-  transform-origin: 50% 96%;
-  animation: nisse-set-heart .8s ease-out both;
+.nisse-decoration--heart > img:first-child { width: 23%; }
+.nisse-decoration--heart > .nisse-heart-ornament {
+  z-index: 2;
+  left: var(--heart-hook-x, 62.6%);
+  bottom: var(--heart-hook-height, 41.1%);
+  width: 13%;
+  transform: translate(-50%, 100%);
+  transform-origin: 50% 0;
 }
-@keyframes nisse-set-heart {
-  0% { transform: translateX(-50%) rotate(-14deg); opacity: 0; }
-  55% { transform: translateX(-50%) rotate(7deg); opacity: 1; }
-  100% { transform: translateX(-50%) rotate(0deg); opacity: 1; }
+.nisse-decoration--heart.is-hanging > .nisse-heart-ornament {
+  transform: translate(
+    calc(-50% + var(--heart-grip-x, 0px)),
+    calc(100% + var(--heart-grip-y, 0px))
+  );
+}
+.nisse-decoration--heart.is-hung > .nisse-heart-ornament {
+  animation: nisse-heart-swing 1.38s ease-in-out both;
+}
+@keyframes nisse-heart-swing {
+  0%, 100% { transform: translate(-50%, 100%) rotate(0); }
+  19% { transform: translate(-50%, 100%) rotate(11deg); }
+  47% { transform: translate(-50%, 100%) rotate(-6deg); }
+  71% { transform: translate(-50%, 100%) rotate(3deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-decoration--heart.is-hung > .nisse-heart-ornament { animation: none; }
 }
 .nisse-decoration--gift img {
   width: 26%;
@@ -765,24 +815,50 @@ textarea {
   to { transform: translate(-50%, 0); opacity: 1; }
 }
 
-/* Overgangen lægges bag sidens indhold og den eksisterende røde baggrund
-   skinner uhindret igennem over 66 % af vinduets højde. */
-body.nisse-night {
-  isolation: isolate;
-}
+/* De små stjerner ligger foran den natteblå farveovergang. */
+body.nisse-night { isolation: isolate; }
 body.nisse-night::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    transparent 66%,
-    rgb(22 19 42 / .34) 75%,
-    rgb(12 19 39 / .86) 90%,
-    #070d1a 100%
-  );
+  background:
+    radial-gradient(circle at 7% 54%, rgb(224 237 255 / 0.34) 0 1.1px, transparent 1.65px),
+    radial-gradient(circle at 16% 59%, rgb(224 237 255 / 0.5) 0 0.75px, transparent 1.30px),
+    radial-gradient(circle at 26% 52%, rgb(224 237 255 / 0.31) 0 0.8px, transparent 1.35px),
+    radial-gradient(circle at 33% 63%, rgb(224 237 255 / 0.65) 0 1.15px, transparent 1.70px),
+    radial-gradient(circle at 44% 57%, rgb(224 237 255 / 0.35) 0 0.78px, transparent 1.33px),
+    radial-gradient(circle at 53% 65%, rgb(224 237 255 / 0.34) 0 0.8px, transparent 1.35px),
+    radial-gradient(circle at 62% 54%, rgb(224 237 255 / 0.35) 0 0.65px, transparent 1.20px),
+    radial-gradient(circle at 71% 61%, rgb(224 237 255 / 0.57) 0 1px, transparent 1.55px),
+    radial-gradient(circle at 83% 55%, rgb(224 237 255 / 0.43) 0 0.9px, transparent 1.45px),
+    radial-gradient(circle at 94% 65%, rgb(224 237 255 / 0.54) 0 1.1px, transparent 1.65px),
+    radial-gradient(circle at 5% 76%, rgb(224 237 255 / 0.48) 0 0.8px, transparent 1.35px),
+    radial-gradient(circle at 15% 81%, rgb(224 237 255 / 0.57) 0 1.1px, transparent 1.65px),
+    radial-gradient(circle at 23% 70%, rgb(224 237 255 / 0.38) 0 0.85px, transparent 1.40px),
+    radial-gradient(circle at 30% 78%, rgb(224 237 255 / 0.59) 0 1.2px, transparent 1.75px),
+    radial-gradient(circle at 40% 71%, rgb(224 237 255 / 0.44) 0 0.85px, transparent 1.40px),
+    radial-gradient(circle at 47% 87%, rgb(224 237 255 / 0.5) 0 1.1px, transparent 1.65px),
+    radial-gradient(circle at 56% 77%, rgb(224 237 255 / 0.58) 0 1.2px, transparent 1.75px),
+    radial-gradient(circle at 66% 85%, rgb(224 237 255 / 0.38) 0 0.8px, transparent 1.35px),
+    radial-gradient(circle at 74% 75%, rgb(224 237 255 / 0.58) 0 0.9px, transparent 1.45px),
+    radial-gradient(circle at 80% 87%, rgb(224 237 255 / 0.35) 0 0.7px, transparent 1.25px),
+    radial-gradient(circle at 91% 77%, rgb(224 237 255 / 0.51) 0 0.85px, transparent 1.40px),
+    radial-gradient(circle at 96% 89%, rgb(224 237 255 / 0.4) 0 0.7px, transparent 1.25px),
+    radial-gradient(circle at 11% 89%, rgb(224 237 255 / 0.3) 0 0.7px, transparent 1.25px),
+    radial-gradient(circle at 36% 86%, rgb(224 237 255 / 0.32) 0 0.72px, transparent 1.27px),
+    radial-gradient(circle at 62% 70%, rgb(224 237 255 / 0.32) 0 0.66px, transparent 1.21px),
+    radial-gradient(circle at 88% 70%, rgb(224 237 255 / 0.33) 0 0.62px, transparent 1.17px),
+    linear-gradient(
+      to bottom,
+      transparent 45%,
+      rgb(29 28 61 / .46) 52%,
+      rgb(14 31 66 / .94) 64%,
+      #101f40 75%,
+      #0a1329 90%,
+      #070d1b 100%
+    );
 }
 
 /* Billedets øverste del er transparent. Sneens synlige kant ligger
@@ -803,14 +879,31 @@ body.nisse-night::after {
 .nisse-stage[data-nisse-snow] .nisse-scrooge { z-index: 1; }
 .nisse-decoration.snow-front { z-index: 3; }
 .nisse-decoration.snow-back { z-index: 0; }
+.nisse-stage[data-nisse-snow]
+  .nisse-decoration.snow-back:is(.nisse-decoration--tree, .nisse-decoration--snowman) {
+  width: calc(var(--nisse-decoration-width, var(--nisse-width)) * var(--nisse-far-scale, .86));
+}
 .nisse-stage[data-nisse-snow] .snow-front {
   bottom: calc(var(--nisse-bottom) - var(--nisse-front-drop));
 }
+.nisse-decoration.snow-front:is(.nisse-decoration--gift, .nisse-decoration--lantern) {
+  margin-bottom: calc(var(--nisse-prop-lift, 0px) + var(--nisse-gift-lift, 0px));
+}
 .nisse-decoration--gift.snow-front {
-  margin-bottom: 8px;
+  --nisse-gift-lift: 8px;
 }
 .nisse-stage[data-nisse-snow] .nisse-decoration--gift.snow-front {
-  margin-bottom: 12px;
+  --nisse-gift-lift: 12px;
+}
+.nisse-decoration.snow-front[data-size="small"] {
+  --nisse-small-prop-width: calc(var(--nisse-decoration-width, var(--nisse-width)) * var(--nisse-small-prop-scale, .82));
+  width: var(--nisse-small-prop-width);
+}
+.nisse-stage[data-nisse-snow] .nisse-decoration.snow-front[data-size="small"] {
+  /* The PNG's ground point is one twelfth of the canvas width above its bottom. */
+  bottom: calc(var(--nisse-snow-line) * var(--nisse-edge-ratio, 1)
+    - var(--nisse-edge-inset, 4px) - var(--nisse-small-prop-width) / 12);
+  margin-bottom: 0;
 }
 .nisse-decoration img { z-index: 1; }
 .nisse-decoration.snow-front::before,
@@ -829,7 +922,7 @@ body.nisse-night::after {
   background: radial-gradient(ellipse, rgb(35 54 83 / .26), rgb(50 82 115 / .08) 52%, transparent 72%);
 }
 .nisse-decoration--tree img {
-  filter: saturate(.91) brightness(.96) drop-shadow(0 1px 2px #1224316b);
+  filter: saturate(.96) drop-shadow(0 1px 2px #0e1b2b75);
 }
 .nisse-decoration--tree::after {
   z-index: 2;
@@ -844,7 +937,7 @@ body.nisse-night::after {
     radial-gradient(circle closest-side at 63% 68%, #ffcf7b65, transparent 40%);
   mix-blend-mode: screen;
   opacity: 0;
-  animation: nisse-juleglimt 6.8s 1.55s ease-in-out infinite;
+  animation: nisse-juleglimt 6.8s 1.75s ease-in-out infinite;
 }
 .nisse-decoration--lantern::after {
   z-index: 0;
@@ -871,3 +964,418 @@ body.nisse-night::after {
   .nisse-stage .nisse-decoration::after { animation: none; opacity: .72; }
 }
 
+/* Mirror the complete snowman artwork without moving its position in the snow. */
+.nisse-decoration--snowman[data-facing="left"] { --snowman-facing: -1; }
+.nisse-decoration--snowman > img:first-child {
+  transform: translateX(-50%) scaleX(var(--snowman-facing, 1));
+}
+.nisse-decoration--snowman.is-building > img:first-child { visibility: hidden; }
+.nisse-snowman-build {
+  position: absolute;
+  z-index: 1;
+  left: 56.5%;
+  bottom: 10%;
+  width: 32%;
+  aspect-ratio: 208 / 320;
+  transform: translateX(-50%) scaleX(var(--snowman-facing, 1));
+  pointer-events: none;
+}
+.nisse-snowman-piece {
+  position: absolute;
+  inset: 0;
+  background: url("../img/nisse/snow-body.png") center / 100% 100% no-repeat;
+  opacity: 0;
+  animation: nisse-stack-snow .48s ease-out both;
+}
+.nisse-snowman-build .snow-base {
+  clip-path: inset(57% 0 0);
+  animation-delay: .57s;
+}
+.nisse-snowman-build .snow-middle {
+  clip-path: inset(31% 0 40%);
+  animation-delay: 1.69s;
+}
+.nisse-snowman-build .snow-head {
+  clip-path: inset(0 0 67%);
+  animation-delay: 2.81s;
+}
+@keyframes nisse-stack-snow {
+  from { opacity: 0; transform: translateY(9%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nisse-decoration--snowman > img:not(:first-child) {
+  z-index: 2;
+  opacity: 0;
+  transform: translate(-50%, -8px) scaleX(var(--snowman-facing, 1));
+  transition: opacity .28s ease, transform .32s ease-out;
+}
+.nisse-decoration--snowman > .nisse-snow-scarf { width: 20%; bottom: 31.7%; }
+.nisse-decoration--snowman > .nisse-snow-carrot { width: 5.3%; left: calc(56.5% + 7px * var(--snowman-facing, 1)); bottom: 56.5%; }
+.nisse-decoration--snowman > .nisse-snow-hat { width: 19.5%; bottom: 63.8%; }
+.nisse-decoration--snowman.is-dressed > img:not(:first-child),
+.nisse-decoration--snowman.has-scarf > .nisse-snow-scarf,
+.nisse-decoration--snowman.has-carrot > .nisse-snow-carrot,
+.nisse-decoration--snowman.has-hat > .nisse-snow-hat {
+  opacity: 1;
+  transform: translateX(-50%) scaleX(var(--snowman-facing, 1));
+}
+.nisse-decoration--snowman[data-variant="1"] > .nisse-snow-hat,
+.nisse-decoration--snowman[data-variant="1"] > .nisse-snow-scarf {
+  filter: hue-rotate(205deg) saturate(.78);
+}
+.nisse-decoration--snowman[data-variant="2"] > .nisse-snow-hat,
+.nisse-decoration--snowman[data-variant="2"] > .nisse-snow-scarf {
+  filter: hue-rotate(105deg) saturate(.8);
+}
+
+.nisse.is-workshop { z-index: 4; }
+.nisse-decoration--tree.is-sprout img {
+  animation: none;
+  transform: translateX(-50%) scale(.19);
+}
+.nisse-decoration--tree.is-sprout::after,
+.nisse-decoration--lantern.is-unlit::after {
+  opacity: 0;
+  animation: none;
+}
+.nisse-decoration--lantern.is-unlit img { filter: brightness(.40) saturate(.65); }
+.nisse-decoration--lantern.is-setting img { animation: nisse-set-lantern 1.15s ease-in-out both; }
+@keyframes nisse-set-lantern {
+  from { transform: translate(calc(-50% + var(--lantern-approach) * 66%), -39%); }
+  to { transform: translate(-50%, 0); }
+}
+.nisse-lantern-flame {
+  position: absolute;
+  z-index: 2;
+  left: 55%;
+  bottom: 21.5%;
+  width: 2.2%;
+  height: 5.2%;
+  pointer-events: none;
+  border-radius: 64% 36% 58% 44%;
+  background: radial-gradient(ellipse at 54% 68%, #fffde2 8%, #fff1ae 45%, #f8ac4c6e 72%, transparent 83%);
+  filter: drop-shadow(0 0 4px #ffba6d85);
+  transform-origin: 50% 94%;
+  transform: translateX(-50%);
+  opacity: .8;
+  animation: nisse-candle-flutter 2.3s ease-in-out infinite;
+}
+.nisse-decoration[data-size="small"] .nisse-lantern-flame { animation-duration: 2.9s; }
+.nisse-decoration--lantern.is-unlit .nisse-lantern-flame {
+  visibility: hidden;
+  animation: none;
+}
+@keyframes nisse-candle-flutter {
+  0%, 100% { opacity: .81; transform: translateX(-50%) rotate(-3deg) scale(.94, 1); }
+  18% { opacity: .92; transform: translateX(-50%) rotate(5deg) scale(.86, 1.10); }
+  34% { opacity: .72; transform: translateX(-50%) rotate(2deg) scale(1.08, .92); }
+  56% { opacity: .89; transform: translateX(-50%) rotate(-6deg) scale(.91, 1.12); }
+  73% { opacity: .74; transform: translateX(-50%) rotate(4deg) scale(1.05, .93); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-lantern-flame { animation: none; }
+}
+.nisse-lantern-match {
+  --match-hand-y: -9px;
+  position: absolute;
+  z-index: 3;
+  left: 55.2%;
+  bottom: 22%;
+  width: clamp(8px, 5%, 12px);
+  height: 2px;
+  pointer-events: none;
+  border-radius: 2px;
+  background: linear-gradient(to right, #f0c68f, #ae6f44);
+  opacity: 0;
+  transform-origin: left center;
+  transform: translate(
+    calc(var(--lantern-approach) * var(--match-reach, 1) * 23px),
+    calc(var(--match-reach, 1) * var(--match-hand-y))
+  ) scaleX(var(--lantern-approach)) rotate(-13deg);
+}
+.nisse-decoration[data-size="small"] .nisse-lantern-match { --match-hand-y: 6px; }
+.nisse-lantern-match.is-visible { opacity: 1; }
+.nisse-lantern-match::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  bottom: 0;
+  width: 5px;
+  height: 8px;
+  transform: rotate(10deg);
+  border-radius: 65% 45% 65% 50%;
+  background: radial-gradient(ellipse at 57% 68%, #fffae0 7%, #ffce6e 53%, #e9823c 85%);
+  box-shadow: 0 0 5px 2px #ffb74d95, 0 0 13px 3px #ff9f493d;
+  animation: nisse-match-glow .65s ease-in-out infinite alternate;
+}
+@keyframes nisse-match-glow {
+  from { opacity: .76; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-lantern-match::before { animation: none; }
+}
+.nisse-decoration--gift.is-conjuring > img {
+  visibility: hidden;
+  animation: none;
+}
+.nisse-decoration--gift.is-conjuring::before,
+.nisse-decoration--gift.is-conjuring::after {
+  opacity: 0;
+  animation: none;
+}
+.nisse-decoration--gift {
+  --gift-floor-bottom: calc(var(--nisse-bottom) + var(--nisse-gift-lift, 0px));
+}
+.nisse-stage[data-nisse-snow] .nisse-decoration--gift {
+  --gift-floor-bottom: calc(var(--nisse-bottom) - var(--nisse-front-drop) + var(--nisse-gift-lift, 0px));
+}
+.nisse-stage[data-nisse-snow] .nisse-decoration--gift[data-size="small"] {
+  --gift-floor-bottom: calc(var(--nisse-snow-line) * var(--nisse-edge-ratio)
+    - var(--nisse-edge-inset, 4px) - var(--nisse-small-prop-width) / 12);
+}
+.nisse-gift-magic {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.nisse-gift-magic::before,
+.nisse-gift-magic::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.nisse-gift-magic::before {
+  width: 19px;
+  height: 19px;
+  background: radial-gradient(circle, #fffde8 1px, #ffe19c 3px, #efab5a86 5px, transparent 9px);
+  filter: drop-shadow(-6px 4px 3px #ffd282a0) drop-shadow(4px -4px 5px #ffe4ac75);
+  transform: translate(-50%, 50%);
+  animation: nisse-wand-spark .81s cubic-bezier(.37,.08,.58,.56) both;
+}
+@keyframes nisse-wand-spark {
+  0%, 12% {
+    left: calc(56.5% + var(--gift-tip-x, 0px));
+    bottom: calc(var(--nisse-bottom) + var(--nisse-width) * .195 - var(--gift-floor-bottom));
+  }
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  38% { left: calc(56.5% - var(--gift-spell-side) * 13%); bottom: 59%; }
+  75% { left: calc(56.5% - var(--gift-spell-side) * 9%); bottom: 26%; opacity: 1; }
+  100% { left: 56.5%; bottom: 14%; opacity: 0; }
+}
+.nisse-gift-magic::after {
+  width: 48%;
+  height: 12%;
+  left: 56.5%;
+  bottom: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, transparent 31%, #ffe2a4aa 46%, #eeb15854 54%, transparent 65%);
+  opacity: 0;
+  transform: translateX(-50%) scale(.35);
+}
+.nisse-gift-magic.is-arrived::after { animation: nisse-magic-on-snow .85s ease-out both; }
+@keyframes nisse-magic-on-snow {
+  0% { opacity: 0; transform: translateX(-50%) scale(.35); }
+  26% { opacity: .8; }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.42); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-gift-magic { display: none; }
+}
+.nisse-decoration--gift::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 56.5%;
+  bottom: 8%;
+  width: 43%;
+  height: 34%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 19% 68%, #fff9dc 0 1.2px, #ffbf6975 2.4px, transparent 5px),
+    radial-gradient(circle at 75% 22%, #fff6d0 0 1.5px, #ffd4776d 3px, transparent 6px),
+    radial-gradient(circle at 87% 64%, #fff9d2 0 1px, #ffd67966 3px, transparent 5px),
+    radial-gradient(circle at 34% 29%, #fff1bd 0 1px, #ffc87565 2.3px, transparent 5px),
+    radial-gradient(circle at 54% 52%, #ffdc8b45, transparent 52%);
+  opacity: 0;
+  animation: nisse-gift-sparkle .92s ease-out both;
+}
+@keyframes nisse-gift-sparkle {
+  0% { transform: translateX(-50%) scale(.48); opacity: 0; }
+  30% { opacity: .95; }
+  100% { transform: translateX(-50%) translateY(-15%) scale(1.18); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-decoration--snowman.is-building > img:first-child { visibility: visible; }
+  .nisse-snowman-build, .nisse-decoration--gift::after { display: none; }
+  .nisse-decoration--lantern.is-setting img { animation: none; }
+}
+
+
+/* A self-contained storybook effect on the oldest tree's own decoration layer. */
+.nisse-decoration--tree.is-burning img {
+  animation: nisse-tree-collapse 3.8s ease-in both;
+}
+.nisse-decoration--tree.is-burning::after {
+  z-index: 2;
+  left: 56.5%;
+  bottom: 7%;
+  width: 55%;
+  height: 46%;
+  background:
+    radial-gradient(ellipse 17% 46% at 38% 58%, #fff1ab 1%, #ffae48 33%, #f45823a8 56%, transparent 75%),
+    radial-gradient(ellipse 16% 48% at 59% 53%, #fff4bd 2%, #ffb64c 31%, #f3552191 58%, transparent 77%),
+    radial-gradient(ellipse 15% 38% at 73% 67%, #ffe394 0%, #ed732b9e 52%, transparent 73%),
+    radial-gradient(ellipse 43% 16% at 55% 83%, #ed7a3868 0%, transparent 92%);
+  mix-blend-mode: normal;
+  transform-origin: 50% 84%;
+  animation: nisse-fire-tongues 3.8s ease-in-out both;
+}
+.nisse-decoration--tree.is-burning::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  left: 56.5%;
+  bottom: 18%;
+  width: 49%;
+  height: 38%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 31% 34%, #ffcb76 0 1px, transparent 2px),
+    radial-gradient(circle at 51% 17%, #f4a652 0 1px, transparent 2px),
+    radial-gradient(circle at 69% 47%, #ffd790 0 1px, transparent 2px);
+  animation: nisse-fire-embers 3.8s ease-out both;
+}
+.nisse-tree-ash {
+  position: absolute;
+  z-index: 2;
+  left: 56.5%;
+  bottom: 9%;
+  width: 35%;
+  height: 7%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(ellipse at 38% 57%, #4b4942 0 18%, transparent 41%),
+    radial-gradient(ellipse at 64% 58%, #514b43 0 14%, transparent 34%),
+    radial-gradient(ellipse at 50% 67%, #31323a 0 32%, #55535a73 46%, transparent 68%);
+}
+.nisse-decoration--tree.is-ash .nisse-tree-ash { animation: nisse-ash-fade 1.4s ease-out both; }
+@keyframes nisse-ash-fade {
+  0%, 33% { opacity: .78; }
+  100% { opacity: 0; transform: translateX(-45%) scaleX(1.16); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-decoration--tree.is-ash .nisse-tree-ash { animation: none; opacity: .55; }
+}
+@keyframes nisse-tree-collapse {
+  0%, 14% { transform: translateX(-50%) scale(1); opacity: 1; }
+  49% { transform: translateX(-50%) scale(.76, .72); filter: brightness(.66) saturate(.66); }
+  86% { transform: translateX(-50%) scale(.37, .17); opacity: .8; }
+  100% { transform: translateX(-50%) scale(.28, .05); opacity: 0; filter: brightness(.36) saturate(.35); }
+}
+@keyframes nisse-fire-tongues {
+  0% { transform: translateX(-50%) scale(.20, .13); opacity: 0; }
+  16% { opacity: .85; }
+  36% { transform: translateX(-50%) scale(.94, 1.12); opacity: .97; }
+  62% { transform: translateX(-50%) scale(1, .83); opacity: .82; }
+  84% { transform: translateX(-50%) scale(.64, .38); opacity: .54; }
+  100% { transform: translateX(-50%) scale(.31, .11); opacity: 0; }
+}
+@keyframes nisse-fire-embers {
+  0% { transform: translate(-50%, 35%); opacity: 0; }
+  28% { opacity: .82; }
+  100% { transform: translate(-50%, -78%); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-decoration--tree.is-burning img { animation: none; opacity: .5; }
+  .nisse-decoration--tree.is-burning::before,
+  .nisse-decoration--tree.is-burning::after { display: none; }
+}
+
+
+.nisse.is-riding .nisse-frame { transform-origin: 50% 90%; }
+.nisse-decoration--goat > img:first-child {
+  width: calc(var(--nisse-width) * var(--nisse-goat-width, .479167));
+  transform: translateX(-50%) scaleX(var(--goat-facing, 1));
+  filter: drop-shadow(0 1px 2px #30200c52);
+}
+
+
+.nisse.is-meeting-hidden { visibility: hidden; }
+.nisse-meeting {
+  position: absolute;
+  left: 0;
+  bottom: var(--nisse-bottom);
+  z-index: 1;
+  width: var(--nisse-width);
+  aspect-ratio: 384 / 320;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  transform-origin: 50% 90%;
+  transform: translateX(var(--meeting-x, -300px))
+    scaleX(var(--meeting-facing, 1));
+  filter: drop-shadow(0 2px 2px #0002);
+}
+.nisse-meeting-heart {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 13%;
+  color: #ef7b83;
+  text-shadow: 0 0 9px #f78a8870;
+  font: bold clamp(15px, 1.8vw, 25px)/1 system-ui, sans-serif;
+  pointer-events: none;
+}
+.nisse-meeting.is-kissing .nisse-meeting-heart {
+  display: block;
+  animation: nisse-meeting-heart 1.32s .14s ease-out both;
+}
+@keyframes nisse-meeting-heart {
+  0% { opacity: 0; transform: translate(-50%, 15%) scale(.45); }
+  24% { opacity: 1; transform: translate(-50%, -22%) scale(1.05); }
+  65% { opacity: .85; }
+  100% { opacity: 0; transform: translate(-50%, -95%) scale(.87); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-meeting-heart { animation: none; }
+}
+
+
+/* The collar stays put. The separate tail reaches out behind the snowman. */
+.nisse-decoration--snowman.is-dragged.has-scarf > .nisse-snow-scarf {
+  rotate: none;
+  clip-path: inset(0 0 64% 0);
+  transform: translateX(-50%) scaleX(calc(-1 * var(--tow-direction, 1)));
+}
+.nisse-decoration--snowman.is-dragged > .nisse-scarf-tail {
+  position: absolute;
+  z-index: 3;
+  left: calc(56.5% + var(--scarf-tail-side, 1) * 3.4%);
+  top: 55.8%;
+  width: 30%;
+  aspect-ratio: 3.5 / 1;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+  transform-origin: 0% 50%;
+  transform: translateY(-50%) scaleX(var(--scarf-tail-side, 1)) rotate(-5deg);
+  animation: nisse-scarf-wind .75s ease-in-out infinite;
+}
+.nisse-decoration--snowman[data-variant="1"] > .nisse-scarf-tail {
+  filter: hue-rotate(205deg) saturate(.78);
+}
+.nisse-decoration--snowman[data-variant="2"] > .nisse-scarf-tail {
+  filter: hue-rotate(105deg) saturate(.8);
+}
+@keyframes nisse-scarf-wind {
+  0%, 100% { transform: translateY(-50%) scaleX(var(--scarf-tail-side, 1)) rotate(-5deg) scaleY(1); }
+  30% { transform: translateY(-50%) scaleX(var(--scarf-tail-side, 1)) rotate(-12deg) scaleY(.85); }
+  65% { transform: translateY(-50%) scaleX(var(--scarf-tail-side, 1)) rotate(8deg) scaleY(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nisse-decoration--snowman.is-dragged > .nisse-scarf-tail { animation: none; }
+}

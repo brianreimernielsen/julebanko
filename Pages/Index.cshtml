@@ -20,11 +20,11 @@
     <div class="hero-content">
         <p class="hero-kicker">@DateTime.Now.Year</p>
         <div class="brand-row">
-            <h1 class="brand">@Localizer["Brand"]</h1>
             @if (!string.IsNullOrEmpty(Model.LogoUrl))
             {
                 <img class="hero-logo" src="@Model.LogoUrl" alt="" />
             }
+            <h1 class="brand">@Localizer["Brand"]</h1>
         </div>
         <p class="hero-lead">@Model.SeasonTitle</p>
         <div class="cta-row">
