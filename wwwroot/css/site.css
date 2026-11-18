@@ -663,8 +663,10 @@ textarea {
   background-size: 100% 100%;
 }
 
-/* Christmas nisse v3 — atlas player; feet sit on the snow strip */
+/* Christmas nisse v5 — multi-stop visits, decorations, Scrooge; feet on snow strip */
 .nisse-stage {
+  --nisse-width: min(230px, 65vw);
+  --nisse-bottom: calc(var(--snow-ground-height, 110px) * 0.42);
   pointer-events: none;
   position: fixed;
   inset: 0;
@@ -675,8 +677,9 @@ textarea {
 .nisse {
   position: absolute;
   left: 0;
-  bottom: calc(var(--snow-ground-height, 110px) * 0.42);
-  width: min(230px, 65vw);
+  bottom: var(--nisse-bottom);
+  z-index: 1;
+  width: var(--nisse-width);
   aspect-ratio: 384 / 320;
   opacity: 0;
   transform: translate3d(var(--nisse-x, -300px), 0, 0);
@@ -714,35 +717,130 @@ textarea {
   background-repeat: no-repeat;
   background-size: 400% 400%;
   background-position: calc(var(--col, 0) * 100% / 3) calc(var(--row, 0) * 100% / 3);
+  transform-origin: 33.333333% 90%;
+  transform: rotate(var(--nisse-lean, 0deg)) scaleX(var(--nisse-facing, 1));
 }
 
-.nisse-tree-frame,
-.nisse-grown-tree {
+.nisse-tree-frame {
   position: absolute;
   max-width: none !important;
   height: auto;
   object-fit: contain;
 }
 
-.nisse-grown-tree {
-  left: 37.5%;
-  top: 8%;
-  width: 41%;
-  transform-origin: 50% 93%;
-  transform: scale(0);
-  opacity: 0;
-  transition: transform 1.5s ease, opacity 0.4s;
-}
-
-.nisse-grown-tree.is-grown {
-  transform: scale(1);
-  opacity: 1;
-}
-
 .nisse-frame[hidden],
-.nisse-tree-frame[hidden],
-.nisse-grown-tree[hidden] {
+.nisse-tree-frame[hidden] {
   display: none !important;
+}
+
+.nisse-decoration {
+  position: absolute;
+  left: var(--plant-x);
+  bottom: var(--nisse-bottom);
+  z-index: 0;
+  width: var(--nisse-decoration-width, var(--nisse-width));
+  aspect-ratio: 384 / 320;
+  transform: translateX(-56.5%) translateX(var(--drag-x, 0px));
+}
+
+.nisse-decoration img {
+  position: absolute;
+  left: 56.5%;
+  bottom: 10%;
+  height: auto;
+  max-width: none;
+  transform: translateX(-50%);
+}
+
+.nisse-decoration--tree img {
+  width: 41%;
+  bottom: 7.48%;
+  transform-origin: 50% 95.62%;
+  animation: nisse-tree-grow 1.65s ease-out both;
+}
+
+@keyframes nisse-tree-grow {
+  from { transform: translateX(-50%) scale(0.27); }
+  to { transform: translateX(-50%) scale(1); }
+}
+
+.nisse-decoration--snowman img {
+  width: 32%;
+  animation: nisse-build-snowman 1.3s steps(3, end) both;
+}
+
+@keyframes nisse-build-snowman {
+  from { clip-path: inset(100% 0 0); }
+  to { clip-path: inset(0 0 0); }
+}
+
+.nisse-decoration--lantern img {
+  width: 20%;
+  animation: nisse-light-lantern 1.2s ease-out both;
+}
+
+@keyframes nisse-light-lantern {
+  0% { opacity: 0; filter: brightness(0.65); }
+  25% { opacity: 1; filter: brightness(0.65); }
+  100% { opacity: 1; filter: drop-shadow(0 0 7px #ffd378); }
+}
+
+.nisse-decoration--heart img {
+  width: 23%;
+  transform-origin: 50% 96%;
+  animation: nisse-set-heart 0.8s ease-out both;
+}
+
+@keyframes nisse-set-heart {
+  0% { transform: translateX(-50%) rotate(-14deg); opacity: 0; }
+  55% { transform: translateX(-50%) rotate(7deg); opacity: 1; }
+  100% { transform: translateX(-50%) rotate(0deg); opacity: 1; }
+}
+
+.nisse-decoration--gift img {
+  width: 26%;
+  animation: nisse-set-gift 0.45s ease-out both;
+}
+
+@keyframes nisse-set-gift {
+  from { transform: translate(-50%, -20%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.nisse-decoration.is-dragged img {
+  rotate: -8deg;
+}
+
+.nisse.is-skiing::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  left: 0;
+  bottom: 9%;
+  width: 31%;
+  height: 7%;
+  background: radial-gradient(ellipse at right, #fffc, transparent 73%);
+  animation: nisse-ski-snow 0.45s ease-out infinite;
+  scale: var(--nisse-ski-direction, 1) 1;
+  transform-origin: 44% center;
+}
+
+@keyframes nisse-ski-snow {
+  from { transform: translateX(8%); opacity: 0.9; }
+  to { transform: translateX(-12%); opacity: 0; }
+}
+
+.nisse-scrooge {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: var(--nisse-bottom);
+  width: var(--nisse-width);
+  aspect-ratio: 384 / 320;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  transform-origin: 33.333333% 90%;
+  transform: translateX(var(--scrooge-x, -300px)) scaleX(var(--scrooge-facing, 1));
 }
 
 @media (prefers-reduced-motion: reduce) {
