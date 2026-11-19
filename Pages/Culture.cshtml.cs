@@ -1,3 +1,4 @@
+using Julebanko.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,12 +9,7 @@ public class CultureModel : PageModel
 {
     public IActionResult OnGet(string culture, string? returnUrl)
     {
-        culture = culture switch
-        {
-            "en" => "en",
-            "sv" => "sv",
-            _ => "da"
-        };
+        culture = CultureSupport.Normalize(culture);
 
         Response.Cookies.Append(
             CookieRequestCultureProvider.DefaultCookieName,

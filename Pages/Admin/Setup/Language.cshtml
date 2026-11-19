@@ -1,0 +1,25 @@
+@page
+@model Julebanko.Pages.Admin.Setup.LanguageModel
+@using Julebanko.Services
+@{
+    ViewData["Title"] = Localizer["DefaultLanguage"].Value;
+}
+<div class="admin-card">
+    <h2>@Localizer["DefaultLanguage"]</h2>
+    <p class="muted">@Localizer["DefaultLanguageHint"]</p>
+    @if (Model.Saved)
+    {
+        <div class="alert alert-success">@Localizer["Saved"]</div>
+    }
+    <form method="post" class="form-stack" style="max-width:420px;">
+        <label>
+            @Localizer["DefaultLanguage"]
+            <select asp-for="DefaultCulture">
+                <option value="@CultureSupport.Danish">Dansk (da)</option>
+                <option value="@CultureSupport.Swedish">Svenska (sv)</option>
+                <option value="@CultureSupport.English">English (en)</option>
+            </select>
+        </label>
+        <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
+    </form>
+</div>

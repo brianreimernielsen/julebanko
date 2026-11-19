@@ -21,6 +21,8 @@
   <data name="ClaimSubmitted" xml:space="preserve"><value>Thanks! Your claim was sent and awaits confirmation.</value></data>
   <data name="NoNumbersYet" xml:space="preserve"><value>No numbers drawn yet.</value></data>
   <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="DefaultLanguage" xml:space="preserve"><value>Default language</value></data>
+  <data name="DefaultLanguageHint" xml:space="preserve"><value>Used for the public site when visitors have not chosen a language. The DA/EN/SV switcher still overrides per browser.</value></data>
   <data name="AdminLogin" xml:space="preserve"><value>Admin login</value></data>
   <data name="Username" xml:space="preserve"><value>Username</value></data>
   <data name="Password" xml:space="preserve"><value>Password</value></data>

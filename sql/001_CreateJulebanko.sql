@@ -232,7 +232,8 @@ USING (VALUES
     (N'SeasonTitle',        CONCAT(N'Julebanko ', @Year)),
     (N'PlayerSnowEnabled',   N'true'),
     (N'PlayerSnowIntensity', N'1'),
-    (N'PlayerNisseEnabled',  N'true')
+    (N'PlayerNisseEnabled',  N'true'),
+    (N'DefaultCulture',      N'da')
 ) AS s([Key], Value)
 ON t.[Key] = s.[Key]
 WHEN NOT MATCHED THEN

@@ -82,6 +82,7 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowIntensity, "1");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowGroundEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.PlayerNisseEnabled, "true");
+        await EnsureSettingAsync(db, SettingKeys.DefaultCulture, "da");
 
         await db.SaveChangesAsync(cancellationToken);
 

@@ -69,14 +69,20 @@ builder.Services.AddScoped<AdminAuthService>();
 
 var app = builder.Build();
 
-var supportedCultures = new[] { "da", "en", "sv" };
+var supportedCultures = CultureSupport.Supported;
 var localizationOptions = new RequestLocalizationOptions
 {
-    DefaultRequestCulture = new RequestCulture("da"),
+    // Fallback if AppSettings is unavailable; live default comes from AppSettingsCultureProvider.
+    DefaultRequestCulture = new RequestCulture(CultureSupport.Danish),
     SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
-    SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
+    SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
+    // Cookie (language switcher) wins; otherwise AppSettings DefaultCulture (not Accept-Language).
+    RequestCultureProviders =
+    [
+        new CookieRequestCultureProvider(),
+        new AppSettingsCultureProvider()
+    ]
 };
-localizationOptions.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 
 if (!app.Environment.IsDevelopment())
 {

@@ -14,4 +14,5 @@ public static class SettingKeys
     public const string PlayerSnowIntensity = "PlayerSnowIntensity";
     public const string PlayerSnowGroundEnabled = "PlayerSnowGroundEnabled";
     public const string PlayerNisseEnabled = "PlayerNisseEnabled";
+    public const string DefaultCulture = "DefaultCulture";
 }
