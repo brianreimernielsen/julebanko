@@ -67,7 +67,8 @@ img {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  z-index: 0;
+  /* Above .site-shell (z-index 1) so flakes are visible; below .nisse-stage (8). */
+  z-index: 7;
   contain: layout style paint;
 }
 
@@ -657,7 +658,10 @@ textarea {
 .nisse-sprite{background:none!important;filter:drop-shadow(0 2px 2px #0002)}
 .nisse-frame{position:absolute;left:0;top:18.75%;width:66.666667%;height:80%;background-repeat:no-repeat;background-size:400% 400%;background-position:calc(var(--col,0)*100%/3) calc(var(--row,0)*100%/3)}
 .nisse-frame[hidden]{display:none!important}
-@media(prefers-reduced-motion:reduce){.nisse-stage{display:none}}
+/* Keep snow strip / stage chrome; only hide the animated actor. */
+@media (prefers-reduced-motion: reduce) {
+  .nisse-stage .nisse { display: none; }
+}
 /* Atlas cells are normalized to the same 384 × 320 canvas. */
 .nisse-frame{left:0;top:0;width:100%;height:100%}
 

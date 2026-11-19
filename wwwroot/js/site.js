@@ -989,7 +989,8 @@
     });
     motion.addEventListener('change',()=>{
       cancelAnimationFrame(raf);prev=0;
-      stage.hidden=motion.matches;
+      // Do not hide the whole stage (snow strip must stay). Pause the actor only.
+      if(actor) actor.hidden=motion.matches;
       if(!motion.matches&&!document.hidden)raf=requestAnimationFrame(tick);
     });
   };
