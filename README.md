@@ -1,7 +1,7 @@
 # Julebanko
 
 Internal Christmas bingo (julebanko) web app for intranet / VPN.  
-ASP.NET Core 8 Razor Pages + SQL Server + cookie auth. Deployable on IIS.
+ASP.NET Core 10 Razor Pages + SQL Server + cookie auth. Deployable on IIS.
 
 ## Features
 
@@ -13,7 +13,7 @@ ASP.NET Core 8 Razor Pages + SQL Server + cookie auth. Deployable on IIS.
 
 ## Requirements
 
-- .NET 8 SDK
+- .NET 10 SDK
 - SQL Server (existing instance, Express, or Docker). LocalDB works on Windows.
 - Outbound TCP 587 to `outbound12.electric.net` from the IIS/app server (for claim mail)
 
