@@ -1,6 +1,9 @@
 using Julebanko.Models;
+using Julebanko.Options;
+using Julebanko.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Julebanko.Data;
 
@@ -75,14 +78,25 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.AccentColor, "#D4A017");
         await EnsureSettingAsync(db, SettingKeys.PlayerTextColor, "#FFF8F0");
         await EnsureSettingAsync(db, SettingKeys.AdminTextColor, "#F0F7F2");
+        var smtp = scope.ServiceProvider.GetRequiredService<IOptions<SmtpOptions>>().Value;
         await EnsureSettingAsync(db, SettingKeys.ClaimNotifyTo, "banko@example.com");
-        await EnsureSettingAsync(db, SettingKeys.MailFrom, "julebanko@example.com");
+        await EnsureSettingAsync(db, SettingKeys.MailFrom,
+            string.IsNullOrWhiteSpace(smtp.From) ? "julebanko@example.com" : smtp.From);
+        await EnsureSettingAsync(db, SettingKeys.SmtpHost,
+            string.IsNullOrWhiteSpace(smtp.Host) ? "outbound12.electric.net" : smtp.Host);
+        await EnsureSettingAsync(db, SettingKeys.SmtpPort, smtp.Port > 0 ? smtp.Port.ToString() : "587");
+        await EnsureSettingAsync(db, SettingKeys.SmtpUseSsl, smtp.UseSsl ? "true" : "false");
+        await EnsureSettingAsync(db, SettingKeys.SmtpUsername, smtp.Username ?? "");
+        await EnsureSettingAsync(db, SettingKeys.SmtpPassword, smtp.Password ?? "");
         await EnsureSettingAsync(db, SettingKeys.SeasonTitle, $"Julebanko {year}");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowIntensity, "1");
         await EnsureSettingAsync(db, SettingKeys.PlayerSnowGroundEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.PlayerNisseEnabled, "true");
         await EnsureSettingAsync(db, SettingKeys.DefaultCulture, "da");
+        await EnsureSettingAsync(db, SettingKeys.BrandNameDa, CultureSupport.DefaultBrandDa);
+        await EnsureSettingAsync(db, SettingKeys.BrandNameEn, CultureSupport.DefaultBrandEn);
+        await EnsureSettingAsync(db, SettingKeys.BrandNameSv, CultureSupport.DefaultBrandSv);
 
         await db.SaveChangesAsync(cancellationToken);
 

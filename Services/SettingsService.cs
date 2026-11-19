@@ -1,3 +1,4 @@
+using System.Globalization;
 using Julebanko.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,21 @@ public class SettingsService(AppDbContext db)
     {
         var map = await GetAllAsync();
         return map.TryGetValue(key, out var value) ? value : fallback;
+    }
+
+    /// <summary>
+    /// Brand name for the current UI culture (or an explicit two-letter culture).
+    /// </summary>
+    public async Task<string> GetBrandNameAsync(string? culture = null)
+    {
+        var lang = CultureSupport.Normalize(
+            culture ?? CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
+        var value = await GetAsync(
+            CultureSupport.BrandSettingKey(lang),
+            CultureSupport.DefaultBrandName(lang));
+        return string.IsNullOrWhiteSpace(value)
+            ? CultureSupport.DefaultBrandName(lang)
+            : value.Trim();
     }
 
     public async Task<IReadOnlyDictionary<string, string>> GetAllAsync()

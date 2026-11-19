@@ -4,6 +4,7 @@
 @inject Julebanko.Services.SettingsService Settings
 @{
     var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var brandName = await Settings.GetBrandNameAsync(culture);
     var playerBg = await Settings.GetAsync(SettingKeys.PlayerBgColor, "#8B1E1E");
     var accent = await Settings.GetAsync(SettingKeys.AccentColor, "#D4A017");
     var playerText = await Settings.GetAsync(SettingKeys.PlayerTextColor, "#FFF8F0");
@@ -27,7 +28,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] — Julebanko</title>
+    <title>@ViewData["Title"] — @brandName</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -63,7 +64,7 @@
         </div>
         @RenderBody()
     </div>
-    <footer class="site-footer">Julebanko © Brian Reimer-Nielsen</footer>
+    <footer class="site-footer">@brandName © Brian Reimer-Nielsen</footer>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

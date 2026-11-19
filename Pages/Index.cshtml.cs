@@ -21,6 +21,7 @@ public class IndexModel(
     public WinType WinType { get; set; } = WinType.OneRow;
 
     public string SeasonTitle { get; private set; } = "Julebanko";
+    public string BrandName { get; private set; } = CultureSupport.DefaultBrandDa;
     public IReadOnlyList<DrawnNumber> TodayNumbers { get; private set; } = Array.Empty<DrawnNumber>();
     public IReadOnlyList<DrawnNumber> AllDrawOrder { get; private set; } = Array.Empty<DrawnNumber>();
     public IReadOnlyList<int> AllSorted { get; private set; } = Array.Empty<int>();
@@ -58,6 +59,7 @@ public class IndexModel(
     {
         var season = await seasons.GetActiveSeasonAsync();
         SeasonTitle = await settings.GetAsync(SettingKeys.SeasonTitle, season.Title);
+        BrandName = await settings.GetBrandNameAsync();
         AllDrawOrder = await draws.GetAllAsync();
         TodayNumbers = await draws.GetTodaysAsync();
         AllSorted = AllDrawOrder.Select(n => n.Number).OrderBy(n => n).ToList();

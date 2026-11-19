@@ -229,11 +229,19 @@ USING (VALUES
     (N'AdminTextColor',     N'#F0F7F2'),
     (N'ClaimNotifyTo',      N'banko@example.com'),
     (N'MailFrom',           N'julebanko@example.com'),
+    (N'SmtpHost',           N'outbound12.electric.net'),
+    (N'SmtpPort',           N'587'),
+    (N'SmtpUseSsl',         N'true'),
+    (N'SmtpUsername',       N''),
+    (N'SmtpPassword',       N''),
     (N'SeasonTitle',        CONCAT(N'Julebanko ', @Year)),
     (N'PlayerSnowEnabled',   N'true'),
     (N'PlayerSnowIntensity', N'1'),
     (N'PlayerNisseEnabled',  N'true'),
-    (N'DefaultCulture',      N'da')
+    (N'DefaultCulture',      N'da'),
+    (N'BrandNameDa',         N'Julebanko'),
+    (N'BrandNameEn',         N'Julebanko'),
+    (N'BrandNameSv',         N'Julbingo')
 ) AS s([Key], Value)
 ON t.[Key] = s.[Key]
 WHEN NOT MATCHED THEN

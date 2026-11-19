@@ -35,16 +35,16 @@ Edit `appsettings.json` / `appsettings.Development.json`, or set IIS / User Secr
 
 ### SMTP
 
-Locked defaults in `Smtp` section:
+File defaults in `Smtp` (seeded into `AppSettings` on first run if missing):
 
-| Setting | Value |
-|---------|--------|
+| Setting | Default |
+|---------|---------|
 | Host | `outbound12.electric.net` |
 | Port | `587` |
-| TLS | StartTLS / SSL required |
-| Password | empty (provider IP-allowlists the server) |
+| TLS | StartTLS / SSL |
+| Username / Password | empty (provider IP-allowlists the server) |
 
-**Claim To:** is **not** hard-coded. It lives in DB setting `ClaimNotifyTo` (seed placeholder `banko@example.com`) and is editable under **Setup Admin → Claim email**.
+**Setup Admin → Claim email** edits Claim To, From, and full SMTP (host/port/SSL/user/password) in the database; runtime mail uses those overrides and falls back to `appsettings.json` when keys are absent.
 
 ### Default admin logins (temporary)
 

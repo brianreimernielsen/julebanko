@@ -23,6 +23,11 @@
   <data name="Language" xml:space="preserve"><value>Language</value></data>
   <data name="DefaultLanguage" xml:space="preserve"><value>Default language</value></data>
   <data name="DefaultLanguageHint" xml:space="preserve"><value>Used for the public site when visitors have not chosen a language. The DA/EN/SV switcher still overrides per browser.</value></data>
+  <data name="BrandNames" xml:space="preserve"><value>Brand name per language</value></data>
+  <data name="BrandNamesHint" xml:space="preserve"><value>Shown as the large hero title (and browser title) when that language is active. Season title on Theme stays separate.</value></data>
+  <data name="BrandNameDa" xml:space="preserve"><value>Brand (Danish)</value></data>
+  <data name="BrandNameEn" xml:space="preserve"><value>Brand (English)</value></data>
+  <data name="BrandNameSv" xml:space="preserve"><value>Brand (Swedish)</value></data>
   <data name="AdminLogin" xml:space="preserve"><value>Admin login</value></data>
   <data name="Username" xml:space="preserve"><value>Username</value></data>
   <data name="Password" xml:space="preserve"><value>Password</value></data>
@@ -54,7 +59,7 @@
   <data name="Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>
   <data name="HeroImage" xml:space="preserve"><value>Hero image</value></data>
-  <data name="HeroLogo" xml:space="preserve"><value>Hero logo (left of Julebanko)</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero logo (left of brand name)</value></data>
   <data name="BackgroundImage" xml:space="preserve"><value>Background image</value></data>
   <data name="DecorationImage" xml:space="preserve"><value>Decoration image (unused on player page)</value></data>
   <data name="PlayerColors" xml:space="preserve"><value>Player colors</value></data>
@@ -62,6 +67,15 @@
   <data name="Accent" xml:space="preserve"><value>Accent</value></data>
   <data name="NotifyTo" xml:space="preserve"><value>Claim notification To:</value></data>
   <data name="MailFrom" xml:space="preserve"><value>Mail From:</value></data>
+  <data name="SmtpSettings" xml:space="preserve"><value>SMTP server</value></data>
+  <data name="SmtpHint" xml:space="preserve"><value>Claim To/From and SMTP provider. Values are stored in the database and override appsettings.json when set. Defaults seed from the Smtp section on first run.</value></data>
+  <data name="SmtpHost" xml:space="preserve"><value>SMTP host</value></data>
+  <data name="SmtpPort" xml:space="preserve"><value>Port</value></data>
+  <data name="SmtpUseSsl" xml:space="preserve"><value>Use SSL / StartTLS</value></data>
+  <data name="SmtpUsername" xml:space="preserve"><value>Username (optional)</value></data>
+  <data name="SmtpPassword" xml:space="preserve"><value>Password (optional)</value></data>
+  <data name="SmtpPasswordKeep" xml:space="preserve"><value>Leave blank to keep current password</value></data>
+  <data name="SmtpPasswordHint" xml:space="preserve"><value>Leave password blank to keep the stored value. Clear username if the provider uses IP allowlisting only.</value></data>
   <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
   <data name="Saved" xml:space="preserve"><value>Saved.</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
