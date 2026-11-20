@@ -6,6 +6,11 @@ namespace Julebanko.Services;
 
 public class DrawService(AppDbContext db, SeasonService seasons)
 {
+    /// <summary>Inclusive banko pool: 1–90 (Scandinavian banko).</summary>
+    public const int MinNumber = 1;
+    public const int MaxNumber = 90;
+    public const int PoolSize = MaxNumber - MinNumber + 1; // 90
+
     public async Task<IReadOnlyList<DrawnNumber>> GetAllAsync()
     {
         var season = await seasons.GetActiveSeasonAsync();
@@ -52,7 +57,7 @@ public class DrawService(AppDbContext db, SeasonService seasons)
             .Select(n => n.Number)
             .ToListAsync();
 
-        var available = Enumerable.Range(1, 99).Except(used).ToList();
+        var available = Enumerable.Range(MinNumber, PoolSize).Except(used).ToList();
         if (available.Count < count)
         {
             return (false, $"Only {available.Count} numbers left in the season.", Array.Empty<int>());

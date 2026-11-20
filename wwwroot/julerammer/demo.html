@@ -126,7 +126,7 @@
     }
 
     document.querySelector('#numbers').addEventListener('click', () => {
-      const unused = Array.from({length: 99}, (_, i) => i + 1).filter(n => !numbers.includes(n));
+      const unused = Array.from({length: 90}, (_, i) => i + 1).filter(n => !numbers.includes(n));
       numbers = numbers.concat(unused.slice(0, 12));
       render();
     });
