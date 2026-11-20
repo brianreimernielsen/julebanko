@@ -83,6 +83,13 @@
   <data name="SmtpPasswordHint" xml:space="preserve"><value>Lad adgangskode stå tom for at beholde den gemte værdi. Ryd brugernavn, hvis udbyderen kun bruger IP-allowlisting.</value></data>
   <data name="NewPassword" xml:space="preserve"><value>Ny adgangskode</value></data>
   <data name="Saved" xml:space="preserve"><value>Gemt.</value></data>
+  <data name="Deleted" xml:space="preserve"><value>Slettet.</value></data>
+  <data name="ResetToDefaults" xml:space="preserve"><value>Nulstil til standard</value></data>
+  <data name="ConfirmResetMedia" xml:space="preserve"><value>Gendan de medfølgende eksempelbilleder (hero, logo, baggrund og dekoration)? Egne uploads i de felter bliver erstattet.</value></data>
+  <data name="ResetMediaHint" xml:space="preserve"><value>Gendan appens medfølgende spillerbilleder (rød hero, nattebaggrund, dekoration og julelogo).</value></data>
+  <data name="MediaResetOk" xml:space="preserve"><value>Spillerbilleder er gendannet til standard.</value></data>
+  <data name="MediaResetFailed" xml:space="preserve"><value>Kunne ikke gendanne eksempelbilleder.</value></data>
+  <data name="ResetMediaThemeHint" xml:space="preserve"><value>For at fortryde egne spillerbilleder og gendanne eksemplerne, gå til Billeder →</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
   <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lad brandfeltet stå tomt for kun at vise logo. Upload et hero-logo under Billeder; brandteksten skjules, når feltet er tomt.</value></data>

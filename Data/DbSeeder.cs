@@ -124,13 +124,7 @@ public static class DbSeeder
         ILogger logger,
         CancellationToken cancellationToken)
     {
-        var samples = new (MediaSlot Slot, string FileName, string ContentType)[]
-        {
-            (MediaSlot.PlayerHero, "hero.jpg", "image/jpeg"),
-            (MediaSlot.PlayerBackground, "background.jpg", "image/jpeg"),
-            (MediaSlot.PlayerDecoration, "decoration.jpg", "image/jpeg"),
-            (MediaSlot.PlayerHeroLogo, "hero-logo.png", "image/png")
-        };
+        var samples = MediaService.SampleSlots;
 
         var sampleRoot = Path.Combine(env.WebRootPath, "sample-media");
         var uploadRoot = Path.Combine(env.ContentRootPath, "App_Data", "uploads");

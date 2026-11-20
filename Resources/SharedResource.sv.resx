@@ -83,6 +83,13 @@
   <data name="SmtpPasswordHint" xml:space="preserve"><value>Lämna lösenordet tomt för att behålla det sparade värdet. Rensa användarnamn om leverantören bara använder IP-allowlisting.</value></data>
   <data name="NewPassword" xml:space="preserve"><value>Nytt lösenord</value></data>
   <data name="Saved" xml:space="preserve"><value>Sparat.</value></data>
+  <data name="Deleted" xml:space="preserve"><value>Borttaget.</value></data>
+  <data name="ResetToDefaults" xml:space="preserve"><value>Återställ till standard</value></data>
+  <data name="ConfirmResetMedia" xml:space="preserve"><value>Återställ de medföljande exempelbilderna (hero, logo, bakgrund och dekoration)? Egna uppladdningar i de fälten ersätts.</value></data>
+  <data name="ResetMediaHint" xml:space="preserve"><value>Återställ appens medföljande spelarbilder (röd hero, nattbakgrund, dekoration och jul-logo).</value></data>
+  <data name="MediaResetOk" xml:space="preserve"><value>Spelarbilder återställda till standard.</value></data>
+  <data name="MediaResetFailed" xml:space="preserve"><value>Kunde inte återställa exempelbilder.</value></data>
+  <data name="ResetMediaThemeHint" xml:space="preserve"><value>För att ångra egna spelarbilder och återställa exemplen, gå till Bilder →</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
   <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lämna varumärket tomt för att bara visa logotypen. Ladda upp en hero-logotyp under Bilder; varumärkestexten döljs när fältet är tomt.</value></data>

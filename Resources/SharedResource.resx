@@ -83,6 +83,13 @@
   <data name="SmtpPasswordHint" xml:space="preserve"><value>Leave password blank to keep the stored value. Clear username if the provider uses IP allowlisting only.</value></data>
   <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
   <data name="Saved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="Deleted" xml:space="preserve"><value>Deleted.</value></data>
+  <data name="ResetToDefaults" xml:space="preserve"><value>Reset to defaults</value></data>
+  <data name="ConfirmResetMedia" xml:space="preserve"><value>Restore the bundled sample hero, logo, background, and decoration images? Custom uploads for those slots will be replaced.</value></data>
+  <data name="ResetMediaHint" xml:space="preserve"><value>Restore the shipped sample player images (red hero, night background, decoration, and Christmas logo mark).</value></data>
+  <data name="MediaResetOk" xml:space="preserve"><value>Player media restored to bundled defaults.</value></data>
+  <data name="MediaResetFailed" xml:space="preserve"><value>Could not restore sample media.</value></data>
+  <data name="ResetMediaThemeHint" xml:space="preserve"><value>To undo custom player images and restore samples, use Images →</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
   <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Leave brand blank to show logo only. Upload a hero logo under Images; the brand text element is hidden when empty.</value></data>

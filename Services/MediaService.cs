@@ -15,6 +15,15 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
             "image/jpeg", "image/png", "image/webp", "image/gif"
         };
 
+    /// <summary>Bundled festive samples under wwwroot/sample-media.</summary>
+    public static readonly (MediaSlot Slot, string FileName, string ContentType)[] SampleSlots =
+    [
+        (MediaSlot.PlayerHero, "hero.jpg", "image/jpeg"),
+        (MediaSlot.PlayerBackground, "background.jpg", "image/jpeg"),
+        (MediaSlot.PlayerDecoration, "decoration.jpg", "image/jpeg"),
+        (MediaSlot.PlayerHeroLogo, "hero-logo.png", "image/png")
+    ];
+
     public const long MaxBytes = 2 * 1024 * 1024;
 
     public async Task<IReadOnlyDictionary<MediaSlot, MediaAsset>> GetAllAsync()
@@ -91,6 +100,66 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
         db.MediaAssets.Remove(existing);
         await db.SaveChangesAsync();
         return (true, null);
+    }
+
+    /// <summary>
+    /// Restore player media slots from wwwroot/sample-media (hero, logo, background, decoration).
+    /// Overwrites custom uploads so Setup Admin can undo changes.
+    /// </summary>
+    public async Task<(bool Ok, string? Error, int Restored)> ResetToSampleDefaultsAsync(int? adminId = null)
+    {
+        var sampleRoot = Path.Combine(env.WebRootPath, "sample-media");
+        var uploadRoot = Path.Combine(env.ContentRootPath, "App_Data", "uploads");
+        Directory.CreateDirectory(uploadRoot);
+
+        var restored = 0;
+        foreach (var (slot, fileName, contentType) in SampleSlots)
+        {
+            var source = Path.Combine(sampleRoot, fileName);
+            if (!File.Exists(source))
+            {
+                return (false, $"SampleMissing:{fileName}", restored);
+            }
+
+            var destName = $"{slot.ToString().ToLowerInvariant()}-sample{Path.GetExtension(fileName)}";
+            var destPath = Path.Combine(uploadRoot, destName);
+            var relative = $"/uploads/{destName}";
+
+            var existing = await db.MediaAssets.FirstOrDefaultAsync(m => m.Slot == slot);
+            if (existing is not null)
+            {
+                var oldName = Path.GetFileName(existing.RelativePath);
+                if (!string.Equals(oldName, destName, StringComparison.OrdinalIgnoreCase))
+                {
+                    TryDeleteFile(existing.RelativePath);
+                }
+
+                File.Copy(source, destPath, overwrite: true);
+                existing.FileName = fileName;
+                existing.ContentType = contentType;
+                existing.RelativePath = relative;
+                existing.UploadedAt = DateTime.UtcNow;
+                existing.UploadedByAdminId = adminId;
+            }
+            else
+            {
+                File.Copy(source, destPath, overwrite: true);
+                db.MediaAssets.Add(new MediaAsset
+                {
+                    Slot = slot,
+                    FileName = fileName,
+                    ContentType = contentType,
+                    RelativePath = relative,
+                    UploadedAt = DateTime.UtcNow,
+                    UploadedByAdminId = adminId
+                });
+            }
+
+            restored++;
+        }
+
+        await db.SaveChangesAsync();
+        return (true, null, restored);
     }
 
     private void TryDeleteFile(string relativePath)
