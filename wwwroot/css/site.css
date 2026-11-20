@@ -447,7 +447,7 @@ img {
 }
 
 .all-numbers-scroll {
-  max-height: min(26vh, 210px);
+  max-height: min(20vh, 168px);
   overflow-x: hidden;
   overflow-y: auto;
   padding-right: 0.15rem;
