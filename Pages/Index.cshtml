@@ -1,7 +1,7 @@
 @page
 @model Julebanko.Pages.IndexModel
 @{
-    ViewData["Title"] = Model.SeasonTitle;
+    // Browser <title> is Brand + year from _Layout (culture-specific). SeasonTitle stays the hero lead.
     var showClaimFirst = Model.StatusMessage == "ok" || Model.StatusIsError;
 }
 
