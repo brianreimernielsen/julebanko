@@ -500,10 +500,11 @@ img {
   opacity: 0.78;
 }
 
-/* Middle column: roomier than a single ball row, still above Bethlehem star / aurora */
+/* Middle column — tuned for common 24" / ~1920×1080 desktop:
+   multi-row All Numbers list, panel bottom still above Bethlehem star. */
 .player-middle > .player-panel.all-numbers-panel,
 .player-middle > .player-panel.claim-panel {
-  max-height: min(48vh, 420px);
+  max-height: min(50vh, 460px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -520,7 +521,7 @@ img {
 
 .player-middle .all-numbers-scroll {
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 10.5rem; /* ~4 chip rows on FHD before scroll */
   max-height: none;
   overflow-x: hidden;
   overflow-y: auto;
@@ -529,17 +530,33 @@ img {
 }
 
 .player-panel.winners-panel .winner-list {
-  max-height: min(48vh, 420px);
+  max-height: min(50vh, 460px);
   overflow-x: hidden;
   overflow-y: auto;
   padding-right: 0.15rem;
   scrollbar-gutter: stable;
 }
 
+/* Explicit FHD / 24" band */
+@media (min-width: 1400px) and (min-height: 900px) and (max-height: 1200px) {
+  .player-middle > .player-panel.all-numbers-panel,
+  .player-middle > .player-panel.claim-panel {
+    max-height: 460px;
+  }
+
+  .player-panel.winners-panel .winner-list {
+    max-height: 460px;
+  }
+}
+
 @media (max-width: 750px) {
   .player-middle > .player-panel.all-numbers-panel,
   .player-middle > .player-panel.claim-panel {
     max-height: min(52vh, 440px);
+  }
+
+  .player-middle .all-numbers-scroll {
+    min-height: 8rem;
   }
 
   .player-panel.winners-panel .winner-list {
