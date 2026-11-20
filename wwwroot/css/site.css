@@ -500,10 +500,10 @@ img {
   opacity: 0.78;
 }
 
-/* Middle column: keep panel bottom above Bethlehem star / aurora band */
+/* Middle column: roomier than a single ball row, still above Bethlehem star / aurora */
 .player-middle > .player-panel.all-numbers-panel,
 .player-middle > .player-panel.claim-panel {
-  max-height: min(30vh, 230px);
+  max-height: min(48vh, 420px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -529,7 +529,7 @@ img {
 }
 
 .player-panel.winners-panel .winner-list {
-  max-height: min(30vh, 230px);
+  max-height: min(48vh, 420px);
   overflow-x: hidden;
   overflow-y: auto;
   padding-right: 0.15rem;
@@ -539,11 +539,11 @@ img {
 @media (max-width: 750px) {
   .player-middle > .player-panel.all-numbers-panel,
   .player-middle > .player-panel.claim-panel {
-    max-height: min(40vh, 300px);
+    max-height: min(52vh, 440px);
   }
 
   .player-panel.winners-panel .winner-list {
-    max-height: min(40vh, 300px);
+    max-height: min(52vh, 440px);
   }
 }
 
