@@ -16,11 +16,27 @@ public class DrawService(AppDbContext db, SeasonService seasons)
             .ToListAsync();
     }
 
+    /// <summary>
+    /// Numbers drawn on the server's local calendar day.
+    /// "Today" uses <see cref="DateTime.Now"/> (OS / IIS timezone), not UTC midnight.
+    /// DrawnAt is stored as UTC; Unspecified values from SQL are treated as UTC.
+    /// </summary>
     public async Task<IReadOnlyList<DrawnNumber>> GetTodaysAsync(DateTime? nowLocal = null)
     {
         var all = await GetAllAsync();
         var today = (nowLocal ?? DateTime.Now).Date;
-        return all.Where(n => n.DrawnAt.ToLocalTime().Date == today).ToList();
+        return all.Where(n => ToLocalDrawnDay(n.DrawnAt) == today).ToList();
+    }
+
+    private static DateTime ToLocalDrawnDay(DateTime drawnAt)
+    {
+        var utc = drawnAt.Kind switch
+        {
+            DateTimeKind.Utc => drawnAt,
+            DateTimeKind.Local => drawnAt.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(drawnAt, DateTimeKind.Utc)
+        };
+        return utc.ToLocalTime().Date;
     }
 
     public async Task<(bool Ok, string? Error, IReadOnlyList<int> Numbers)> DrawAsync(int count)

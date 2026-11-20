@@ -6,6 +6,9 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="Brand" xml:space="preserve"><value>Julebanko</value></data>
   <data name="TodaysNumbers" xml:space="preserve"><value>Dagens nummer</value></data>
+  <data name="AllNumbers" xml:space="preserve"><value>Alla nummer</value></data>
+  <data name="DrawOrder" xml:space="preserve"><value>Dragningsordning</value></data>
+  <data name="SortedNumerically" xml:space="preserve"><value>Numeriskt sorterade</value></data>
   <data name="AllNumbersDrawOrder" xml:space="preserve"><value>Alla nummer (dragningsordning)</value></data>
   <data name="AllNumbersSorted" xml:space="preserve"><value>Alla nummer (sorterade)</value></data>
   <data name="HaveYouWon" xml:space="preserve"><value>Har du vunnit?</value></data>
@@ -18,6 +21,8 @@
   <data name="Send" xml:space="preserve"><value>Skicka</value></data>
   <data name="ConfirmedWinners" xml:space="preserve"><value>Vinnare</value></data>
   <data name="NoWinnersYet" xml:space="preserve"><value>Inga vinnare ännu.</value></data>
+  <data name="ConfirmedWinner" xml:space="preserve"><value>Bekräftad vinnare</value></data>
+  <data name="PendingClaim" xml:space="preserve"><value>Väntar på bekräftelse</value></data>
   <data name="ClaimSubmitted" xml:space="preserve"><value>Tack! Din anmälan har skickats och väntar på bekräftelse.</value></data>
   <data name="NoNumbersYet" xml:space="preserve"><value>Inga nummer dragna ännu.</value></data>
   <data name="Language" xml:space="preserve"><value>Språk</value></data>

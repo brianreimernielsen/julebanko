@@ -24,6 +24,26 @@ public class ClaimService(AppDbContext db, SeasonService seasons, EmailService e
             .ToListAsync();
     }
 
+    /// <summary>
+    /// Public player board: pending + approved claims only (rejected never listed).
+    /// Approved first, then pending by submit time.
+    /// </summary>
+    public async Task<IReadOnlyList<Claim>> GetPublicBoardAsync()
+    {
+        var season = await seasons.GetActiveSeasonAsync();
+        var claims = await db.Claims.AsNoTracking()
+            .Where(c => c.SeasonId == season.Id
+                        && (c.Status == ClaimStatus.Pending || c.Status == ClaimStatus.Approved))
+            .ToListAsync();
+
+        return claims
+            .OrderBy(c => c.Status == ClaimStatus.Approved ? 0 : 1)
+            .ThenBy(c => c.Status == ClaimStatus.Approved
+                ? (c.ReviewedAt ?? c.CreatedAt)
+                : c.CreatedAt)
+            .ToList();
+    }
+
     public async Task<IReadOnlyList<Claim>> GetAllForSeasonAsync()
     {
         var season = await seasons.GetActiveSeasonAsync();

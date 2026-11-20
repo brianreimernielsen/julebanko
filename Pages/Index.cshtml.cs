@@ -25,7 +25,7 @@ public class IndexModel(
     public IReadOnlyList<DrawnNumber> TodayNumbers { get; private set; } = Array.Empty<DrawnNumber>();
     public IReadOnlyList<DrawnNumber> AllDrawOrder { get; private set; } = Array.Empty<DrawnNumber>();
     public IReadOnlyList<int> AllSorted { get; private set; } = Array.Empty<int>();
-    public IReadOnlyList<Claim> ApprovedWinners { get; private set; } = Array.Empty<Claim>();
+    public IReadOnlyList<Claim> PublicClaims { get; private set; } = Array.Empty<Claim>();
     public string? HeroUrl { get; private set; }
     public string? BackgroundUrl { get; private set; }
     public string? LogoUrl { get; private set; }
@@ -39,6 +39,25 @@ public class IndexModel(
         {
             StatusMessage = "ok";
         }
+    }
+
+    public async Task<IActionResult> OnGetLiveAsync()
+    {
+        await LoadBoardAsync();
+        var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        return new JsonResult(new
+        {
+            today = TodayNumbers.Select(n => n.Number).ToArray(),
+            allOrder = AllDrawOrder.Select(n => n.Number).ToArray(),
+            allSorted = AllSorted.ToArray(),
+            claims = PublicClaims.Select(c => new
+            {
+                name = c.PlayerName,
+                winType = (int)c.WinType,
+                status = c.Status == ClaimStatus.Approved ? "approved" : "pending",
+                label = ClaimService.WinTypeLabel(c.WinType, culture)
+            }).ToArray()
+        });
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -60,10 +79,7 @@ public class IndexModel(
         var season = await seasons.GetActiveSeasonAsync();
         SeasonTitle = await settings.GetAsync(SettingKeys.SeasonTitle, season.Title);
         BrandName = await settings.GetBrandNameAsync();
-        AllDrawOrder = await draws.GetAllAsync();
-        TodayNumbers = await draws.GetTodaysAsync();
-        AllSorted = AllDrawOrder.Select(n => n.Number).OrderBy(n => n).ToList();
-        ApprovedWinners = await claims.GetApprovedAsync();
+        await LoadBoardAsync();
         var assets = await media.GetAllAsync();
         if (assets.TryGetValue(MediaSlot.PlayerHero, out var hero))
         {
@@ -79,6 +95,14 @@ public class IndexModel(
         {
             LogoUrl = logo.RelativePath;
         }
+    }
+
+    private async Task LoadBoardAsync()
+    {
+        AllDrawOrder = await draws.GetAllAsync();
+        TodayNumbers = await draws.GetTodaysAsync();
+        AllSorted = AllDrawOrder.Select(n => n.Number).OrderBy(n => n).ToList();
+        PublicClaims = await claims.GetPublicBoardAsync();
     }
 
     public string WinLabel(WinType type) =>

@@ -37,58 +37,64 @@
     </div>
 </section>
 
-<section class="section section-player" id="numbers">
+<section class="section section-player" id="numbers"
+         data-live-board
+         data-live-url="@Url.Page("/Index", "Live")"
+         data-live-interval="20000"
+         data-empty-numbers="@Localizer["NoNumbersYet"]"
+         data-empty-winners="@Localizer["NoWinnersYet"]"
+         data-label-confirmed="@Localizer["ConfirmedWinner"]"
+         data-label-pending="@Localizer["PendingClaim"]">
     <div class="julebanko-paneler numbers-grid">
-        <div class="player-panel number-panel juleramme juleramme--glimt">
-            <div class="number-block">
+        <div class="player-left-stack">
+            <div class="player-panel number-panel juleramme juleramme--glimt">
                 <h2 class="block-heading">@Localizer["TodaysNumbers"]</h2>
-                @if (Model.TodayNumbers.Count == 0)
-                {
-                    <p class="empty-note">@Localizer["NoNumbersYet"]</p>
-                }
-                else
-                {
-                    <div class="ball-row">
-                        @foreach (var n in Model.TodayNumbers)
-                        {
-                            <span class="ball">@n.Number</span>
-                        }
-                    </div>
-                }
+                <div data-live-today>
+                    @if (Model.TodayNumbers.Count == 0)
+                    {
+                        <p class="empty-note">@Localizer["NoNumbersYet"]</p>
+                    }
+                    else
+                    {
+                        <div class="ball-row">
+                            @foreach (var n in Model.TodayNumbers)
+                            {
+                                <span class="ball">@n.Number</span>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
 
-            <div class="number-block">
-                <h3>@Localizer["AllNumbersDrawOrder"]</h3>
-                @if (Model.AllDrawOrder.Count == 0)
-                {
-                    <p class="empty-note">@Localizer["NoNumbersYet"]</p>
-                }
-                else
-                {
-                    <div class="ball-row dense">
-                        @foreach (var n in Model.AllDrawOrder)
-                        {
-                            <span class="ball chip">@n.Number</span>
-                        }
+            <div class="player-panel all-numbers-panel juleramme juleramme--glimt" data-all-numbers>
+                <div class="all-numbers-head">
+                    <h2 class="block-heading">@Localizer["AllNumbers"]</h2>
+                    <div class="view-toggle" role="group" aria-label="@Localizer["AllNumbers"]">
+                        <button type="button" class="view-toggle-btn is-active" data-all-view="order" aria-pressed="true">@Localizer["DrawOrder"]</button>
+                        <button type="button" class="view-toggle-btn" data-all-view="sorted" aria-pressed="false">@Localizer["SortedNumerically"]</button>
                     </div>
-                }
-            </div>
-
-            <div class="number-block">
-                <h3>@Localizer["AllNumbersSorted"]</h3>
-                @if (Model.AllSorted.Count == 0)
-                {
-                    <p class="empty-note">@Localizer["NoNumbersYet"]</p>
-                }
-                else
-                {
-                    <div class="ball-row dense">
-                        @foreach (var n in Model.AllSorted)
-                        {
-                            <span class="ball chip">@n</span>
-                        }
-                    </div>
-                }
+                </div>
+                <div class="all-numbers-scroll" data-live-all>
+                    @if (Model.AllDrawOrder.Count == 0)
+                    {
+                        <p class="empty-note">@Localizer["NoNumbersYet"]</p>
+                    }
+                    else
+                    {
+                        <div class="ball-row dense" data-all-list="order">
+                            @foreach (var n in Model.AllDrawOrder)
+                            {
+                                <span class="ball chip">@n.Number</span>
+                            }
+                        </div>
+                        <div class="ball-row dense" data-all-list="sorted" hidden>
+                            @foreach (var n in Model.AllSorted)
+                            {
+                                <span class="ball chip">@n</span>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
         </div>
 
@@ -122,22 +128,35 @@
 
         <div class="player-panel winners-panel juleramme juleramme--glimt">
             <h2>@Localizer["Winners"]</h2>
-            @if (Model.ApprovedWinners.Count == 0)
-            {
-                <p class="empty-note">@Localizer["NoWinnersYet"]</p>
-            }
-            else
-            {
-                <ul class="winner-list">
-                    @foreach (var w in Model.ApprovedWinners)
-                    {
-                        <li>
-                            <strong>@w.PlayerName</strong>
-                            <span>@Model.WinLabel(w.WinType)</span>
-                        </li>
-                    }
-                </ul>
-            }
+            <div data-live-winners>
+                @if (Model.PublicClaims.Count == 0)
+                {
+                    <p class="empty-note">@Localizer["NoWinnersYet"]</p>
+                }
+                else
+                {
+                    <ul class="winner-list winner-bubbles">
+                        @foreach (var w in Model.PublicClaims)
+                        {
+                            var confirmed = w.Status == ClaimStatus.Approved;
+                            <li class="winner-bubble@(confirmed ? " is-confirmed" : " is-pending")" title="@(confirmed ? Localizer["ConfirmedWinner"].Value : Localizer["PendingClaim"].Value)">
+                                @if (confirmed)
+                                {
+                                    <span class="winner-badge" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <path d="M12 2.2 13.7 8h6.1l-4.9 3.6 1.9 5.9L12 14.8 7.2 17.5l1.9-5.9L4.2 8h6.1L12 2.2Z"/>
+                                            <path d="M12 14.2v7.1"/>
+                                            <path d="M9.2 19.4h5.6"/>
+                                        </svg>
+                                    </span>
+                                }
+                                <span class="winner-bubble-name">@w.PlayerName</span>
+                                <span class="winner-bubble-type">@Model.WinLabel(w.WinType)</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
         </div>
     </div>
 </section>

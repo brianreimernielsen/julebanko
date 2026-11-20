@@ -8,6 +8,174 @@
     });
   });
 
+  const bindAllNumbersToggle = (panel) => {
+    const buttons = panel.querySelectorAll("[data-all-view]");
+    const lists = panel.querySelectorAll("[data-all-list]");
+    if (!buttons.length || !lists.length) return;
+
+    const show = (view) => {
+      buttons.forEach((btn) => {
+        const active = btn.getAttribute("data-all-view") === view;
+        btn.classList.toggle("is-active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      lists.forEach((list) => {
+        list.hidden = list.getAttribute("data-all-list") !== view;
+      });
+    };
+
+    buttons.forEach((btn) => {
+      if (btn.dataset.toggleBound) return;
+      btn.dataset.toggleBound = "1";
+      btn.addEventListener("click", () => {
+        const view = btn.getAttribute("data-all-view");
+        if (view) show(view);
+      });
+    });
+  };
+
+  document.querySelectorAll("[data-all-numbers]").forEach(bindAllNumbersToggle);
+
+  const winnerBadgeSvg =
+    '<span class="winner-badge" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">' +
+    '<path d="M12 2.2 13.7 8h6.1l-4.9 3.6 1.9 5.9L12 14.8 7.2 17.5l1.9-5.9L4.2 8h6.1L12 2.2Z"/>' +
+    '<path d="M12 14.2v7.1"/><path d="M9.2 19.4h5.6"/></svg></span>';
+
+  const renderBalls = (numbers, chip) => {
+    const row = document.createElement("div");
+    row.className = chip ? "ball-row dense" : "ball-row";
+    numbers.forEach((n) => {
+      const ball = document.createElement("span");
+      ball.className = chip ? "ball chip" : "ball";
+      ball.textContent = String(n);
+      row.appendChild(ball);
+    });
+    return row;
+  };
+
+  const fingerprint = (data) =>
+    JSON.stringify({
+      today: data.today,
+      allOrder: data.allOrder,
+      allSorted: data.allSorted,
+      claims: data.claims
+    });
+
+  document.querySelectorAll("[data-live-board]").forEach((root) => {
+    const url = root.getAttribute("data-live-url");
+    if (!url) return;
+    const interval = Math.max(10000, Number(root.getAttribute("data-live-interval") || "20000") || 20000);
+    const emptyNumbers = root.getAttribute("data-empty-numbers") || "";
+    const emptyWinners = root.getAttribute("data-empty-winners") || "";
+    const labelConfirmed = root.getAttribute("data-label-confirmed") || "";
+    const labelPending = root.getAttribute("data-label-pending") || "";
+    const todayHost = root.querySelector("[data-live-today]");
+    const allHost = root.querySelector("[data-live-all]");
+    const winnersHost = root.querySelector("[data-live-winners]");
+    const allPanel = root.querySelector("[data-all-numbers]");
+    let last = "";
+    let inFlight = false;
+
+    const currentAllView = () => {
+      const active = allPanel && allPanel.querySelector("[data-all-view].is-active");
+      return (active && active.getAttribute("data-all-view")) || "order";
+    };
+
+    const apply = (data) => {
+      const next = fingerprint(data);
+      if (next === last) return;
+      last = next;
+
+      if (todayHost) {
+        todayHost.replaceChildren();
+        if (!data.today || !data.today.length) {
+          const note = document.createElement("p");
+          note.className = "empty-note";
+          note.textContent = emptyNumbers;
+          todayHost.appendChild(note);
+        } else {
+          todayHost.appendChild(renderBalls(data.today, false));
+        }
+      }
+
+      if (allHost) {
+        const view = currentAllView();
+        allHost.replaceChildren();
+        if (!data.allOrder || !data.allOrder.length) {
+          const note = document.createElement("p");
+          note.className = "empty-note";
+          note.textContent = emptyNumbers;
+          allHost.appendChild(note);
+        } else {
+          const order = renderBalls(data.allOrder, true);
+          order.setAttribute("data-all-list", "order");
+          const sorted = renderBalls(data.allSorted || [], true);
+          sorted.setAttribute("data-all-list", "sorted");
+          order.hidden = view !== "order";
+          sorted.hidden = view !== "sorted";
+          allHost.appendChild(order);
+          allHost.appendChild(sorted);
+          if (allPanel) bindAllNumbersToggle(allPanel);
+        }
+      }
+
+      if (winnersHost) {
+        winnersHost.replaceChildren();
+        if (!data.claims || !data.claims.length) {
+          const note = document.createElement("p");
+          note.className = "empty-note";
+          note.textContent = emptyWinners;
+          winnersHost.appendChild(note);
+        } else {
+          const list = document.createElement("ul");
+          list.className = "winner-list winner-bubbles";
+          data.claims.forEach((claim) => {
+            const confirmed = claim.status === "approved";
+            const li = document.createElement("li");
+            li.className = "winner-bubble " + (confirmed ? "is-confirmed" : "is-pending");
+            li.title = confirmed ? labelConfirmed : labelPending;
+            if (confirmed) li.insertAdjacentHTML("beforeend", winnerBadgeSvg);
+            const name = document.createElement("span");
+            name.className = "winner-bubble-name";
+            name.textContent = claim.name || "";
+            const type = document.createElement("span");
+            type.className = "winner-bubble-type";
+            type.textContent = claim.label || "";
+            li.appendChild(name);
+            li.appendChild(type);
+            list.appendChild(li);
+          });
+          winnersHost.appendChild(list);
+        }
+      }
+    };
+
+    const tick = async () => {
+      if (inFlight || document.hidden) return;
+      inFlight = true;
+      try {
+        const res = await fetch(url, {
+          headers: { Accept: "application/json" },
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        apply(data);
+      } catch (_) {
+        /* keep last rendered board */
+      } finally {
+        inFlight = false;
+      }
+    };
+
+    tick();
+    window.setInterval(tick, interval);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) tick();
+    });
+  });
+
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const flakeCounts = { 1: 12, 2: 18, 3: 24, 4: 32, 5: 40 };
 

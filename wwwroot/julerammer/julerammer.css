@@ -65,8 +65,15 @@
   opacity: .89;
   animation: juleramme-lysflamme 5.6s ease-in-out infinite;
 }
-.juleramme--glimt:nth-child(2)::after { animation-delay: -.9s; animation-duration: 6.5s; }
-.juleramme--glimt:nth-child(3)::after { animation-delay: -2.1s; animation-duration: 5.1s; }
+.julebanko-paneler > .juleramme--glimt:nth-child(2)::after,
+.player-left-stack > .juleramme--glimt:nth-child(2)::after {
+  animation-delay: -.9s;
+  animation-duration: 6.5s;
+}
+.julebanko-paneler > .juleramme--glimt:nth-child(3)::after {
+  animation-delay: -2.1s;
+  animation-duration: 5.1s;
+}
 @keyframes juleramme-lysflamme {
   0%, 100% { opacity: .89; filter: brightness(1); }
   16% { opacity: .98; filter: brightness(1.12); }
