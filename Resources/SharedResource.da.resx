@@ -97,6 +97,7 @@
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lad brandfeltet stå tomt for kun at vise logo. Upload et hero-logo under Billeder; brandteksten skjules, når feltet er tomt.</value></data>
   <data name="Fonts" xml:space="preserve"><value>Skrifttyper</value></data>
   <data name="FontsHint" xml:space="preserve"><value>Brandskriften bruges til den store hero-titel. Brødtekstskriften bruges til resten af spiller-UI.</value></data>
+  <data name="FontsPreviewHint" xml:space="preserve"><value>Hver mulighed nedenfor vises i den pågældende skrifttype, så du kan sammenligne før du gemmer.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Brand- / hero-skrift</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Spiller-brødtekstskrift</value></data>
 </root>

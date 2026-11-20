@@ -97,6 +97,7 @@
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lämna varumärket tomt för att bara visa logotypen. Ladda upp en hero-logotyp under Bilder; varumärkestexten döljs när fältet är tomt.</value></data>
   <data name="Fonts" xml:space="preserve"><value>Typsnitt</value></data>
   <data name="FontsHint" xml:space="preserve"><value>Varumärkestypsnittet används för den stora hero-titeln. Brödtexttypsnittet används för resten av spel-UI.</value></data>
+  <data name="FontsPreviewHint" xml:space="preserve"><value>Varje alternativ nedan visas i det typsnittet så du kan jämföra innan du sparar.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Varumärkes- / hero-typsnitt</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Spel-brödtexttypsnitt</value></data>
 </root>

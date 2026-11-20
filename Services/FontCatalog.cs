@@ -60,4 +60,21 @@ public static class FontCatalog
         };
         return "https://fonts.googleapis.com/css2?" + string.Join("&", families) + "&display=swap";
     }
+
+    /// <summary>Loads every curated brand + body face for Setup Admin font pickers.</summary>
+    public static string GoogleFontsCatalogHref()
+    {
+        var families = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var font in BrandFonts)
+        {
+            families.Add($"family={font.GoogleFamilyQuery}");
+        }
+
+        foreach (var font in BodyFonts)
+        {
+            families.Add($"family={font.GoogleFamilyQuery}");
+        }
+
+        return "https://fonts.googleapis.com/css2?" + string.Join("&", families) + "&display=swap";
+    }
 }

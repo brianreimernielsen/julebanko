@@ -4,6 +4,9 @@
 @{
     ViewData["Title"] = Localizer["Language"].Value;
 }
+@section Head {
+    <link href="@FontCatalog.GoogleFontsCatalogHref()" rel="stylesheet" />
+}
 <div class="admin-card">
     <h2>@Localizer["Language"]</h2>
     <p class="muted">@Localizer["DefaultLanguageHint"]</p>
@@ -11,7 +14,7 @@
     {
         <div class="alert alert-success">@Localizer["Saved"]</div>
     }
-    <form method="post" class="form-stack" style="max-width:420px;">
+    <form method="post" class="form-stack" style="max-width:520px;">
         <label>
             @Localizer["DefaultLanguage"]
             <select asp-for="DefaultCulture">
@@ -39,24 +42,31 @@
 
         <h3 style="margin:1.25rem 0 0.35rem; font-size:1.05rem;">@Localizer["Fonts"]</h3>
         <p class="muted" style="margin-top:0;">@Localizer["FontsHint"]</p>
-        <label>
-            @Localizer["BrandFont"]
-            <select asp-for="BrandFont">
-                @foreach (var font in FontCatalog.BrandFonts)
-                {
-                    <option value="@font.Id">@font.Label</option>
-                }
-            </select>
-        </label>
-        <label>
-            @Localizer["BodyFont"]
-            <select asp-for="BodyFont">
-                @foreach (var font in FontCatalog.BodyFonts)
-                {
-                    <option value="@font.Id">@font.Label</option>
-                }
-            </select>
-        </label>
+        <p class="muted" style="margin-top:0;">@Localizer["FontsPreviewHint"]</p>
+
+        <fieldset class="font-picker">
+            <legend>@Localizer["BrandFont"]</legend>
+            @foreach (var font in FontCatalog.BrandFonts)
+            {
+                <label class="font-picker-option @(Model.BrandFont == font.Id ? "is-selected" : null)">
+                    <input type="radio" asp-for="BrandFont" value="@font.Id" />
+                    <span class="font-picker-sample" style="font-family: @font.CssFamily;">@font.Label</span>
+                    <span class="font-picker-pangram" style="font-family: @font.CssFamily;">Aa Bb Cc — Julebanko 123</span>
+                </label>
+            }
+        </fieldset>
+
+        <fieldset class="font-picker">
+            <legend>@Localizer["BodyFont"]</legend>
+            @foreach (var font in FontCatalog.BodyFonts)
+            {
+                <label class="font-picker-option @(Model.BodyFont == font.Id ? "is-selected" : null)">
+                    <input type="radio" asp-for="BodyFont" value="@font.Id" />
+                    <span class="font-picker-sample" style="font-family: @font.CssFamily;">@font.Label</span>
+                    <span class="font-picker-pangram" style="font-family: @font.CssFamily;">Aa Bb Cc — Julebanko 123</span>
+                </label>
+            }
+        </fieldset>
 
         <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
     </form>
