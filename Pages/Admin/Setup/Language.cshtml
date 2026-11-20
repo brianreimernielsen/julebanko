@@ -1,0 +1,73 @@
+@page
+@model Julebanko.Pages.Admin.Setup.LanguageModel
+@using Julebanko.Services
+@{
+    ViewData["Title"] = Localizer["LanguageAndBranding"].Value;
+}
+@section Head {
+    <link href="@FontCatalog.GoogleFontsCatalogHref()" rel="stylesheet" />
+}
+<div class="admin-card">
+    <h2>@Localizer["LanguageAndBranding"]</h2>
+    <p class="muted">@Localizer["DefaultLanguageHint"]</p>
+    @if (Model.Saved)
+    {
+        <div class="alert alert-success">@Localizer["Saved"]</div>
+    }
+    <form method="post" class="form-stack" style="max-width:520px;">
+        <label>
+            @Localizer["DefaultLanguage"]
+            <select asp-for="DefaultCulture">
+                <option value="@CultureSupport.Danish">Dansk (da)</option>
+                <option value="@CultureSupport.Swedish">Svenska (sv)</option>
+                <option value="@CultureSupport.English">English (en)</option>
+            </select>
+        </label>
+
+        <h3 style="margin:1.25rem 0 0.35rem; font-size:1.05rem;">@Localizer["BrandNames"]</h3>
+        <p class="muted" style="margin-top:0;">@Localizer["BrandNamesHint"]</p>
+        <p class="muted" style="margin-top:0;">@Localizer["BrandLogoOnlyHint"]</p>
+        <label>
+            @Localizer["BrandNameDa"]
+            <input asp-for="BrandNameDa" maxlength="80" />
+        </label>
+        <label>
+            @Localizer["BrandNameEn"]
+            <input asp-for="BrandNameEn" maxlength="80" />
+        </label>
+        <label>
+            @Localizer["BrandNameSv"]
+            <input asp-for="BrandNameSv" maxlength="80" />
+        </label>
+
+        <h3 style="margin:1.25rem 0 0.35rem; font-size:1.05rem;">@Localizer["Fonts"]</h3>
+        <p class="muted" style="margin-top:0;">@Localizer["FontsHint"]</p>
+        <p class="muted" style="margin-top:0;">@Localizer["FontsPreviewHint"]</p>
+
+        <fieldset class="font-picker">
+            <legend>@Localizer["BrandFont"]</legend>
+            @foreach (var font in FontCatalog.BrandFonts)
+            {
+                <label class="font-picker-option @(Model.BrandFont == font.Id ? "is-selected" : null)">
+                    <input type="radio" asp-for="BrandFont" value="@font.Id" />
+                    <span class="font-picker-sample" style="font-family: @font.CssFamily;">@font.Label</span>
+                    <span class="font-picker-pangram" style="font-family: @font.CssFamily;">Aa Bb Cc — Julebanko 123</span>
+                </label>
+            }
+        </fieldset>
+
+        <fieldset class="font-picker">
+            <legend>@Localizer["BodyFont"]</legend>
+            @foreach (var font in FontCatalog.BodyFonts)
+            {
+                <label class="font-picker-option @(Model.BodyFont == font.Id ? "is-selected" : null)">
+                    <input type="radio" asp-for="BodyFont" value="@font.Id" />
+                    <span class="font-picker-sample" style="font-family: @font.CssFamily;">@font.Label</span>
+                    <span class="font-picker-pangram" style="font-family: @font.CssFamily;">Aa Bb Cc — Julebanko 123</span>
+                </label>
+            }
+        </fieldset>
+
+        <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
+    </form>
+</div>

@@ -1,0 +1,48 @@
+@page
+@model Julebanko.Pages.Admin.Setup.MediaModel
+@{
+    ViewData["Title"] = Localizer["Media"].Value;
+    var slots = new (MediaSlot Slot, string Label)[]
+    {
+        (MediaSlot.PlayerHero, Localizer["HeroImage"].Value),
+        (MediaSlot.PlayerHeroLogo, Localizer["HeroLogo"].Value),
+        (MediaSlot.PlayerDecoration, Localizer["DecorationImage"].Value)
+    };
+}
+<div class="admin-card">
+    <h2>@Localizer["Media"]</h2>
+    <p class="muted">jpg / png / webp / gif · max 2 MB</p>
+    <p class="muted">@Localizer["MediaLandscapeLockedHint"]</p>
+    <p class="muted">Hero logo sits beside the brand name — or alone if brand text is left blank under Language. Decoration image is kept for uploads but is no longer shown as a top bar on the player page (juleramme frames the panels instead).</p>
+    @if (Model.Message is not null)
+    {
+        <div class="alert @(Model.IsError ? "alert-error" : "alert-success")">@Model.Message</div>
+    }
+
+    <form method="post" asp-page-handler="ResetDefaults" class="form-stack" style="max-width:520px; margin:1rem 0 1.5rem;"
+          onsubmit="return confirm('@Localizer["ConfirmResetMedia"]');">
+        <p class="muted" style="margin:0;">@Localizer["ResetMediaHint"]</p>
+        <button class="btn btn-ghost" type="submit">@Localizer["ResetToDefaults"]</button>
+    </form>
+
+    @foreach (var (slot, label) in slots)
+    {
+        <div style="margin:1.25rem 0; padding-top:1rem; border-top:1px solid var(--line);">
+            <h3>@label</h3>
+            @if (Model.Assets.TryGetValue(slot, out var asset))
+            {
+                <img class="media-preview" src="@asset.RelativePath?v=@asset.UploadedAt.Ticks" alt="@asset.FileName" />
+                <p class="muted">@asset.FileName</p>
+                <form method="post" asp-page-handler="Delete" style="margin-bottom:0.75rem;">
+                    <input type="hidden" name="slot" value="@((int)slot)" />
+                    <button class="btn btn-danger btn-small" type="submit">@Localizer["Delete"]</button>
+                </form>
+            }
+            <form method="post" enctype="multipart/form-data" asp-page-handler="Upload" class="form-stack" style="max-width:420px;">
+                <input type="hidden" name="slot" value="@((int)slot)" />
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/*" required />
+                <button class="btn btn-primary btn-small" type="submit">@Localizer["Upload"]</button>
+            </form>
+        </div>
+    }
+</div>

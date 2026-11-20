@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Brand" xml:space="preserve"><value>Julebanko</value></data>
+  <data name="TodaysNumbers" xml:space="preserve"><value>Dagens tal</value></data>
+  <data name="AllNumbers" xml:space="preserve"><value>Alle tal</value></data>
+  <data name="DrawOrder" xml:space="preserve"><value>Trækningsrækkefølge</value></data>
+  <data name="SortedNumerically" xml:space="preserve"><value>Numerisk sorteret</value></data>
+  <data name="AllNumbersDrawOrder" xml:space="preserve"><value>Alle tal (i trækningsrækkefølge)</value></data>
+  <data name="AllNumbersSorted" xml:space="preserve"><value>Alle tal (sorteret)</value></data>
+  <data name="HaveYouWon" xml:space="preserve"><value>Har du vundet?</value></data>
+  <data name="ClaimHint" xml:space="preserve"><value>Så er det bare med at melde det. Først til mølle…</value></data>
+  <data name="YourName" xml:space="preserve"><value>Dit navn</value></data>
+  <data name="WinType" xml:space="preserve"><value>Respons</value></data>
+  <data name="OneRow" xml:space="preserve"><value>1 række</value></data>
+  <data name="TwoRows" xml:space="preserve"><value>2 rækker</value></data>
+  <data name="FullBoard" xml:space="preserve"><value>Fuld plade</value></data>
+  <data name="Send" xml:space="preserve"><value>Send</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Vindere</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>Ingen vindere endnu.</value></data>
+  <data name="ConfirmedWinner" xml:space="preserve"><value>Bekræftet vinder</value></data>
+  <data name="PendingClaim" xml:space="preserve"><value>Afventer bekræftelse</value></data>
+  <data name="ClaimSubmitted" xml:space="preserve"><value>Tak! Din melding er sendt og afventer bekræftelse.</value></data>
+  <data name="NoNumbersYet" xml:space="preserve"><value>Ingen tal trukket endnu.</value></data>
+  <data name="Language" xml:space="preserve"><value>Sprog</value></data>
+  <data name="LanguageAndBranding" xml:space="preserve"><value>Sprog og branding</value></data>
+  <data name="DefaultLanguage" xml:space="preserve"><value>Standardsprog</value></data>
+  <data name="DefaultLanguageHint" xml:space="preserve"><value>Bruges på den offentlige side, når besøgende ikke har valgt sprog. DA/EN/SV-vælgeren kan stadig overstyre pr. browser.</value></data>
+  <data name="BrandNames" xml:space="preserve"><value>Brandnavn pr. sprog</value></data>
+  <data name="BrandNamesHint" xml:space="preserve"><value>Vises som den store hero-titel (og browser-titel), når det sprog er aktivt. Sæsontitel under Tema forbliver separat.</value></data>
+  <data name="BrandNameDa" xml:space="preserve"><value>Brand (dansk)</value></data>
+  <data name="BrandNameEn" xml:space="preserve"><value>Brand (engelsk)</value></data>
+  <data name="BrandNameSv" xml:space="preserve"><value>Brand (svensk)</value></data>
+  <data name="AdminLogin" xml:space="preserve"><value>Admin-login</value></data>
+  <data name="Username" xml:space="preserve"><value>Brugernavn</value></data>
+  <data name="Password" xml:space="preserve"><value>Adgangskode</value></data>
+  <data name="Login" xml:space="preserve"><value>Log ind</value></data>
+  <data name="Logout" xml:space="preserve"><value>Log ud</value></data>
+  <data name="DrawNumbers" xml:space="preserve"><value>Træk tal</value></data>
+  <data name="NumbersToDraw" xml:space="preserve"><value>Antal tal der skal trækkes</value></data>
+  <data name="DrawTodays" xml:space="preserve"><value>Træk dagens tal</value></data>
+  <data name="PendingClaims" xml:space="preserve"><value>Afventende meldinger</value></data>
+  <data name="Approve" xml:space="preserve"><value>Godkend</value></data>
+  <data name="Reject" xml:space="preserve"><value>Afvis</value></data>
+  <data name="Setup" xml:space="preserve"><value>Opsætning</value></data>
+  <data name="Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Media" xml:space="preserve"><value>Billeder</value></data>
+  <data name="Passwords" xml:space="preserve"><value>Adgangskoder</value></data>
+  <data name="ClaimEmail" xml:space="preserve"><value>Claim-e-mail</value></data>
+  <data name="SeasonReset" xml:space="preserve"><value>Sæson-reset</value></data>
+  <data name="Winners" xml:space="preserve"><value>Vindere</value></data>
+  <data name="Save" xml:space="preserve"><value>Gem</value></data>
+  <data name="BackToPlayer" xml:space="preserve"><value>Spillerside</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Overblik</value></data>
+  <data name="InvalidLogin" xml:space="preserve"><value>Forkert brugernavn eller adgangskode.</value></data>
+  <data name="Drawn" xml:space="preserve"><value>Trukket</value></data>
+  <data name="NonePending" xml:space="preserve"><value>Ingen afventende meldinger.</value></data>
+  <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denne tavle opdateres automatisk ca. hvert 15. sekund, mens fanen er synlig.</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter alle trukne tal og claims for den aktive sæson efter backup. Fortsæt?</value></data>
+  <data name="ResetSeason" xml:space="preserve"><value>Nulstil sæson</value></data>
+  <data name="UndoBackup" xml:space="preserve"><value>Gendan backup</value></data>
+  <data name="Edit" xml:space="preserve"><value>Rediger</value></data>
+  <data name="Delete" xml:space="preserve"><value>Slet</value></data>
+  <data name="Upload" xml:space="preserve"><value>Upload</value></data>
+  <data name="HeroImage" xml:space="preserve"><value>Hero-billede</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero-logo (kan erstatte brandteksten)</value></data>
+  <data name="BackgroundImage" xml:space="preserve"><value>Baggrundsbillede</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Dekoration (bruges ikke på spillersiden)</value></data>
+  <data name="PlayerColors" xml:space="preserve"><value>Spillerfarver</value></data>
+  <data name="AdminColors" xml:space="preserve"><value>Adminfarver</value></data>
+  <data name="Accent" xml:space="preserve"><value>Accent</value></data>
+  <data name="NotifyTo" xml:space="preserve"><value>Claim-modtager (To:)</value></data>
+  <data name="MailFrom" xml:space="preserve"><value>Mail From:</value></data>
+  <data name="SmtpSettings" xml:space="preserve"><value>SMTP-server</value></data>
+  <data name="SmtpHint" xml:space="preserve"><value>Claim To/From og SMTP-udbyder. Værdier gemmes i databasen og overstyrer appsettings.json, når de er sat. Standardværdier seeds fra Smtp-sektionen ved første kørsel.</value></data>
+  <data name="SmtpHost" xml:space="preserve"><value>SMTP-vært</value></data>
+  <data name="SmtpPort" xml:space="preserve"><value>Port</value></data>
+  <data name="SmtpUseSsl" xml:space="preserve"><value>Brug SSL / StartTLS</value></data>
+  <data name="SmtpUsername" xml:space="preserve"><value>Brugernavn (valgfrit)</value></data>
+  <data name="SmtpPassword" xml:space="preserve"><value>Adgangskode (valgfri)</value></data>
+  <data name="SmtpPasswordKeep" xml:space="preserve"><value>Lad stå tom for at beholde nuværende adgangskode</value></data>
+  <data name="SmtpPasswordHint" xml:space="preserve"><value>Lad adgangskode stå tom for at beholde den gemte værdi. Ryd brugernavn, hvis udbyderen kun bruger IP-allowlisting.</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>Ny adgangskode</value></data>
+  <data name="Saved" xml:space="preserve"><value>Gemt.</value></data>
+  <data name="Deleted" xml:space="preserve"><value>Slettet.</value></data>
+  <data name="ResetToDefaults" xml:space="preserve"><value>Nulstil til standard</value></data>
+  <data name="ConfirmResetMedia" xml:space="preserve"><value>Gendan de medfølgende eksempelbilleder (hero, logo og dekoration)? Egne uploads i de felter bliver erstattet. Natlandskabet forbliver låst.</value></data>
+  <data name="ResetMediaHint" xml:space="preserve"><value>Gendan medfølgende hero-bånd, julelogo og dekoration. Natlandskabet udskiftes aldrig — justér den røde top under Tema → Spiller-baggrundsfarve.</value></data>
+  <data name="MediaResetOk" xml:space="preserve"><value>Spillerbilleder er gendannet til standard.</value></data>
+  <data name="MediaResetFailed" xml:space="preserve"><value>Kunne ikke gendanne eksempelbilleder.</value></data>
+  <data name="ResetMediaThemeHint" xml:space="preserve"><value>For at fortryde egne spillerbilleder og gendanne eksemplerne, gå til Billeder →</value></data>
+  <data name="MediaLandscapeLockedHint" xml:space="preserve"><value>Det blå natte- og sne-landskab er låst og kan ikke erstattes af uploads. Tilpas det røde øvre bånd med Tema → Spiller-baggrundsfarve, og upload evt. et hero-billede til topområdet — begge toner ud i det låste landskab.</value></data>
+  <data name="PlayerBgRedTopHint" xml:space="preserve"><value>Spiller-baggrundsfarven farver kun det røde øvre bånd; det toner altid ud i det låste natlandskab. Fuldskærms-baggrundsuploads er deaktiveret.</value></data>
+  <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
+  <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lad brandfeltet stå tomt for kun at vise logo. Upload et hero-logo under Billeder; brandteksten skjules, når feltet er tomt.</value></data>
+  <data name="Fonts" xml:space="preserve"><value>Skrifttyper</value></data>
+  <data name="FontsHint" xml:space="preserve"><value>Brandskriften bruges til den store hero-titel. Brødtekstskriften bruges til resten af spiller-UI.</value></data>
+  <data name="FontsPreviewHint" xml:space="preserve"><value>Hver mulighed nedenfor vises i den pågældende skrifttype, så du kan sammenligne før du gemmer.</value></data>
+  <data name="BrandFont" xml:space="preserve"><value>Brand- / hero-skrift</value></data>
+  <data name="BodyFont" xml:space="preserve"><value>Spiller-brødtekstskrift</value></data>
+</root>
