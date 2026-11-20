@@ -2,18 +2,7 @@
 @model Julebanko.Pages.IndexModel
 @{
     ViewData["Title"] = Model.SeasonTitle;
-    ViewData["BodyClass"] = string.IsNullOrEmpty(Model.BackgroundUrl) ? "" : "has-bg-image";
     var showClaimFirst = Model.StatusMessage == "ok" || Model.StatusIsError;
-}
-@if (!string.IsNullOrEmpty(Model.BackgroundUrl))
-{
-    <style>
-        body.has-bg-image {
-            background-image:
-                linear-gradient(180deg, rgba(40, 8, 8, 0.55), rgba(40, 8, 8, 0.72)),
-                url('@Model.BackgroundUrl');
-        }
-    </style>
 }
 
 <section class="hero hero-compact">

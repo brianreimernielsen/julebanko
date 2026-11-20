@@ -27,7 +27,6 @@ public class IndexModel(
     public IReadOnlyList<int> AllSorted { get; private set; } = Array.Empty<int>();
     public IReadOnlyList<Claim> PublicClaims { get; private set; } = Array.Empty<Claim>();
     public string? HeroUrl { get; private set; }
-    public string? BackgroundUrl { get; private set; }
     public string? LogoUrl { get; private set; }
     public string? StatusMessage { get; private set; }
     public bool StatusIsError { get; private set; }
@@ -86,10 +85,8 @@ public class IndexModel(
             HeroUrl = hero.RelativePath;
         }
 
-        if (assets.TryGetValue(MediaSlot.PlayerBackground, out var bg))
-        {
-            BackgroundUrl = bg.RelativePath;
-        }
+        // PlayerBackground uploads are intentionally unused: night landscape is locked.
+        // Customize the red top via Theme → Player bg color; hero band via PlayerHero image.
 
         if (assets.TryGetValue(MediaSlot.PlayerHeroLogo, out var logo))
         {
