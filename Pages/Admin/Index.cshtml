@@ -4,7 +4,7 @@
     ViewData["Title"] = Localizer["Dashboard"].Value;
 }
 <div class="admin-grid two">
-    <div class="admin-card">
+    <div class="admin-card" data-admin-auto-refresh="15000">
         <h2>@Model.SeasonTitle</h2>
         <p>@Localizer["Drawn"]: <strong>@Model.DrawnCount</strong></p>
         <p>@Localizer["PendingClaims"]: <strong>@Model.PendingCount</strong></p>

@@ -58,6 +58,7 @@
   <data name="InvalidLogin" xml:space="preserve"><value>Invalid username or password.</value></data>
   <data name="Drawn" xml:space="preserve"><value>Drawn</value></data>
   <data name="NonePending" xml:space="preserve"><value>No pending claims.</value></data>
+  <data name="AdminAutoRefreshHint" xml:space="preserve"><value>This board refreshes automatically about every 15 seconds while the tab is visible.</value></data>
   <data name="ConfirmReset" xml:space="preserve"><value>This will clear all drawn numbers and claims for the active season after creating a backup. Continue?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Reset season</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Restore backup</value></data>

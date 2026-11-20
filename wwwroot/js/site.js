@@ -8,28 +8,65 @@
     });
   });
 
+  // Admin boards (pending claims, dashboard, draw list): soft full reload.
+  document.querySelectorAll("[data-admin-auto-refresh]").forEach((el) => {
+    const ms = Math.max(10000, Number(el.getAttribute("data-admin-auto-refresh") || "15000") || 15000);
+    window.setInterval(() => {
+      if (document.hidden) return;
+      if (document.querySelector("form:focus-within, button:focus, input:focus")) return;
+      window.location.reload();
+    }, ms);
+  });
+
+  const ALL_NUMBERS_VIEW_KEY = "julebanko-all-numbers-view";
+
+  const readAllNumbersView = () => {
+    try {
+      const stored = window.localStorage.getItem(ALL_NUMBERS_VIEW_KEY);
+      if (stored === "order" || stored === "sorted") return stored;
+    } catch (_) {
+      /* private mode / blocked storage */
+    }
+    return "sorted";
+  };
+
+  const writeAllNumbersView = (view) => {
+    if (view !== "order" && view !== "sorted") return;
+    try {
+      window.localStorage.setItem(ALL_NUMBERS_VIEW_KEY, view);
+    } catch (_) {
+      /* ignore */
+    }
+  };
+
+  const applyAllNumbersView = (panel, view) => {
+    if (!panel) return;
+    const resolved = view === "order" || view === "sorted" ? view : "sorted";
+    panel.querySelectorAll("[data-all-view]").forEach((btn) => {
+      const active = btn.getAttribute("data-all-view") === resolved;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    // Query lists fresh each time — live poll replaces the ball rows.
+    panel.querySelectorAll("[data-all-list]").forEach((list) => {
+      list.hidden = list.getAttribute("data-all-list") !== resolved;
+    });
+  };
+
   const bindAllNumbersToggle = (panel) => {
     const buttons = panel.querySelectorAll("[data-all-view]");
-    const lists = panel.querySelectorAll("[data-all-list]");
-    if (!buttons.length || !lists.length) return;
+    if (!buttons.length) return;
 
-    const show = (view) => {
-      buttons.forEach((btn) => {
-        const active = btn.getAttribute("data-all-view") === view;
-        btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-      lists.forEach((list) => {
-        list.hidden = list.getAttribute("data-all-list") !== view;
-      });
-    };
+    applyAllNumbersView(panel, readAllNumbersView());
 
     buttons.forEach((btn) => {
       if (btn.dataset.toggleBound) return;
       btn.dataset.toggleBound = "1";
       btn.addEventListener("click", () => {
         const view = btn.getAttribute("data-all-view");
-        if (view) show(view);
+        if (!view) return;
+        writeAllNumbersView(view);
+        applyAllNumbersView(panel, view);
       });
     });
   };
@@ -122,11 +159,6 @@
     let last = "";
     let inFlight = false;
 
-    const currentAllView = () => {
-      const active = allPanel && allPanel.querySelector("[data-all-view].is-active");
-      return (active && active.getAttribute("data-all-view")) || "order";
-    };
-
     const apply = (data) => {
       const next = fingerprint(data);
       if (next === last) return;
@@ -145,7 +177,7 @@
       }
 
       if (allHost) {
-        const view = currentAllView();
+        const view = readAllNumbersView();
         allHost.replaceChildren();
         if (!data.allOrder || !data.allOrder.length) {
           const note = document.createElement("p");
@@ -157,11 +189,15 @@
           order.setAttribute("data-all-list", "order");
           const sorted = renderBalls(data.allSorted || [], true);
           sorted.setAttribute("data-all-list", "sorted");
-          order.hidden = view !== "order";
-          sorted.hidden = view !== "sorted";
           allHost.appendChild(order);
           allHost.appendChild(sorted);
-          if (allPanel) bindAllNumbersToggle(allPanel);
+          if (allPanel) {
+            bindAllNumbersToggle(allPanel);
+            applyAllNumbersView(allPanel, view);
+          } else {
+            order.hidden = view !== "order";
+            sorted.hidden = view !== "sorted";
+          }
         }
       }
 

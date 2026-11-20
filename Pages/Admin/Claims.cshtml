@@ -3,8 +3,9 @@
 @{
     ViewData["Title"] = Localizer["PendingClaims"].Value;
 }
-<div class="admin-card">
+<div class="admin-card" data-admin-auto-refresh="15000">
     <h2>@Localizer["PendingClaims"]</h2>
+    <p class="muted" style="margin-top:0;">@Localizer["AdminAutoRefreshHint"]</p>
     @if (Model.Pending.Count == 0)
     {
         <p class="empty-note">@Localizer["NonePending"]</p>

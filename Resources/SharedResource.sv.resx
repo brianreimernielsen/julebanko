@@ -58,6 +58,7 @@
   <data name="InvalidLogin" xml:space="preserve"><value>Fel användarnamn eller lösenord.</value></data>
   <data name="Drawn" xml:space="preserve"><value>Draget</value></data>
   <data name="NonePending" xml:space="preserve"><value>Inga väntande anmälningar.</value></data>
+  <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denna tavla uppdateras automatiskt ungefär var 15:e sekund medan fliken syns.</value></data>
   <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar alla dragna nummer och claims för den aktiva säsongen efter backup. Fortsätt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Återställ säsong</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Återställ backup</value></data>

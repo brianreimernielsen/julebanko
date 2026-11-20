@@ -58,6 +58,7 @@
   <data name="InvalidLogin" xml:space="preserve"><value>Forkert brugernavn eller adgangskode.</value></data>
   <data name="Drawn" xml:space="preserve"><value>Trukket</value></data>
   <data name="NonePending" xml:space="preserve"><value>Ingen afventende meldinger.</value></data>
+  <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denne tavle opdateres automatisk ca. hvert 15. sekund, mens fanen er synlig.</value></data>
   <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter alle trukne tal og claims for den aktive sæson efter backup. Fortsæt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Nulstil sæson</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Gendan backup</value></data>

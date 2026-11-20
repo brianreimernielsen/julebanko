@@ -76,8 +76,8 @@
                 <div class="all-numbers-head">
                     <h2 class="block-heading">@Localizer["AllNumbers"]</h2>
                     <div class="view-toggle" role="group" aria-label="@Localizer["AllNumbers"]">
-                        <button type="button" class="view-toggle-btn is-active" data-all-view="order" aria-pressed="true">@Localizer["DrawOrder"]</button>
-                        <button type="button" class="view-toggle-btn" data-all-view="sorted" aria-pressed="false">@Localizer["SortedNumerically"]</button>
+                        <button type="button" class="view-toggle-btn" data-all-view="order" aria-pressed="false">@Localizer["DrawOrder"]</button>
+                        <button type="button" class="view-toggle-btn is-active" data-all-view="sorted" aria-pressed="true">@Localizer["SortedNumerically"]</button>
                     </div>
                 </div>
                 <div class="all-numbers-scroll" data-live-all>
@@ -87,13 +87,13 @@
                     }
                     else
                     {
-                        <div class="ball-row dense" data-all-list="order">
+                        <div class="ball-row dense" data-all-list="order" hidden>
                             @foreach (var n in Model.AllDrawOrder)
                             {
                                 <span class="ball chip">@n.Number</span>
                             }
                         </div>
-                        <div class="ball-row dense" data-all-list="sorted" hidden>
+                        <div class="ball-row dense" data-all-list="sorted">
                             @foreach (var n in Model.AllSorted)
                             {
                                 <span class="ball chip">@n</span>

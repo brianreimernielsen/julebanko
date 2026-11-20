@@ -27,7 +27,7 @@
         <button class="btn btn-primary" type="submit">@Localizer["DrawTodays"]</button>
     </form>
 </div>
-<div class="admin-card">
+<div class="admin-card" data-admin-auto-refresh="20000">
     <h2>@Localizer["AllNumbersDrawOrder"]</h2>
     @if (Model.AllNumbers.Count == 0)
     {
