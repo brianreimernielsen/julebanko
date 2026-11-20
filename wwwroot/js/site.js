@@ -49,6 +49,36 @@
     if (!stage || stage.dataset.nisseReady) return;
     stage.dataset.nisseReady = 'true';
     stage.setAttribute('aria-hidden','true');
+    if(stage.hasAttribute('data-nisse-snow')){
+      const landscape=document.createElement('div');
+      landscape.className='nisse-julenat';
+      landscape.innerHTML=`
+        <span class="nisse-night-smoke"></span><span class="nisse-night-smoke"></span>
+        <span class="nisse-night-smoke"></span><span class="nisse-night-smoke"></span>
+        <span class="nisse-night-window nisse-night-window--left"></span>
+        <span class="nisse-night-window nisse-night-window--right"></span>
+        <span class="nisse-night-wreath"></span>
+        <span class="nisse-night-star"></span>
+        <span class="nisse-night-spark nisse-night-spark--first"></span>
+        <span class="nisse-night-spark nisse-night-spark--second"></span>
+        <span class="nisse-night-deer nisse-night-deer--first"></span>
+        <span class="nisse-night-deer nisse-night-deer--second"></span>
+        <span class="nisse-night-ripple"></span>
+        <span class="nisse-night-bird"></span>
+        <span class="nisse-night-snow-drop"></span>
+        <span class="nisse-night-snow-drop nisse-night-snow-drop--powder"></span>
+        <span class="nisse-night-door"></span>
+        <span class="nisse-night-visitor nisse-night-hare"></span>
+        <div class="nisse-night-hut-path">
+          <span class="nisse-night-visitor nisse-night-hare nisse-night-hare--hut"></span>
+          <span class="nisse-night-visitor nisse-night-fox"></span>
+        </div>
+        <span class="nisse-night-bird nisse-night-bird--solo"></span>
+        <span class="nisse-night-shooting-star"></span>
+        <span class="nisse-night-owl"></span>
+        <span class="nisse-night-bird nisse-night-bird--second"></span>`;
+      stage.prepend(landscape);
+    }
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     if (motion.matches) return;
     const actor = stage.querySelector('[data-nisse-actor]');
@@ -56,8 +86,15 @@
     actor.innerHTML = '<div class="nisse-inner"><div class="nisse-sprite"><div class="nisse-frame"></div></div></div>';
     const frame = actor.querySelector('.nisse-frame');
     const giftSprites = ['gift.png','gift-red.png','gift-blue.png','gift-gold.png'];
-    const heartSprites = ['heart-ornament.png','heart-red-gold.png','heart-green-white.png','heart-green-gold.png'];
-    const files = ['nisse-actions.png','nisse-walk.png','nisse-wave.png','nisse-polish.png','nisse-watering-v2.png','nisse-backwork.png','tree-frost-v1.png','snow-body.png','snow-hat-nordic.png','snow-scarf-nordic.png','snow-scarf-tail.png','snow-carrot.png','lantern.png','nisse-ski.png','scrooge-walk-v2.png','scrooge-kneel.png','heart-branch.png','nisse-heart-kneel.png','nisse-gift-magic.png','goat.png','nisse-goat-ride.png','nisse-meeting-v1.png','nisse-partner-walk-v2.png','nisse-couple-walk-v2.png',...heartSprites,...giftSprites];
+    const heartSprites = ['heart-ornament.png','heart-green-white.png','heart-red-gold.png','heart-green-gold.png'];
+    const foregroundProps = {
+      sled: {x:.92,y:.31,width:.43,aspect:2.1},
+      basket: {x:.50,y:.08,width:.29,aspect:.96},
+      clogs: {x:.75,y:.65,width:.29,aspect:.97},
+      globe: {x:.76,y:.89,width:.25,aspect:.91},
+    };
+    const newPropNames = Object.keys(foregroundProps);
+    const files = ['nisse-place-props.png',...newPropNames.map(name=>name+'.png'),'nisse-sleep.png','nisse-rest.png','nisse-actions.png','nisse-walk.png','nisse-wave.png','nisse-polish.png','nisse-watering-v2.png','nisse-backwork.png','tree-frost-v1.png','snow-body.png','snow-hat-nordic.png','snow-scarf-nordic.png','snow-scarf-tail.png','snow-carrot.png','lantern.png','nisse-ski.png','scrooge-walk-v2.png','scrooge-kneel.png','heart-branch.png','nisse-heart-kneel.png','nisse-gift-magic.png','goat.png','nisse-goat-ride.png','nisse-meeting-v1.png','nisse-partner-walk-v2.png','nisse-couple-walk-v2.png',...heartSprites,...giftSprites];
     const assets = new Map();
     try {
       await Promise.all(files.map(async file => {
@@ -65,11 +102,12 @@
         await img.decode(); assets.set(file,img);
       }));
     } catch(error) { console.error('Nisse: et billede kunne ikke indlæses',error); return; }
-    frame.style.backgroundImage = `url("${assets.get(files[0]).src}")`;
+    frame.style.backgroundImage = `url("${assets.get('nisse-actions.png').src}")`;
     const durations = {walk:160,eat:320,wave:125,polish:145,ski:155};
     const counts = {walk:8,eat:4,wave:8,polish:8,ski:4};
-    const decorationJobs = ['tree','snowman','lantern','heart','gift'];
+    const decorationJobs = ['tree','snowman','lantern','heart','gift',...newPropNames];
     const walkingJobs = ['wave','polish',...decorationJobs];
+    const propRotation = ['heart','goat','sled','lantern','globe','snowman','basket','gift','clogs'];
     const maxDecorations = 7;
     const decorationSpacing = 116;
     const decorations = [];
@@ -83,7 +121,7 @@
     const skiDue=()=>!forced&&activeTime>=nextSkiAt;
     let forced = new URLSearchParams(location.search).get('nisse');
     forced = ({water:'tree',porridge:'eat',cross:'walk'})[forced] || forced;
-    if(!['walk','eat','ski','visit','scrooge','scrooge-flugt','scrooge-kaede','scrooge-alle','scrooge-snowman','landscape','gifts','snowmen','hearts','goat','meeting',...walkingJobs].includes(forced)) forced=null;
+    if(!['walk','eat','ski','visit','scrooge','scrooge-flugt','scrooge-kaede','scrooge-alle','scrooge-snowman','landscape','gifts','snowmen','hearts','goat','meeting','nap',...walkingJobs].includes(forced)) forced=null;
 
     const scroogeDemo=['scrooge','scrooge-flugt','scrooge-kaede','scrooge-alle','scrooge-snowman'].includes(forced);
     let mode='wait', elapsed=0, prev=0, raf=0, x=0;
@@ -91,9 +129,13 @@
     let visit=[], job=null, stopRatio=.5, plantRatio=null, planted=false;
     let work=null, treeFacing=1, polishTarget=null, polishFacing=1;
     let goatRide=null, meeting=null;
-    let nextMeetingAt=120_000;
+    let nextMeetingAt=75_000;
+    let nap=null, nextNapAt=55_000;
+    const meetingBudget=()=>(width()/2+size())/speed*(1+1/.86)*1000+5800;
+    const meetingDue=()=>!forced&&!retryPending&&!retreat&&activeTime>=nextMeetingAt
+      &&Math.min(nextSkiAt,nextMealAt)-activeTime>meetingBudget();
     const treeVisitInterval=4;
-    let visitsSinceTree=treeVisitInterval-1;
+    let visitsSinceTree=treeVisitInterval-1, visitsStarted=0;
     let scrooge=null, stolen=null, dragStart=0, towChain=null, testPropIndex=0;
     let retreat=null, retryPending=false, interruptAttempt=false;
     let nextInterruptionAt=45_000;
@@ -103,7 +145,8 @@
     const outside=(side)=>side<0?-size()-24:width()+24;
     const limit=()=>Math.max(1,Math.min(maxDecorations,Math.floor(width()/decorationSpacing)));
     const jobTarget=()=>stopRatio*width()-foot();
-    const speed=forced?108:54;
+    const nearestExit=()=>x+foot()<width()/2?-1:1;
+    const speed=forced?108:68;
 
     const showAction=(name,t)=>{
       frame.hidden=false;
@@ -193,7 +236,8 @@
       const count=decorationCount.get(name)||0;
       decorationCount.set(name,count+1);
       const smallProp=name==='gift'||name==='lantern';
-      const layer=smallProp?'snow-front':depth||(count%2===0?'snow-front':'snow-back');
+      const newProp=foregroundProps[name];
+      const layer=smallProp||newProp?'snow-front':depth||(count%2===0?'snow-front':'snow-back');
       element.className=`nisse-decoration nisse-decoration--${name} ${layer}`;
       if(smallProp&&count%2===1){
         element.dataset.size='small';
@@ -209,6 +253,26 @@
       if(name==='snowman') spriteName='snow-body.png';
       image.src=assets.get(spriteName).src;
       element.append(image);
+      if(newProp){
+        element.classList.add('nisse-new-prop');
+        element.style.setProperty('--new-prop-width',`${newProp.width*100}%`);
+        const sprite=assets.get(spriteName);
+        const aspect=sprite.naturalWidth&&sprite.naturalHeight?sprite.naturalWidth/sprite.naturalHeight:newProp.aspect;
+        element.style.setProperty('--new-prop-aspect',aspect);
+      }
+      if(name==='globe'){
+        const snow=document.createElement('span');
+        snow.className='nisse-globe-snow';
+        for(let i=0;i<7;i++){
+          const flake=document.createElement('i');
+          flake.style.setProperty('--flake-x',`${12+(i*29)%79}%`);
+          flake.style.setProperty('--flake-shift',`${i%2===0?10:-13}px`);
+          flake.style.setProperty('--flake-offset',`${-i*.63}s`);
+          snow.append(flake);
+        }
+        element.append(snow);
+        if(job!=='globe') element.classList.add('is-snowing');
+      }
       if(name==='lantern'){
         const flame=document.createElement('span');
         flame.className='nisse-lantern-flame';
@@ -239,12 +303,44 @@
       fitDecorations();
       return element;
     };
+    const napDue=()=>forced==='nap'||(!forced&&!retryPending&&!retreat&&
+      decorations.length>0&&activeTime>=nextNapAt&&Math.min(nextSkiAt,nextMealAt)-activeTime>39_000);
+    const startNap=()=>{
+      const target=decorations[0];
+      const current=Math.min(.82,Math.max(.18,(x+foot())/width()));
+      const clearOfTarget=!target||Math.abs(current-target.ratio)*width()>size()*.72;
+      const ratio=clearOfTarget?current:target.ratio>.5?.22:.78;
+      stopRatio=ratio;
+      nap={ratio,facing:direction,settledAt:null,theftStarted:false,wakeAt:0};
+      faceAndGo(Math.sign(jobTarget()-x)||direction,'nap-approach');
+    };
+    const playNap=()=>{
+      if(nap.settledAt===null){
+        nap.settledAt=activeTime;
+        nap.wakeAt=activeTime+16_000;
+        nextNapAt=activeTime+83_000+Math.random()*26_000;
+      }
+      if(!nap.theftStarted&&decorations.length&&activeTime-nap.settledAt>=3800){
+        nap.theftStarted=true;
+        startTheft();
+      }else if(activeTime>=nap.wakeAt){
+        const {ratio,facing}=nap;
+        nap=null;
+        x=ratio*width()-foot();
+        direction=facing;
+        startMode('wake');
+      }
+    };
     const nextStop=()=>{
       const leavingForSki=skiDue();
       job=leavingForSki?null:visit.shift();
       if(!job){
-        const exitDirection=leavingForSki?(x+foot()<width()/2?-1:1):
-          forced==='walk'||forced==='scrooge-flugt'?-direction:(Math.random()<.62?direction:-direction);
+        if(!leavingForSki&&napDue()){
+          startNap();
+          return;
+        }
+        const exitDirection=forced==='walk'||forced==='scrooge-flugt'?-direction:
+          !forced&&Math.random()<.81?nearestExit():leavingForSki?nearestExit():direction;
         faceAndGo(exitDirection,'exit');
         return;
       }
@@ -270,6 +366,15 @@
       if(job==='gift'&&plantRatio!==null){
         const approach=plantRatio<.28?1:-1;
         stopRatio=plantRatio+approach*size()*.40/width();
+      }
+      if(plantRatio!==null&&foregroundProps[job]){
+        if(job==='sled'){
+          const pullSide=Math.sign(plantRatio*width()-x-foot())||direction;
+          stopRatio=plantRatio+pullSide*size()*.34/width();
+        }else{
+          const facing=plantRatio<.28?-1:1;
+          stopRatio=plantRatio-facing*size()*.235/width();
+        }
       }
       if(polishTarget){
         polishFacing=polishTarget.ratio>.5?1:-1;
@@ -327,7 +432,7 @@
       meeting={figure,heart,side:direction,partnerX:width()-(x+foot())-size()/2,pairX:0};
       figure.style.setProperty('--meeting-x',`${meeting.partnerX}px`);
       stage.insertBefore(figure,actor);
-      nextMeetingAt=activeTime+180_000;
+      nextMeetingAt=activeTime+125_000+Math.random()*25_000;
       startMode('meet-approach');
     };
     const moveToward=(current,target,distance)=>current+Math.sign(target-current)*Math.min(Math.abs(target-current),distance);
@@ -383,20 +488,22 @@
         }
       }
     };
-    const startVisit=(entryDirection=null)=>{
-      direction=entryDirection??(forced==='walk'?1:forced==='visit'?-1:pick([-1,1]));
-      x=outside(-direction);
-      if(!forced) visitsSinceTree++;
+    const startVisit=(entryDirection=null,fromScene=false)=>{
+      if(!fromScene){
+        direction=entryDirection??(forced==='walk'?1:forced==='visit'?-1:pick([-1,1]));
+        x=outside(-direction);
+      }
+      if(!forced&&!fromScene){
+        visitsSinceTree++;
+        visitsStarted++;
+      }
       const treeDue=!forced&&visitsSinceTree>=treeVisitInterval;
       if(forced==='ski'||skiDue()){
         nextSkiAt=activeTime+skiDelay();
         startMode('ski');
         return;
       }
-      const meetingBudget=(width()/2+size())/speed*(1+1/.86)*1000+5800;
-      const canMeet=!forced&&entryDirection===null&&!treeDue&&!retryPending&&!retreat
-        &&activeTime>=nextMeetingAt&&Math.min(nextSkiAt,nextMealAt)-activeTime>meetingBudget;
-      if(forced==='meeting'||(canMeet&&Math.random()<.20)){
+      if(forced==='meeting'||(!fromScene&&entryDirection===null&&meetingDue())){
         startMeeting();
         return;
       }
@@ -408,31 +515,44 @@
           return;
         }
         visit=['wave'];
-      }else if(forced==='scrooge-flugt'){
+      }else if(forced==='scrooge-flugt'||forced==='nap'){
+        if(forced==='nap'&&!decorations.length) placeDecoration('tree',.27,'snow-front');
         visit=['wave'];
       }else if(forced==='visit'){
         visit=['tree','wave','heart','polish'];
       }else if(forced){
         visit=[forced];
       }else{
-        const choices=treeDue?walkingJobs.filter(name=>name!=='tree'):[...walkingJobs];
         const stops=1+Math.floor(Math.random()*4);
-        visit=treeDue?['tree']:[];
-        if(activeTime>=nextMealAt) visit.push('eat');
-        while(visit.length<stops){
-          const available=choosePlantSpot()===null?[]:choices.filter(name=>decorationJobs.includes(name));
-          const next=pick(available.length&&Math.random()<.78?available:choices);
-          visit.push(next);
-          choices.splice(choices.indexOf(next),1);
+        const available=choosePlantSpot(direction>0?.33:.67);
+        let slots=available===null?0:limit()-decorations.length;
+        const mealDue=activeTime>=nextMealAt;
+        visit=mealDue?['eat']:[];
+        if(slots&&treeDue&&(!mealDue||stops>1)){
+          visit.push('tree');
+          slots--;
         }
-        const canRide=!treeDue&&activeTime<nextMealAt&&!retryPending&&!retreat;
-        if(canRide&&Math.random()<.19){
-          const available=choosePlantSpot(direction>0?.33:.67);
-          if(available!==null){
-            visit.pop();
-            startGoatRide(available);
-            return;
-          }
+        const props=[...propRotation].sort((a,b)=>(decorationCount.get(a)||0)-(decorationCount.get(b)||0));
+        const canRide=slots&&!fromScene&&!mealDue&&!treeDue&&!retryPending&&!retreat;
+        // Reserve the next vacant plot for the first ride from the second normal visit onward.
+        const goatFirst=!(decorationCount.get('goat')||0)&&visitsStarted>=2;
+        const ride=canRide&&(goatFirst||props[0]==='goat');
+        if(ride) slots--;
+        if(!ride&&slots&&!fromScene&&!mealDue&&!treeDue&&props[0]==='sled'){
+          visit.push('sled');
+          slots--;
+        }
+        for(const name of props){
+          if(!slots||visit.length+Number(ride)>=stops) break;
+          if(name==='goat'||name==='sled') continue;
+          visit.push(name);
+          slots--;
+        }
+        const gestures=Math.random()<.5?['wave','polish']:['polish','wave'];
+        while(visit.length+Number(ride)<stops&&gestures.length) visit.push(gestures.pop());
+        if(ride){
+          startGoatRide(available);
+          return;
         }
       }
       nextStop();
@@ -622,6 +742,84 @@
         nextStop();
       }
     };
+    const pullSled=()=>{
+      if(!work){
+        const element=placeDecoration('sled',plantRatio,'snow-front');
+        element.style.setProperty('--sled-facing',direction);
+        const rope=document.createElement('span');
+        rope.className='nisse-sled-rope';
+        stage.append(rope);
+        work={element,rope,facing:direction};
+      }
+      const slide=x-jobTarget();
+      work.element.style.setProperty('--prop-travel-x',`${slide}px`);
+      const stageBounds=stage.getBoundingClientRect();
+      const item=work.element.getBoundingClientRect();
+      const actorBounds=actor.getBoundingClientRect();
+      const imageWidth=item.width*foregroundProps.sled.width;
+      const image=assets.get('sled.png');
+      const aspect=image.naturalWidth&&image.naturalHeight?image.naturalWidth/image.naturalHeight:2.3;
+      const hookX=plantRatio*width()+slide+work.facing*(foregroundProps.sled.x-.5)*imageWidth;
+      const hookY=item.bottom-stageBounds.top-item.height*.10-(1-foregroundProps.sled.y)*imageWidth/aspect;
+      const handX=x+foot()-work.facing*size()*.16;
+      const handY=actorBounds.top-stageBounds.top+actorBounds.height*.61;
+      const dx=handX-hookX,dy=handY-hookY;
+      work.rope.style.width=`${Math.hypot(dx,dy)}px`;
+      work.rope.style.transform=`translate(${hookX}px,${hookY}px) rotate(${Math.atan2(dy,dx)}rad)`;
+    };
+    const setForegroundProp=()=>{
+      const facing=job==='sled'?-work.facing:(plantRatio<.28?-1:1);
+      if(job==='sled'){
+        if(work.rope){
+          work.rope.remove();
+          work.rope=null;
+          work.element.style.removeProperty('--prop-travel-x');
+        }
+        const brushing=elapsed>450&&elapsed<1650;
+        if(brushing&&!planted){
+          const powder=document.createElement('span');
+          powder.className='nisse-sled-powder';
+          work.element.append(powder);
+          work.powder=powder;
+          planted=true;
+        }
+        if(elapsed<1950){
+          const pose=brushing&&Math.floor(elapsed/220)%2?2:1;
+          showWorkshopPose('nisse-place-props.png',pose,3,facing);
+        }else{
+          showAction('wave',elapsed-1950);
+        }
+        if(elapsed>=2450){
+          work.powder?.remove();
+          nextStop();
+        }
+        return;
+      }
+      const globe=job==='globe';
+      const lowerAt=globe?1060:470;
+      const releaseAt=lowerAt+510;
+      if(!work){
+        const element=placeDecoration(job,plantRatio,'snow-front');
+        work={element};
+      }
+      const lowering=Math.min(1,Math.max(0,(elapsed-lowerAt)/(releaseAt-lowerAt)));
+      const lift=(1-lowering)*size()*.17;
+      const shake=globe&&elapsed<lowerAt?Math.sin(elapsed/51)*4:0;
+      if(elapsed<releaseAt){
+        work.element.style.setProperty('--prop-lift',`${-lift+shake}px`);
+        const pose=lowering<.55?0:1;
+        showWorkshopPose('nisse-place-props.png',pose,3,facing);
+      }else{
+        if(!planted){
+          work.element.style.removeProperty('--prop-lift');
+          if(globe) work.element.classList.add('is-snowing');
+          planted=true;
+        }
+        if(elapsed<releaseAt+620) showWorkshopPose('nisse-place-props.png',1,3,facing);
+        else showAction('wave',elapsed-releaseAt-620);
+      }
+      if(elapsed>=releaseAt+1300) nextStop();
+    };
     const doJob=()=>{
       if(job==='tree'){
         plantTree();
@@ -633,6 +831,8 @@
         hangHeart();
       }else if(job==='gift'){
         conjureGift();
+      }else if(foregroundProps[job]){
+        setForegroundProp();
       }else if(elapsed>=(job==='eat'?mealDuration:durations[job]*counts[job]*2)){
         nextStop();
       }else{
@@ -644,7 +844,7 @@
     };
     const startTheft=(isRetry=false)=>{
       stolen=decorations[0];
-      interruptAttempt=!isRetry&&(forced==='scrooge-flugt'||(
+      interruptAttempt=!nap&&!isRetry&&(forced==='scrooge-flugt'||(
         !forced&&activeTime>=nextInterruptionAt&&nextSkiAt-activeTime>25_000&&Math.random()<.30
       ));
       direction=stolen.ratio<.5?1:-1;
@@ -689,8 +889,9 @@
       snowman:{x:.52,y:.36,width:.32,aspect:208/320},
       heart:{x:.30,y:.27,width:.23,aspect:220/260},
       goat:{x:.68,y:.48,width:.479167,aspect:184/196,fromStage:true},
+      ...foregroundProps,
     };
-    const towTestProps=['gift','lantern','snowman','heart','goat','tree'];
+    const towTestProps=[...newPropNames,'gift','lantern','snowman','heart','goat','tree'];
     const startTowChain=()=>{
       const anchor=towAnchor[stolen.name];
       if(!anchor) return;
@@ -725,10 +926,11 @@
         const imageHeight=imageWidth/imageAspect;
         const imageX=item.left-bounds.left-drag+item.width*.565;
         const imageY=item.bottom-bounds.top-item.height*.10-imageHeight/2;
-        const mirrored=stolen.name==='goat'&&stolen.element.style.getPropertyValue('--goat-facing')==='-1';
+        const facing=stolen.element.style.getPropertyValue(stolen.name==='sled'?'--sled-facing':'--goat-facing');
+        const mirrored=(stolen.name==='sled'||stolen.name==='goat')&&facing==='-1';
         const u=mirrored?1-anchor.x:anchor.x;
         // Taller props still use their original rotation before translateX.
-        const pivotOffset=stolen.name==='gift'||stolen.name==='lantern'?0:imageWidth/2;
+        const pivotOffset=stolen.name==='gift'||stolen.name==='lantern'||foregroundProps[stolen.name]?0:imageWidth/2;
         const a=(u-.5)*imageWidth-pivotOffset;
         const b=(anchor.y-.5)*imageHeight;
         const tilt=-8*Math.PI/180;
@@ -777,7 +979,12 @@
       }
       scrooge.remove();
       scrooge=null;
-      startMode('pause');
+      if(nap){
+        nap.wakeAt=Math.max(nap.wakeAt,activeTime+1800);
+        startMode('nap');
+      }else{
+        startMode('pause');
+      }
     };
     const scroogeSneakSpeed=85;
     const scroogeExitSpeed=190;
@@ -872,6 +1079,18 @@
       actor.classList.toggle('is-riding',mode==='ride');
       if(scrooge){
         playTheft(dt);
+      }else if(mode==='nap-settle'){
+        showWorkshopPose('nisse-rest.png',0,1,nap.facing);
+        if(elapsed>=620) startMode('nap');
+      }else if(mode==='nap'){
+        playNap();
+      }else if(mode==='wake'){
+        if(elapsed<420) showWorkshopPose('nisse-rest.png',0,1,direction);
+        else showFront();
+        if(elapsed>=750){
+          if(forced==='nap'||skiDue()||meetingDue()||!choosePlantSpot()) faceAndGo(nearestExit(),'exit');
+          else startVisit(null,true);
+        }
       }else if(meeting){
         playMeeting(dt);
       }else if(mode==='ride'){
@@ -883,12 +1102,16 @@
         x+=direction*(skiing?150:speed)*dt/1000;
         showAction(skiing?'ski':'walk',elapsed);
         if(direction*(x-outside(direction))>=0) startMode('wait');
-      }else if(mode==='move'){
+      }else if(mode==='move'||mode==='nap-approach'){
         const distance=jobTarget()-x;
         x+=Math.sign(distance)*Math.min(Math.abs(distance),speed*dt/1000);
         showAction('walk',elapsed);
+        if(mode==='move'&&job==='sled') pullSled();
         if(Math.abs(distance)<=speed*dt/1000){
-          if(job==='walk') nextStop();
+          if(mode==='nap-approach'){
+            nap.facing=direction;
+            startMode('nap-settle');
+          }else if(job==='walk') nextStop();
           else{
             if(job==='eat') nextMealAt=activeTime+mealInterval;
             startMode('job');
@@ -918,17 +1141,21 @@
       }else if(mode==='wait'&&elapsed>=(forced?1100:4200)){
         const enoughToRaid=decorations.length>=3&&Math.random()<.48;
         const plotsFull=decorations.length>0&&choosePlantSpot()===null;
-        if(skiDue()) startVisit();
-        else if(scroogeDemo||plotsFull||(!forced&&enoughToRaid)) startTheft();
+        if(skiDue()||meetingDue()) startVisit();
+        else if(scroogeDemo||(forced!=='nap'&&(plotsFull||(!forced&&enoughToRaid)))) startTheft();
         else startVisit();
       }
-      const elfOnScreen=['move','job','turn','exit','ski','ride','dismount','meet-approach'].includes(mode);
+      const sleeping=nap!==null&&nap.settledAt!==null;
+      if(sleeping) showWorkshopPose('nisse-sleep.png',0,1,nap.facing);
+      const elfOnScreen=sleeping||['move','job','turn','exit','ski','ride','dismount','meet-approach','nap-approach','nap-settle','nap','wake'].includes(mode);
+      actor.classList.toggle('is-napping',sleeping);
+      actor.classList.toggle('is-nap-seated',mode==='nap-settle'||(mode==='wake'&&elapsed<420));
       actor.classList.toggle('is-polishing',mode==='job'&&job==='polish');
-      actor.classList.toggle('is-workshop',mode==='dismount'||(mode==='job'&&(job==='snowman'||job==='lantern'||job==='heart'||job==='gift')));
+      actor.classList.toggle('is-workshop',mode==='dismount'||(mode==='job'&&(job==='snowman'||job==='lantern'||job==='heart'||job==='gift'||Boolean(foregroundProps[job]))));
       actor.classList.toggle('is-meeting-hidden',mode==='meet-kiss'||mode==='meet-exit');
       actor.classList.toggle('is-active',elfOnScreen);
       actor.style.setProperty('--nisse-ski-direction',direction);
-      actor.style.setProperty('--nisse-x',`${x}px`);
+      actor.style.setProperty('--nisse-x',`${sleeping?nap.ratio*width()-foot():x}px`);
       raf=requestAnimationFrame(tick);
     };
     const seedTheftDemo=()=>{
@@ -979,6 +1206,7 @@
       return;
     }
     if(forced==='polish') placeDecoration('lantern',.55,'snow-front');
+
     if(scroogeDemo) seedTheftDemo();
     else startVisit();
     actor.style.setProperty('--nisse-x',`${x}px`);
@@ -989,8 +1217,7 @@
     });
     motion.addEventListener('change',()=>{
       cancelAnimationFrame(raf);prev=0;
-      // Do not hide the whole stage (snow strip must stay). Pause the actor only.
-      if(actor) actor.hidden=motion.matches;
+      actor.hidden=motion.matches;
       if(!motion.matches&&!document.hidden)raf=requestAnimationFrame(tick);
     });
   };

@@ -19,12 +19,15 @@
     <div class="hero-media"@if (!string.IsNullOrEmpty(Model.HeroUrl)) { <text> style="background-image:url(@Model.HeroUrl);" </text> }></div>
     <div class="hero-content">
         <p class="hero-kicker">@DateTime.Now.Year</p>
-        <div class="brand-row">
+        <div class="brand-row@(string.IsNullOrEmpty(Model.BrandName) && !string.IsNullOrEmpty(Model.LogoUrl) ? " brand-row--logo-only" : "")">
             @if (!string.IsNullOrEmpty(Model.LogoUrl))
             {
-                <img class="hero-logo" src="@Model.LogoUrl" alt="" />
+                <img class="hero-logo" src="@Model.LogoUrl" alt="@(string.IsNullOrEmpty(Model.BrandName) ? Model.SeasonTitle : Model.BrandName)" />
             }
-            <h1 class="brand">@Model.BrandName</h1>
+            @if (!string.IsNullOrEmpty(Model.BrandName))
+            {
+                <h1 class="brand">@Model.BrandName</h1>
+            }
         </div>
         <p class="hero-lead">@Model.SeasonTitle</p>
         <div class="cta-row">

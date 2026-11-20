@@ -59,7 +59,7 @@
   <data name="Delete" xml:space="preserve"><value>Slet</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>
   <data name="HeroImage" xml:space="preserve"><value>Hero-billede</value></data>
-  <data name="HeroLogo" xml:space="preserve"><value>Hero-logo (til venstre for brandnavn)</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero-logo (kan erstatte brandteksten)</value></data>
   <data name="BackgroundImage" xml:space="preserve"><value>Baggrundsbillede</value></data>
   <data name="DecorationImage" xml:space="preserve"><value>Dekoration (bruges ikke på spillersiden)</value></data>
   <data name="PlayerColors" xml:space="preserve"><value>Spillerfarver</value></data>
@@ -79,4 +79,9 @@
   <data name="NewPassword" xml:space="preserve"><value>Ny adgangskode</value></data>
   <data name="Saved" xml:space="preserve"><value>Gemt.</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lad brandfeltet stå tomt for kun at vise logo. Upload et hero-logo under Billeder; brandteksten skjules, når feltet er tomt.</value></data>
+  <data name="Fonts" xml:space="preserve"><value>Skrifttyper</value></data>
+  <data name="FontsHint" xml:space="preserve"><value>Brandskriften bruges til den store hero-titel. Brødtekstskriften bruges til resten af spiller-UI.</value></data>
+  <data name="BrandFont" xml:space="preserve"><value>Brand- / hero-skrift</value></data>
+  <data name="BodyFont" xml:space="preserve"><value>Spiller-brødtekstskrift</value></data>
 </root>

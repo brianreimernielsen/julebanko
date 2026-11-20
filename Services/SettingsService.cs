@@ -16,17 +16,31 @@ public class SettingsService(AppDbContext db)
 
     /// <summary>
     /// Brand name for the current UI culture (or an explicit two-letter culture).
+    /// Empty string means logo-only hero (no wordmark). Missing keys fall back to defaults.
     /// </summary>
     public async Task<string> GetBrandNameAsync(string? culture = null)
     {
         var lang = CultureSupport.Normalize(
             culture ?? CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
-        var value = await GetAsync(
-            CultureSupport.BrandSettingKey(lang),
-            CultureSupport.DefaultBrandName(lang));
-        return string.IsNullOrWhiteSpace(value)
-            ? CultureSupport.DefaultBrandName(lang)
-            : value.Trim();
+        var key = CultureSupport.BrandSettingKey(lang);
+        var map = await GetAllAsync();
+        if (map.TryGetValue(key, out var value))
+        {
+            return value.Trim();
+        }
+
+        return CultureSupport.DefaultBrandName(lang);
+    }
+
+    /// <summary>
+    /// Brand for titles/email when a blank wordmark is allowed on the player hero.
+    /// </summary>
+    public async Task<string> GetBrandNameOrFallbackAsync(string? culture = null)
+    {
+        var name = await GetBrandNameAsync(culture);
+        return string.IsNullOrWhiteSpace(name)
+            ? CultureSupport.DefaultBrandName(culture)
+            : name;
     }
 
     public async Task<IReadOnlyDictionary<string, string>> GetAllAsync()

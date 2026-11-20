@@ -59,7 +59,7 @@
   <data name="Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>
   <data name="HeroImage" xml:space="preserve"><value>Hero image</value></data>
-  <data name="HeroLogo" xml:space="preserve"><value>Hero logo (left of brand name)</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero logo (wordmark image; can replace brand text)</value></data>
   <data name="BackgroundImage" xml:space="preserve"><value>Background image</value></data>
   <data name="DecorationImage" xml:space="preserve"><value>Decoration image (unused on player page)</value></data>
   <data name="PlayerColors" xml:space="preserve"><value>Player colors</value></data>
@@ -79,4 +79,9 @@
   <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
   <data name="Saved" xml:space="preserve"><value>Saved.</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Leave brand blank to show logo only. Upload a hero logo under Images; the brand text element is hidden when empty.</value></data>
+  <data name="Fonts" xml:space="preserve"><value>Fonts</value></data>
+  <data name="FontsHint" xml:space="preserve"><value>Brand font styles the large hero wordmark. Body font is used for the rest of the player UI.</value></data>
+  <data name="BrandFont" xml:space="preserve"><value>Brand / hero font</value></data>
+  <data name="BodyFont" xml:space="preserve"><value>Player body font</value></data>
 </root>

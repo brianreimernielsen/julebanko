@@ -97,6 +97,8 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.BrandNameDa, CultureSupport.DefaultBrandDa);
         await EnsureSettingAsync(db, SettingKeys.BrandNameEn, CultureSupport.DefaultBrandEn);
         await EnsureSettingAsync(db, SettingKeys.BrandNameSv, CultureSupport.DefaultBrandSv);
+        await EnsureSettingAsync(db, SettingKeys.BrandFont, FontCatalog.DefaultBrandFont);
+        await EnsureSettingAsync(db, SettingKeys.BodyFont, FontCatalog.DefaultBodyFont);
 
         await db.SaveChangesAsync(cancellationToken);
 

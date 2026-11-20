@@ -23,4 +23,6 @@ public static class SettingKeys
     public const string BrandNameDa = "BrandNameDa";
     public const string BrandNameEn = "BrandNameEn";
     public const string BrandNameSv = "BrandNameSv";
+    public const string BrandFont = "BrandFont";
+    public const string BodyFont = "BodyFont";
 }

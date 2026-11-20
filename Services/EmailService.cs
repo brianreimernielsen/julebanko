@@ -18,7 +18,7 @@ public class EmailService(
         var smtp = await ResolveSmtpAsync();
         var to = await settings.GetAsync(SettingKeys.ClaimNotifyTo, "banko@example.com");
         var from = string.IsNullOrWhiteSpace(smtp.From) ? "julebanko@example.com" : smtp.From;
-        var brand = await settings.GetBrandNameAsync("da");
+        var brand = await settings.GetBrandNameOrFallbackAsync("da");
         var winLabel = ClaimService.WinTypeLabel(claim.WinType, "da");
 
         var message = new MimeMessage();

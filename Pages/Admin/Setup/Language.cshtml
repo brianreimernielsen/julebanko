@@ -23,6 +23,7 @@
 
         <h3 style="margin:1.25rem 0 0.35rem; font-size:1.05rem;">@Localizer["BrandNames"]</h3>
         <p class="muted" style="margin-top:0;">@Localizer["BrandNamesHint"]</p>
+        <p class="muted" style="margin-top:0;">@Localizer["BrandLogoOnlyHint"]</p>
         <label>
             @Localizer["BrandNameDa"]
             <input asp-for="BrandNameDa" maxlength="80" />
@@ -34,6 +35,27 @@
         <label>
             @Localizer["BrandNameSv"]
             <input asp-for="BrandNameSv" maxlength="80" />
+        </label>
+
+        <h3 style="margin:1.25rem 0 0.35rem; font-size:1.05rem;">@Localizer["Fonts"]</h3>
+        <p class="muted" style="margin-top:0;">@Localizer["FontsHint"]</p>
+        <label>
+            @Localizer["BrandFont"]
+            <select asp-for="BrandFont">
+                @foreach (var font in FontCatalog.BrandFonts)
+                {
+                    <option value="@font.Id">@font.Label</option>
+                }
+            </select>
+        </label>
+        <label>
+            @Localizer["BodyFont"]
+            <select asp-for="BodyFont">
+                @foreach (var font in FontCatalog.BodyFonts)
+                {
+                    <option value="@font.Id">@font.Label</option>
+                }
+            </select>
         </label>
 
         <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
