@@ -84,6 +84,7 @@
   <data name="NewPassword" xml:space="preserve"><value>Ny adgangskode</value></data>
   <data name="Saved" xml:space="preserve"><value>Gemt.</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lad brandfeltet stå tomt for kun at vise logo. Upload et hero-logo under Billeder; brandteksten skjules, når feltet er tomt.</value></data>
   <data name="Fonts" xml:space="preserve"><value>Skrifttyper</value></data>
   <data name="FontsHint" xml:space="preserve"><value>Brandskriften bruges til den store hero-titel. Brødtekstskriften bruges til resten af spiller-UI.</value></data>

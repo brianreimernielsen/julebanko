@@ -84,6 +84,7 @@
   <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
   <data name="Saved" xml:space="preserve"><value>Saved.</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Leave brand blank to show logo only. Upload a hero logo under Images; the brand text element is hidden when empty.</value></data>
   <data name="Fonts" xml:space="preserve"><value>Fonts</value></data>
   <data name="FontsHint" xml:space="preserve"><value>Brand font styles the large hero wordmark. Body font is used for the rest of the player UI.</value></data>

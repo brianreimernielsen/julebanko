@@ -1,4 +1,5 @@
 @using System.Globalization
+@using System.Reflection
 @using Julebanko.Data
 @using Julebanko.Services
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -11,6 +12,16 @@
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
     var isSetup = AdminAuthService.IsSetupAdmin(User);
     var path = Context.Request.Path.Value ?? "";
+    var appVersion = typeof(Program).Assembly
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+        ?? typeof(Program).Assembly.GetName().Version?.ToString()
+        ?? "dev";
+    // Strip optional +git metadata some hosts append to InformationalVersion.
+    var plus = appVersion.IndexOf('+');
+    if (plus >= 0)
+    {
+        appVersion = appVersion[..plus];
+    }
 }
 <!DOCTYPE html>
 <html lang="@culture">
@@ -42,7 +53,7 @@
                 <a class="top-link" href="/">@Localizer["BackToPlayer"]</a>
             </div>
             <h1 class="admin-brand">@Localizer["AdminArea"]</h1>
-            <p class="muted">@User.Identity?.Name</p>
+            <p class="muted">@User.Identity?.Name · @Localizer["AppVersion"] @appVersion</p>
             <nav class="admin-nav">
                 <a class="@(path.Equals("/Admin", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin">@Localizer["Dashboard"]</a>
                 <a class="@(path.StartsWith("/Admin/Draw", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Draw">@Localizer["DrawNumbers"]</a>
@@ -60,6 +71,7 @@
                 <a href="/Admin/Logout">@Localizer["Logout"]</a>
             </nav>
             @RenderBody()
+            <p class="admin-footer muted">© @DateTime.Now.Year Brian Reimer-Nielsen</p>
         </div>
     </div>
     <script src="~/js/site.js" asp-append-version="true"></script>

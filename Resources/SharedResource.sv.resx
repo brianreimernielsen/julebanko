@@ -84,6 +84,7 @@
   <data name="NewPassword" xml:space="preserve"><value>Nytt lösenord</value></data>
   <data name="Saved" xml:space="preserve"><value>Sparat.</value></data>
   <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
   <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lämna varumärket tomt för att bara visa logotypen. Ladda upp en hero-logotyp under Bilder; varumärkestexten döljs när fältet är tomt.</value></data>
   <data name="Fonts" xml:space="preserve"><value>Typsnitt</value></data>
   <data name="FontsHint" xml:space="preserve"><value>Varumärkestypsnittet används för den stora hero-titeln. Brödtexttypsnittet används för resten av spel-UI.</value></data>

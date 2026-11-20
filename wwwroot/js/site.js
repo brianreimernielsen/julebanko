@@ -262,6 +262,7 @@
     const stage = document.querySelector('[data-nisse]');
     if (!stage || stage.dataset.nisseReady) return;
     stage.dataset.nisseReady = 'true';
+    stage.dataset.nisseBuild = 'julenat-kaelk-3';
     stage.setAttribute('aria-hidden','true');
     if(stage.hasAttribute('data-nisse-snow')){
       const landscape=document.createElement('div');
@@ -333,7 +334,10 @@
     const skiDelay=()=>(4+Math.random()*3)*60_000;
     let activeTime=0, nextMealAt=mealInterval, nextSkiAt=skiDelay();
     const skiDue=()=>!forced&&activeTime>=nextSkiAt;
-    let forced = new URLSearchParams(location.search).get('nisse');
+    const query = new URLSearchParams(location.search);
+    let forced = query.get('nisse');
+    const side = query.get('side');
+    const sledTestSide = side==='left'?1:side==='right'?-1:null;
     forced = ({water:'tree',porridge:'eat',cross:'walk'})[forced] || forced;
     if(!['walk','eat','ski','visit','scrooge','scrooge-flugt','scrooge-kaede','scrooge-alle','scrooge-snowman','landscape','gifts','snowmen','hearts','goat','meeting','nap',...walkingJobs].includes(forced)) forced=null;
 
@@ -406,10 +410,11 @@
     };
     const clearForPlanting=(ratio)=>decorations.every(item=>
       Math.abs(item.ratio-ratio)*width()>=Math.min(decorationSpacing*.85,width()*.36));
-    const choosePlantSpot=(preferredRatio=null)=>{
+    const choosePlantSpot=(preferredRatio=null, accepts=()=>true)=>{
       if(decorations.length>=limit()) return null;
       const count=limit();
-      const candidates=Array.from({length:count},(_,i)=>(i+.5)/count).filter(clearForPlanting);
+      const candidates=Array.from({length:count},(_,i)=>(i+.5)/count).filter(ratio=>clearForPlanting(ratio)&&accepts(ratio));
+      if(!candidates.length) return null;
       if(!decorations.length){
         if(preferredRatio===null) return pick(candidates);
         return candidates.reduce((closest,ratio)=>
@@ -545,6 +550,12 @@
         startMode('wake');
       }
     };
+    const sledTowGap=.62;
+    const sledBrushGap=.31;
+    const chooseSledSpot=(side)=>{
+      const gap=sledTowGap*size()/width();
+      return choosePlantSpot(side>0?.24:.76,ratio=>side>0?ratio+gap<=.94:ratio-gap>=.06);
+    };
     const nextStop=()=>{
       const leavingForSki=skiDue();
       job=leavingForSki?null:visit.shift();
@@ -563,6 +574,16 @@
       const firstTree=job==='tree'&&!decorationCount.has('tree');
       const preferredRatio=firstTree?(direction>0?.23:.77):null;
       plantRatio=decorationJobs.includes(job)?choosePlantSpot(preferredRatio):null;
+      if(job==='sled'){
+        plantRatio=chooseSledSpot(direction);
+        if(plantRatio===null){
+          plantRatio=chooseSledSpot(-direction);
+          if(plantRatio!==null){
+            direction=-direction;
+            x=outside(-direction);
+          }
+        }
+      }
       if(decorationJobs.includes(job)&&plantRatio===null) job='polish';
       polishTarget=job==='polish'?pick(decorations.filter(item=>item.name==='tree'||item.name==='lantern')):null;
       if(job==='polish'&&!polishTarget) job='wave';
@@ -583,8 +604,7 @@
       }
       if(plantRatio!==null&&foregroundProps[job]){
         if(job==='sled'){
-          const pullSide=Math.sign(plantRatio*width()-x-foot())||direction;
-          stopRatio=plantRatio+pullSide*size()*.34/width();
+          stopRatio=plantRatio+direction*size()*sledTowGap/width();
         }else{
           const facing=plantRatio<.28?-1:1;
           stopRatio=plantRatio-facing*size()*.235/width();
@@ -704,7 +724,8 @@
     };
     const startVisit=(entryDirection=null,fromScene=false)=>{
       if(!fromScene){
-        direction=entryDirection??(forced==='walk'?1:forced==='visit'?-1:pick([-1,1]));
+        direction=entryDirection??(forced==='walk'?1:forced==='visit'?-1:
+          forced==='sled'&&sledTestSide!==null?sledTestSide:pick([-1,1]));
         x=outside(-direction);
       }
       if(!forced&&!fromScene){
@@ -960,10 +981,14 @@
       if(!work){
         const element=placeDecoration('sled',plantRatio,'snow-front');
         element.style.setProperty('--sled-facing',direction);
-        const rope=document.createElement('span');
-        rope.className='nisse-sled-rope';
+        const svgNS='http://www.w3.org/2000/svg';
+        const rope=document.createElementNS(svgNS,'svg');
+        const line=document.createElementNS(svgNS,'line');
+        rope.setAttribute('class','nisse-sled-reb');
+        rope.setAttribute('aria-hidden','true');
+        rope.append(line);
         stage.append(rope);
-        work={element,rope,facing:direction};
+        work={element,rope,line,facing:direction};
       }
       const slide=x-jobTarget();
       work.element.style.setProperty('--prop-travel-x',`${slide}px`);
@@ -977,9 +1002,10 @@
       const hookY=item.bottom-stageBounds.top-item.height*.10-(1-foregroundProps.sled.y)*imageWidth/aspect;
       const handX=x+foot()-work.facing*size()*.16;
       const handY=actorBounds.top-stageBounds.top+actorBounds.height*.61;
-      const dx=handX-hookX,dy=handY-hookY;
-      work.rope.style.width=`${Math.hypot(dx,dy)}px`;
-      work.rope.style.transform=`translate(${hookX}px,${hookY}px) rotate(${Math.atan2(dy,dx)}rad)`;
+      work.line.setAttribute('x1',hookX);
+      work.line.setAttribute('y1',hookY);
+      work.line.setAttribute('x2',handX);
+      work.line.setAttribute('y2',handY);
     };
     const setForegroundProp=()=>{
       const facing=job==='sled'?-work.facing:(plantRatio<.28?-1:1);
@@ -988,8 +1014,17 @@
           work.rope.remove();
           work.rope=null;
           work.element.style.removeProperty('--prop-travel-x');
+          direction=-work.facing;
         }
-        const brushing=elapsed>450&&elapsed<1650;
+        const stepDistance=(sledTowGap-sledBrushGap)*size();
+        const stepTime=stepDistance/speed*1000;
+        x=jobTarget()-work.facing*Math.min(stepDistance,elapsed*speed/1000);
+        if(elapsed<stepTime){
+          showAction('walk',elapsed);
+          return;
+        }
+        const brushTime=elapsed-stepTime;
+        const brushing=brushTime>350&&brushTime<1550;
         if(brushing&&!planted){
           const powder=document.createElement('span');
           powder.className='nisse-sled-powder';
@@ -997,13 +1032,13 @@
           work.powder=powder;
           planted=true;
         }
-        if(elapsed<1950){
-          const pose=brushing&&Math.floor(elapsed/220)%2?2:1;
+        if(brushTime<1850){
+          const pose=brushing&&Math.floor(brushTime/220)%2?2:1;
           showWorkshopPose('nisse-place-props.png',pose,3,facing);
         }else{
-          showAction('wave',elapsed-1950);
+          showAction('wave',brushTime-1850);
         }
-        if(elapsed>=2450){
+        if(brushTime>=2350){
           work.powder?.remove();
           nextStop();
         }
@@ -1215,7 +1250,11 @@
           return;
         }
         if(Math.abs(distance)<=scroogeSneakSpeed*dt/1000) startMode('grab');
+      }else if(mode==='grab'&&stolen.name==='globe'&&elapsed<1450){
+        stolen.element.classList.toggle('is-scrooge-shaking',elapsed>=290);
+        stolen.element.classList.toggle('is-snowing',elapsed>=500);
       }else if(mode==='grab'&&elapsed>=450){
+        if(stolen.name==='globe') stolen.element.classList.remove('is-scrooge-shaking');
         if(stolen.name==='tree'){
           startMode('ignite');
         }else{
@@ -1269,7 +1308,8 @@
       const dragging=mode==='drag';
       const kneeling=mode==='ignite';
       const hurrying=dragging||mode==='fire-exit';
-      const col=mode==='grab'?1:Math.floor(elapsed/(hurrying?105:165))%4;
+      const grabbingGlobe=mode==='grab'&&stolen.name==='globe'&&elapsed>=290;
+      const col=mode==='grab'?(grabbingGlobe?1+Math.floor(elapsed/185)%2:1):Math.floor(elapsed/(hurrying?105:165))%4;
       const sprite=assets.get(kneeling?'scrooge-kneel.png':'scrooge-walk-v2.png');
       scrooge.style.backgroundImage=`url("${sprite.src}")`;
       scrooge.style.backgroundSize=kneeling?'200% 100%':'400% 200%';
@@ -1315,7 +1355,10 @@
         const skiing=mode==='ski';
         x+=direction*(skiing?150:speed)*dt/1000;
         showAction(skiing?'ski':'walk',elapsed);
-        if(direction*(x-outside(direction))>=0) startMode('wait');
+        if(direction*(x-outside(direction))>=0){
+          const fixedSledDemo=forced==='sled'&&sledTestSide!==null;
+          startMode(fixedSledDemo?'demo-complete':'wait');
+        }
       }else if(mode==='move'||mode==='nap-approach'){
         const distance=jobTarget()-x;
         x+=Math.sign(distance)*Math.min(Math.abs(distance),speed*dt/1000);
@@ -1370,7 +1413,7 @@
       actor.classList.toggle('is-active',elfOnScreen);
       actor.style.setProperty('--nisse-ski-direction',direction);
       actor.style.setProperty('--nisse-x',`${sleeping?nap.ratio*width()-foot():x}px`);
-      raf=requestAnimationFrame(tick);
+      if(mode!=='demo-complete') raf=requestAnimationFrame(tick);
     };
     const seedTheftDemo=()=>{
       if(forced==='scrooge-snowman'){
