@@ -26,6 +26,7 @@
   <data name="ClaimSubmitted" xml:space="preserve"><value>Tack! Din anmälan har skickats och väntar på bekräftelse.</value></data>
   <data name="NoNumbersYet" xml:space="preserve"><value>Inga nummer dragna ännu.</value></data>
   <data name="Language" xml:space="preserve"><value>Språk</value></data>
+  <data name="LanguageAndBranding" xml:space="preserve"><value>Språk och branding</value></data>
   <data name="DefaultLanguage" xml:space="preserve"><value>Standardspråk</value></data>
   <data name="DefaultLanguageHint" xml:space="preserve"><value>Används på den offentliga sidan när besökare inte har valt språk. DA/EN/SV-väljaren kan fortfarande åsidosätta per webbläsare.</value></data>
   <data name="BrandNames" xml:space="preserve"><value>Varumärkesnamn per språk</value></data>

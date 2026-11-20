@@ -26,6 +26,7 @@
   <data name="ClaimSubmitted" xml:space="preserve"><value>Tak! Din melding er sendt og afventer bekræftelse.</value></data>
   <data name="NoNumbersYet" xml:space="preserve"><value>Ingen tal trukket endnu.</value></data>
   <data name="Language" xml:space="preserve"><value>Sprog</value></data>
+  <data name="LanguageAndBranding" xml:space="preserve"><value>Sprog og branding</value></data>
   <data name="DefaultLanguage" xml:space="preserve"><value>Standardsprog</value></data>
   <data name="DefaultLanguageHint" xml:space="preserve"><value>Bruges på den offentlige side, når besøgende ikke har valgt sprog. DA/EN/SV-vælgeren kan stadig overstyre pr. browser.</value></data>
   <data name="BrandNames" xml:space="preserve"><value>Brandnavn pr. sprog</value></data>

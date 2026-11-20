@@ -2,13 +2,13 @@
 @model Julebanko.Pages.Admin.Setup.LanguageModel
 @using Julebanko.Services
 @{
-    ViewData["Title"] = Localizer["Language"].Value;
+    ViewData["Title"] = Localizer["LanguageAndBranding"].Value;
 }
 @section Head {
     <link href="@FontCatalog.GoogleFontsCatalogHref()" rel="stylesheet" />
 }
 <div class="admin-card">
-    <h2>@Localizer["Language"]</h2>
+    <h2>@Localizer["LanguageAndBranding"]</h2>
     <p class="muted">@Localizer["DefaultLanguageHint"]</p>
     @if (Model.Saved)
     {
