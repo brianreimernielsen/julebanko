@@ -19,6 +19,8 @@
   });
 
   const ALL_NUMBERS_VIEW_KEY = "julebanko-all-numbers-view";
+  /** @type {WeakMap<Element, { order: (number|string)[], sorted: (number|string)[] }>} */
+  const allNumbersCache = new WeakMap();
 
   const readAllNumbersView = () => {
     try {
@@ -39,7 +41,28 @@
     }
   };
 
-  const applyAllNumbersView = (panel, view) => {
+  const parseBallNumbers = (row) => {
+    if (!row) return [];
+    return Array.from(row.querySelectorAll(".ball")).map((ball) => {
+      const text = (ball.textContent || "").trim();
+      const asNum = Number(text);
+      return Number.isFinite(asNum) ? asNum : text;
+    });
+  };
+
+  const seedAllNumbersCache = (panel, host) => {
+    if (!panel || !host) return;
+    const existing = allNumbersCache.get(panel);
+    if (existing && (existing.order.length || existing.sorted.length)) return;
+    const orderRow = host.querySelector('[data-all-list="order"]');
+    const sortedRow = host.querySelector('[data-all-list="sorted"]');
+    allNumbersCache.set(panel, {
+      order: parseBallNumbers(orderRow),
+      sorted: parseBallNumbers(sortedRow)
+    });
+  };
+
+  const setAllNumbersButtons = (panel, view) => {
     if (!panel) return;
     const resolved = view === "order" || view === "sorted" ? view : "sorted";
     panel.querySelectorAll("[data-all-view]").forEach((btn) => {
@@ -47,26 +70,57 @@
       btn.classList.toggle("is-active", active);
       btn.setAttribute("aria-pressed", active ? "true" : "false");
     });
-    // Query lists fresh each time — live poll replaces the ball rows.
-    panel.querySelectorAll("[data-all-list]").forEach((list) => {
-      list.hidden = list.getAttribute("data-all-list") !== resolved;
+  };
+
+  const paintAllNumbers = (panel, host, emptyLabel) => {
+    if (!host) return;
+    const view = readAllNumbersView();
+    const cached = (panel && allNumbersCache.get(panel)) || { order: [], sorted: [] };
+    const numbers = view === "order" ? cached.order : cached.sorted;
+
+    setAllNumbersButtons(panel, view);
+    host.replaceChildren();
+
+    if (!numbers.length) {
+      const note = document.createElement("p");
+      note.className = "empty-note";
+      note.textContent = emptyLabel || "";
+      host.appendChild(note);
+      return;
+    }
+
+    // Only ONE ordering in the DOM — never append both rows.
+    const row = document.createElement("div");
+    row.className = "ball-row dense";
+    row.setAttribute("data-all-list", view);
+    numbers.forEach((n) => {
+      const ball = document.createElement("span");
+      ball.className = "ball chip";
+      ball.textContent = String(n);
+      row.appendChild(ball);
     });
+    host.appendChild(row);
   };
 
   const bindAllNumbersToggle = (panel) => {
-    const buttons = panel.querySelectorAll("[data-all-view]");
-    if (!buttons.length) return;
+    if (!panel) return;
+    const host = panel.querySelector("[data-live-all]");
+    const emptyLabel =
+      (panel.closest("[data-live-board]") &&
+        panel.closest("[data-live-board]").getAttribute("data-empty-numbers")) ||
+      "";
 
-    applyAllNumbersView(panel, readAllNumbersView());
+    seedAllNumbersCache(panel, host);
+    paintAllNumbers(panel, host, emptyLabel);
 
-    buttons.forEach((btn) => {
+    panel.querySelectorAll("[data-all-view]").forEach((btn) => {
       if (btn.dataset.toggleBound) return;
       btn.dataset.toggleBound = "1";
       btn.addEventListener("click", () => {
         const view = btn.getAttribute("data-all-view");
         if (!view) return;
         writeAllNumbersView(view);
-        applyAllNumbersView(panel, view);
+        paintAllNumbers(panel, host, emptyLabel);
       });
     });
   };
@@ -177,26 +231,24 @@
       }
 
       if (allHost) {
-        const view = readAllNumbersView();
-        allHost.replaceChildren();
-        if (!data.allOrder || !data.allOrder.length) {
-          const note = document.createElement("p");
-          note.className = "empty-note";
-          note.textContent = emptyNumbers;
-          allHost.appendChild(note);
+        const order = Array.isArray(data.allOrder) ? data.allOrder : [];
+        const sorted = Array.isArray(data.allSorted) ? data.allSorted : [];
+        if (allPanel) {
+          allNumbersCache.set(allPanel, { order, sorted });
+          bindAllNumbersToggle(allPanel);
+          paintAllNumbers(allPanel, allHost, emptyNumbers);
         } else {
-          const order = renderBalls(data.allOrder, true);
-          order.setAttribute("data-all-list", "order");
-          const sorted = renderBalls(data.allSorted || [], true);
-          sorted.setAttribute("data-all-list", "sorted");
-          allHost.appendChild(order);
-          allHost.appendChild(sorted);
-          if (allPanel) {
-            bindAllNumbersToggle(allPanel);
-            applyAllNumbersView(allPanel, view);
+          // Fallback without panel chrome: still only one ordering.
+          const view = readAllNumbersView();
+          allHost.replaceChildren();
+          const numbers = view === "order" ? order : sorted;
+          if (!numbers.length) {
+            const note = document.createElement("p");
+            note.className = "empty-note";
+            note.textContent = emptyNumbers;
+            allHost.appendChild(note);
           } else {
-            order.hidden = view !== "order";
-            sorted.hidden = view !== "sorted";
+            allHost.appendChild(renderBalls(numbers, true));
           }
         }
       }

@@ -621,6 +621,13 @@ img {
   gap: 0.45rem;
 }
 
+/* `.ball-row { display:flex }` otherwise overrides the [hidden] UA rule and
+   shows Draw order + Numerically sorted concatenated in All Numbers. */
+.ball-row[hidden],
+[data-all-list][hidden] {
+  display: none !important;
+}
+
 .ball-row.dense {
   gap: 0.28rem;
 }
