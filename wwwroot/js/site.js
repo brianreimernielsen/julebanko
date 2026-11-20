@@ -36,6 +36,52 @@
 
   document.querySelectorAll("[data-all-numbers]").forEach(bindAllNumbersToggle);
 
+  const setMiddlePanel = (view) => {
+    const switches = document.querySelectorAll("[data-middle-switch] [data-middle-panel]");
+    const panels = document.querySelectorAll("[data-middle-host] [data-middle-view]");
+    if (!switches.length || !panels.length) return;
+
+    switches.forEach((btn) => {
+      const active = btn.getAttribute("data-middle-panel") === view;
+      btn.classList.toggle("is-active", active);
+      btn.classList.toggle("btn-primary", active);
+      btn.classList.toggle("btn-ghost", !active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    panels.forEach((panel) => {
+      panel.hidden = panel.getAttribute("data-middle-view") !== view;
+    });
+
+    const board = document.querySelector("[data-live-board]");
+    if (board) board.setAttribute("data-middle-default", view);
+
+    if (view === "claim") {
+      const claim = document.getElementById("claim");
+      if (claim) claim.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    } else {
+      const numbers = document.getElementById("numbers");
+      if (numbers) numbers.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  };
+
+  document.querySelectorAll("[data-middle-switch]").forEach((row) => {
+    row.querySelectorAll("[data-middle-panel]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const view = btn.getAttribute("data-middle-panel");
+        if (view) setMiddlePanel(view);
+      });
+    });
+  });
+
+  const boardRoot = document.querySelector("[data-live-board]");
+  const hashView = location.hash === "#claim" ? "claim" : null;
+  const defaultView =
+    hashView || (boardRoot && boardRoot.getAttribute("data-middle-default")) || "all";
+  if (document.querySelector("[data-middle-host]")) {
+    setMiddlePanel(defaultView);
+  }
+
   const winnerBadgeSvg =
     '<span class="winner-badge" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">' +
     '<path d="M12 2.2 13.7 8h6.1l-4.9 3.6 1.9 5.9L12 14.8 7.2 17.5l1.9-5.9L4.2 8h6.1L12 2.2Z"/>' +
