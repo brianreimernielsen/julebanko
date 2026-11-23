@@ -62,6 +62,18 @@
   <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar alla dragna nummer och claims för den aktiva säsongen efter backup. Fortsätt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Återställ säsong</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Återställ backup</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Återställ den här backupen? Aktuell säsongs dragna nummer och claims ersätts.</value></data>
+  <data name="Undo" xml:space="preserve"><value>Ångra</value></data>
+  <data name="OK" xml:space="preserve"><value>OK</value></data>
+  <data name="BackupRestoredOk" xml:space="preserve"><value>Backup återställd.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Säsong återställd och backup skapad.</value></data>
+  <data name="ConfirmRequired" xml:space="preserve"><value>Bekräftelse krävs.</value></data>
+  <data name="BackupNotFound" xml:space="preserve"><value>Backup hittades inte.</value></data>
+  <data name="BackupAlreadyRestored" xml:space="preserve"><value>Den här backupen har redan återställts.</value></data>
+  <data name="BackupFileMissing" xml:space="preserve"><value>Backupfilen saknas.</value></data>
+  <data name="BackupCorrupt" xml:space="preserve"><value>Backupfilen är skadad.</value></data>
+  <data name="BackupSeasonMismatch" xml:space="preserve"><value>Backupen matchar inte den aktiva säsongen.</value></data>
+  <data name="BackupRestoreFailed" xml:space="preserve"><value>Kunde inte återställa backup.</value></data>
   <data name="Edit" xml:space="preserve"><value>Redigera</value></data>
   <data name="Delete" xml:space="preserve"><value>Radera</value></data>
   <data name="Upload" xml:space="preserve"><value>Ladda upp</value></data>

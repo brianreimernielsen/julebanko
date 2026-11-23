@@ -49,10 +49,23 @@
                     <td>
                         @if (!b.IsRestored)
                         {
-                            <form method="post" asp-page-handler="Undo">
-                                <input type="hidden" name="id" value="@b.Id" />
-                                <button class="btn btn-ghost btn-small" type="submit">@Localizer["UndoBackup"]</button>
-                            </form>
+                            <div class="backup-restore" data-backup-restore>
+                                <button type="button" class="btn btn-ghost btn-small" data-restore-open>
+                                    @Localizer["UndoBackup"]
+                                </button>
+                                <div class="backup-restore-confirm" hidden>
+                                    <p class="muted" style="margin:0 0 0.5rem;">@Localizer["ConfirmRestoreBackup"]</p>
+                                    <div class="inline-actions">
+                                        <button type="button" class="btn btn-ghost btn-small" data-restore-cancel>
+                                            @Localizer["Undo"]
+                                        </button>
+                                        <form method="post" asp-page-handler="Undo">
+                                            <input type="hidden" name="id" value="@b.Id" />
+                                            <button class="btn btn-primary btn-small" type="submit">@Localizer["OK"]</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         }
                     </td>
                 </tr>

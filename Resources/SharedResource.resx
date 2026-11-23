@@ -62,6 +62,18 @@
   <data name="ConfirmReset" xml:space="preserve"><value>This will clear all drawn numbers and claims for the active season after creating a backup. Continue?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Reset season</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Restore backup</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Restore this backup? Current season draws and claims will be replaced.</value></data>
+  <data name="Undo" xml:space="preserve"><value>Undo</value></data>
+  <data name="OK" xml:space="preserve"><value>OK</value></data>
+  <data name="BackupRestoredOk" xml:space="preserve"><value>Backup restored.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Season reset and backup created.</value></data>
+  <data name="ConfirmRequired" xml:space="preserve"><value>Confirm is required.</value></data>
+  <data name="BackupNotFound" xml:space="preserve"><value>Backup not found.</value></data>
+  <data name="BackupAlreadyRestored" xml:space="preserve"><value>This backup was already restored.</value></data>
+  <data name="BackupFileMissing" xml:space="preserve"><value>Backup file is missing.</value></data>
+  <data name="BackupCorrupt" xml:space="preserve"><value>Backup file is corrupt.</value></data>
+  <data name="BackupSeasonMismatch" xml:space="preserve"><value>Backup does not match the active season.</value></data>
+  <data name="BackupRestoreFailed" xml:space="preserve"><value>Could not restore backup.</value></data>
   <data name="Edit" xml:space="preserve"><value>Edit</value></data>
   <data name="Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>

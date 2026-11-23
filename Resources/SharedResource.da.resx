@@ -62,6 +62,18 @@
   <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter alle trukne tal og claims for den aktive sæson efter backup. Fortsæt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Nulstil sæson</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Gendan backup</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Gendan denne backup? Aktuelle sæsons trukne tal og claims bliver erstattet.</value></data>
+  <data name="Undo" xml:space="preserve"><value>Fortryd</value></data>
+  <data name="OK" xml:space="preserve"><value>OK</value></data>
+  <data name="BackupRestoredOk" xml:space="preserve"><value>Backup gendannet.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Sæson nulstillet og backup oprettet.</value></data>
+  <data name="ConfirmRequired" xml:space="preserve"><value>Bekræftelse er påkrævet.</value></data>
+  <data name="BackupNotFound" xml:space="preserve"><value>Backup ikke fundet.</value></data>
+  <data name="BackupAlreadyRestored" xml:space="preserve"><value>Denne backup er allerede gendannet.</value></data>
+  <data name="BackupFileMissing" xml:space="preserve"><value>Backupfil mangler.</value></data>
+  <data name="BackupCorrupt" xml:space="preserve"><value>Backupfilen er beskadiget.</value></data>
+  <data name="BackupSeasonMismatch" xml:space="preserve"><value>Backup passer ikke til den aktive sæson.</value></data>
+  <data name="BackupRestoreFailed" xml:space="preserve"><value>Kunne ikke gendanne backup.</value></data>
   <data name="Edit" xml:space="preserve"><value>Rediger</value></data>
   <data name="Delete" xml:space="preserve"><value>Slet</value></data>
   <data name="Upload" xml:space="preserve"><value>Upload</value></data>

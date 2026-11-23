@@ -21,6 +21,23 @@
     }, ms);
   });
 
+  // Season backup restore: require Undo / OK before POSTing restore.
+  document.querySelectorAll("[data-backup-restore]").forEach((root) => {
+    const openBtn = root.querySelector("[data-restore-open]");
+    const cancelBtn = root.querySelector("[data-restore-cancel]");
+    const panel = root.querySelector(".backup-restore-confirm");
+    if (!openBtn || !panel) return;
+
+    openBtn.addEventListener("click", () => {
+      panel.hidden = false;
+      openBtn.hidden = true;
+    });
+    cancelBtn?.addEventListener("click", () => {
+      panel.hidden = true;
+      openBtn.hidden = false;
+    });
+  });
+
   const ALL_NUMBERS_VIEW_KEY = "julebanko-all-numbers-view";
   /** @type {WeakMap<Element, { order: (number|string)[], sorted: (number|string)[] }>} */
   const allNumbersCache = new WeakMap();
