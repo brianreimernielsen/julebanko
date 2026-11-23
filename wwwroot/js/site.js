@@ -8,13 +8,16 @@
     });
   });
 
-  // Admin boards (pending claims, dashboard, draw list): soft full reload.
+  // Admin boards (pending claims, dashboard, draw list): GET-only refresh.
+  // Never use location.reload() — after a form POST that returns the same page,
+  // reload re-submits the POST (e.g. Draw kept pulling new numbers every ~20s).
   document.querySelectorAll("[data-admin-auto-refresh]").forEach((el) => {
     const ms = Math.max(10000, Number(el.getAttribute("data-admin-auto-refresh") || "15000") || 15000);
     window.setInterval(() => {
       if (document.hidden) return;
       if (document.querySelector("form:focus-within, button:focus, input:focus")) return;
-      window.location.reload();
+      const next = window.location.pathname + window.location.search + window.location.hash;
+      window.location.assign(next);
     }, ms);
   });
 

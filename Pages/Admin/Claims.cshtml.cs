@@ -13,24 +13,27 @@ public class ClaimsModel(ClaimService claims) : PageModel
     public async Task OnGetAsync()
     {
         Pending = await claims.GetPendingAsync();
+        if (TempData["ClaimMessage"] is string msg)
+        {
+            Message = msg;
+        }
     }
 
     public async Task<IActionResult> OnPostApproveAsync(int id)
     {
         var adminId = AdminAuthService.GetUserId(User) ?? 0;
         await claims.ReviewAsync(id, approve: true, adminId);
-        Message = "approved";
-        Pending = await claims.GetPendingAsync();
-        return Page();
+        TempData["ClaimMessage"] = "approved";
+        // PRG so auto-refresh / reload cannot re-POST approve.
+        return RedirectToPage();
     }
 
     public async Task<IActionResult> OnPostRejectAsync(int id)
     {
         var adminId = AdminAuthService.GetUserId(User) ?? 0;
         await claims.ReviewAsync(id, approve: false, adminId);
-        Message = "rejected";
-        Pending = await claims.GetPendingAsync();
-        return Page();
+        TempData["ClaimMessage"] = "rejected";
+        return RedirectToPage();
     }
 
     public string WinLabel(Models.WinType type) =>
