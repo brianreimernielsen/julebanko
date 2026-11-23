@@ -1,0 +1,46 @@
+@page
+@model Julebanko.Pages.Admin.Setup.WinnersModel
+@{
+    ViewData["Title"] = Localizer["Winners"].Value;
+}
+<div class="admin-card">
+    <h2>@Localizer["ConfirmedWinners"]</h2>
+    @if (Model.Message is not null)
+    {
+        <div class="alert alert-success">@Model.Message</div>
+    }
+    @if (Model.Winners.Count == 0)
+    {
+        <p class="empty-note">@Localizer["NoWinnersYet"]</p>
+    }
+    else
+    {
+        @foreach (var w in Model.Winners)
+        {
+            <div style="padding:1rem 0; border-bottom:1px solid var(--line);">
+                <form method="post" asp-page-handler="Update" class="form-stack">
+                    <input type="hidden" asp-for="EditId" value="@w.Id" />
+                    <label>
+                        @Localizer["YourName"]
+                        <input name="PlayerName" value="@w.PlayerName" required />
+                    </label>
+                    <label>
+                        @Localizer["WinType"]
+                        <select name="WinType">
+                            @if (w.WinType == WinType.OneRow) { <option value="@((int)WinType.OneRow)" selected>@Localizer["OneRow"]</option> } else { <option value="@((int)WinType.OneRow)">@Localizer["OneRow"]</option> }
+                            @if (w.WinType == WinType.TwoRows) { <option value="@((int)WinType.TwoRows)" selected>@Localizer["TwoRows"]</option> } else { <option value="@((int)WinType.TwoRows)">@Localizer["TwoRows"]</option> }
+                            @if (w.WinType == WinType.FullBoard) { <option value="@((int)WinType.FullBoard)" selected>@Localizer["FullBoard"]</option> } else { <option value="@((int)WinType.FullBoard)">@Localizer["FullBoard"]</option> }
+                        </select>
+                    </label>
+                    <div class="inline-actions">
+                        <button class="btn btn-primary btn-small" type="submit">@Localizer["Save"]</button>
+                    </div>
+                </form>
+                <form method="post" asp-page-handler="Delete" style="margin-top:0.5rem;">
+                    <input type="hidden" name="id" value="@w.Id" />
+                    <button class="btn btn-danger btn-small" type="submit">@Localizer["Delete"]</button>
+                </form>
+            </div>
+        }
+    }
+</div>

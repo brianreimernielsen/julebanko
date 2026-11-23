@@ -1,0 +1,83 @@
+@using System.Globalization
+@using Julebanko.Data
+@using Julebanko.Services
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject SettingsService Settings
+@{
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var brandName = await Settings.GetBrandNameAsync(culture);
+    var brandForChrome = string.IsNullOrWhiteSpace(brandName)
+        ? await Settings.GetBrandNameOrFallbackAsync(culture)
+        : brandName;
+    var brandFontId = await Settings.GetAsync(SettingKeys.BrandFont, FontCatalog.DefaultBrandFont);
+    var bodyFontId = await Settings.GetAsync(SettingKeys.BodyFont, FontCatalog.DefaultBodyFont);
+    var brandFont = FontCatalog.ResolveBrand(brandFontId);
+    var bodyFont = FontCatalog.ResolveBody(bodyFontId);
+    var fontsHref = FontCatalog.GoogleFontsHref(brandFont.Id, bodyFont.Id);
+    var playerBg = await Settings.GetAsync(SettingKeys.PlayerBgColor, "#8B1E1E");
+    var accent = await Settings.GetAsync(SettingKeys.AccentColor, "#D4A017");
+    var playerText = await Settings.GetAsync(SettingKeys.PlayerTextColor, "#FFF8F0");
+    var snowRaw = await Settings.GetAsync(SettingKeys.PlayerSnowEnabled, "true");
+    var snowEnabled = !string.Equals(snowRaw, "false", StringComparison.OrdinalIgnoreCase)
+                      && snowRaw != "0";
+    var intensityRaw = await Settings.GetAsync(SettingKeys.PlayerSnowIntensity, "1");
+    if (!int.TryParse(intensityRaw, out var snowIntensity) || snowIntensity < 1 || snowIntensity > 5)
+    {
+        snowIntensity = 1;
+    }
+    // Snow ground is always on for the player page (locked); flakes remain optional.
+    var nisseRaw = await Settings.GetAsync(SettingKeys.PlayerNisseEnabled, "true");
+    var nisseEnabled = !string.Equals(nisseRaw, "false", StringComparison.OrdinalIgnoreCase)
+                       && nisseRaw != "0";
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var bodyExtra = ViewData["BodyClass"] as string;
+}
+<!DOCTYPE html>
+<html lang="@culture">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @* Tab title: localized brand + year only (e.g. Julebanko 2026 / Julbingo 2026) — not SeasonTitle — Brand. *@
+    <title>@brandForChrome @DateTime.Now.Year</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="@fontsHref" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/julerammer/julerammer.css" asp-append-version="true" />
+    <style>
+        :root {
+            --player-bg: @playerBg;
+            --accent: @accent;
+            --player-text: @playerText;
+            --font-display: @Html.Raw(brandFont.CssFamily);
+            --font-body: @Html.Raw(bodyFont.CssFamily);
+        }
+    </style>
+</head>
+<body class="nisse-night@(string.IsNullOrWhiteSpace(bodyExtra) ? "" : " " + bodyExtra)">
+    @if (snowEnabled)
+    {
+        <div class="snow" data-snow data-intensity="@snowIntensity" aria-hidden="true"></div>
+    }
+    <div class="nisse-stage" data-nisse data-nisse-snow aria-hidden="true">
+        @if (nisseEnabled)
+        {
+            <div class="nisse" data-nisse-actor></div>
+        }
+    </div>
+    <div class="site-shell">
+        <div class="topbar">
+            <div class="lang-switch" aria-label="@Localizer["Language"]">
+                <a class="@(culture == "da" ? "active" : null)" href="/Culture?culture=da&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">DA</a>
+                <a class="@(culture == "en" ? "active" : null)" href="/Culture?culture=en&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">EN</a>
+                <a class="@(culture == "sv" ? "active" : null)" href="/Culture?culture=sv&amp;returnUrl=@Uri.EscapeDataString(returnUrl)">SV</a>
+            </div>
+            <a class="top-link" href="/Admin">Admin</a>
+        </div>
+        @RenderBody()
+    </div>
+    <footer class="site-footer">@brandForChrome · © 2026 Brian Reimer-Nielsen</footer>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

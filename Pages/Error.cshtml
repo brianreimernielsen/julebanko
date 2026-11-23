@@ -1,0 +1,13 @@
+﻿@page
+@model Julebanko.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+<section class="section">
+    <h1 class="section-title">Error</h1>
+    <p class="section-lead">Something went wrong. Try again or contact IT if it persists.</p>
+    @if (Model.ShowRequestId)
+    {
+        <p class="muted"><code>@Model.RequestId</code></p>
+    }
+</section>

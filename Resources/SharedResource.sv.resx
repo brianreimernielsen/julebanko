@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Brand" xml:space="preserve"><value>Julebanko</value></data>
+  <data name="TodaysNumbers" xml:space="preserve"><value>Dagens nummer</value></data>
+  <data name="AllNumbers" xml:space="preserve"><value>Alla nummer</value></data>
+  <data name="DrawOrder" xml:space="preserve"><value>Dragningsordning</value></data>
+  <data name="SortedNumerically" xml:space="preserve"><value>Numeriskt sorterade</value></data>
+  <data name="AllNumbersDrawOrder" xml:space="preserve"><value>Alla nummer (dragningsordning)</value></data>
+  <data name="AllNumbersSorted" xml:space="preserve"><value>Alla nummer (sorterade)</value></data>
+  <data name="HaveYouWon" xml:space="preserve"><value>Har du vunnit?</value></data>
+  <data name="ClaimHint" xml:space="preserve"><value>Anmäl det här — först till kvarn.</value></data>
+  <data name="YourName" xml:space="preserve"><value>Ditt namn</value></data>
+  <data name="WinType" xml:space="preserve"><value>Vinsttyp</value></data>
+  <data name="OneRow" xml:space="preserve"><value>1 rad</value></data>
+  <data name="TwoRows" xml:space="preserve"><value>2 rader</value></data>
+  <data name="FullBoard" xml:space="preserve"><value>Full bricka</value></data>
+  <data name="Send" xml:space="preserve"><value>Skicka</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Vinnare</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>Inga vinnare ännu.</value></data>
+  <data name="ConfirmedWinner" xml:space="preserve"><value>Bekräftad vinnare</value></data>
+  <data name="PendingClaim" xml:space="preserve"><value>Väntar på bekräftelse</value></data>
+  <data name="ClaimSubmitted" xml:space="preserve"><value>Tack! Din anmälan har skickats och väntar på bekräftelse.</value></data>
+  <data name="NoNumbersYet" xml:space="preserve"><value>Inga nummer dragna ännu.</value></data>
+  <data name="Language" xml:space="preserve"><value>Språk</value></data>
+  <data name="LanguageAndBranding" xml:space="preserve"><value>Språk och branding</value></data>
+  <data name="DefaultLanguage" xml:space="preserve"><value>Standardspråk</value></data>
+  <data name="DefaultLanguageHint" xml:space="preserve"><value>Används på den offentliga sidan när besökare inte har valt språk. DA/EN/SV-väljaren kan fortfarande åsidosätta per webbläsare.</value></data>
+  <data name="BrandNames" xml:space="preserve"><value>Varumärkesnamn per språk</value></data>
+  <data name="BrandNamesHint" xml:space="preserve"><value>Visas som den stora hero-titeln (och webbläsartiteln) när det språket är aktivt. Säsongstiteln under Tema förblir separat.</value></data>
+  <data name="BrandNameDa" xml:space="preserve"><value>Varumärke (danska)</value></data>
+  <data name="BrandNameEn" xml:space="preserve"><value>Varumärke (engelska)</value></data>
+  <data name="BrandNameSv" xml:space="preserve"><value>Varumärke (svenska)</value></data>
+  <data name="AdminLogin" xml:space="preserve"><value>Admin-inloggning</value></data>
+  <data name="Username" xml:space="preserve"><value>Användarnamn</value></data>
+  <data name="Password" xml:space="preserve"><value>Lösenord</value></data>
+  <data name="Login" xml:space="preserve"><value>Logga in</value></data>
+  <data name="Logout" xml:space="preserve"><value>Logga ut</value></data>
+  <data name="DrawNumbers" xml:space="preserve"><value>Dra nummer</value></data>
+  <data name="NumbersToDraw" xml:space="preserve"><value>Antal nummer att dra</value></data>
+  <data name="DrawTodays" xml:space="preserve"><value>Dra dagens nummer</value></data>
+  <data name="PendingClaims" xml:space="preserve"><value>Väntande anmälningar</value></data>
+  <data name="Approve" xml:space="preserve"><value>Godkänn</value></data>
+  <data name="Reject" xml:space="preserve"><value>Avvisa</value></data>
+  <data name="Setup" xml:space="preserve"><value>Inställningar</value></data>
+  <data name="Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Media" xml:space="preserve"><value>Bilder</value></data>
+  <data name="Passwords" xml:space="preserve"><value>Lösenord</value></data>
+  <data name="ClaimEmail" xml:space="preserve"><value>Claim-e-post</value></data>
+  <data name="SeasonReset" xml:space="preserve"><value>Säsongsåterställning</value></data>
+  <data name="Winners" xml:space="preserve"><value>Vinnare</value></data>
+  <data name="Save" xml:space="preserve"><value>Spara</value></data>
+  <data name="BackToPlayer" xml:space="preserve"><value>Spelarsida</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Översikt</value></data>
+  <data name="InvalidLogin" xml:space="preserve"><value>Fel användarnamn eller lösenord.</value></data>
+  <data name="Drawn" xml:space="preserve"><value>Draget</value></data>
+  <data name="NonePending" xml:space="preserve"><value>Inga väntande anmälningar.</value></data>
+  <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denna tavla uppdateras automatiskt ungefär var 15:e sekund medan fliken syns.</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar alla dragna nummer och claims för den aktiva säsongen efter backup. Fortsätt?</value></data>
+  <data name="ResetSeason" xml:space="preserve"><value>Återställ säsong</value></data>
+  <data name="UndoBackup" xml:space="preserve"><value>Återställ backup</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Återställ den här backupen? Aktuell säsongs dragna nummer och claims ersätts.</value></data>
+  <data name="Undo" xml:space="preserve"><value>Ångra</value></data>
+  <data name="OK" xml:space="preserve"><value>OK</value></data>
+  <data name="BackupRestoredOk" xml:space="preserve"><value>Backup återställd.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Säsong återställd och backup skapad.</value></data>
+  <data name="ConfirmRequired" xml:space="preserve"><value>Bekräftelse krävs.</value></data>
+  <data name="BackupNotFound" xml:space="preserve"><value>Backup hittades inte.</value></data>
+  <data name="BackupAlreadyRestored" xml:space="preserve"><value>Den här backupen har redan återställts.</value></data>
+  <data name="BackupFileMissing" xml:space="preserve"><value>Backupfilen saknas.</value></data>
+  <data name="BackupCorrupt" xml:space="preserve"><value>Backupfilen är skadad.</value></data>
+  <data name="BackupSeasonMismatch" xml:space="preserve"><value>Backupen matchar inte den aktiva säsongen.</value></data>
+  <data name="BackupRestoreFailed" xml:space="preserve"><value>Kunde inte återställa backup.</value></data>
+  <data name="Edit" xml:space="preserve"><value>Redigera</value></data>
+  <data name="Delete" xml:space="preserve"><value>Radera</value></data>
+  <data name="Upload" xml:space="preserve"><value>Ladda upp</value></data>
+  <data name="HeroImage" xml:space="preserve"><value>Hero-bild</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero-logotyp (kan ersätta varumärkestexten)</value></data>
+  <data name="BackgroundImage" xml:space="preserve"><value>Bakgrundsbild</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Dekoration (används inte på spelsidan)</value></data>
+  <data name="PlayerColors" xml:space="preserve"><value>Spelarfärger</value></data>
+  <data name="AdminColors" xml:space="preserve"><value>Adminfärger</value></data>
+  <data name="Accent" xml:space="preserve"><value>Accent</value></data>
+  <data name="NotifyTo" xml:space="preserve"><value>Claim-mottagare (To:)</value></data>
+  <data name="MailFrom" xml:space="preserve"><value>Mail From:</value></data>
+  <data name="SmtpSettings" xml:space="preserve"><value>SMTP-server</value></data>
+  <data name="SmtpHint" xml:space="preserve"><value>Claim To/From och SMTP-leverantör. Värden lagras i databasen och åsidosätter appsettings.json när de är satta. Standardvärden seedas från Smtp-sektionen vid första körning.</value></data>
+  <data name="SmtpHost" xml:space="preserve"><value>SMTP-värd</value></data>
+  <data name="SmtpPort" xml:space="preserve"><value>Port</value></data>
+  <data name="SmtpUseSsl" xml:space="preserve"><value>Använd SSL / StartTLS</value></data>
+  <data name="SmtpUsername" xml:space="preserve"><value>Användarnamn (valfritt)</value></data>
+  <data name="SmtpPassword" xml:space="preserve"><value>Lösenord (valfritt)</value></data>
+  <data name="SmtpPasswordKeep" xml:space="preserve"><value>Lämna tomt för att behålla nuvarande lösenord</value></data>
+  <data name="SmtpPasswordHint" xml:space="preserve"><value>Lämna lösenordet tomt för att behålla det sparade värdet. Rensa användarnamn om leverantören bara använder IP-allowlisting.</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>Nytt lösenord</value></data>
+  <data name="Saved" xml:space="preserve"><value>Sparat.</value></data>
+  <data name="Deleted" xml:space="preserve"><value>Borttaget.</value></data>
+  <data name="ResetToDefaults" xml:space="preserve"><value>Återställ till standard</value></data>
+  <data name="ConfirmResetMedia" xml:space="preserve"><value>Återställ de medföljande exempelbilderna (hero, logo och dekoration)? Egna uppladdningar i de fälten ersätts. Nattlandskapet förblir låst.</value></data>
+  <data name="ResetMediaHint" xml:space="preserve"><value>Återställ medföljande hero-band, jul-logo och dekoration. Nattlandskapet byts aldrig ut — justera den röda toppen under Tema → Spelar-bakgrundsfärg.</value></data>
+  <data name="MediaResetOk" xml:space="preserve"><value>Spelarbilder återställda till standard.</value></data>
+  <data name="MediaResetFailed" xml:space="preserve"><value>Kunde inte återställa exempelbilder.</value></data>
+  <data name="ResetMediaThemeHint" xml:space="preserve"><value>För att ångra egna spelarbilder och återställa exemplen, gå till Bilder →</value></data>
+  <data name="MediaLandscapeLockedHint" xml:space="preserve"><value>Det blå natt- och snölandskapet är låst och kan inte ersättas av uppladdningar. Anpassa det röda övre bandet med Tema → Spelar-bakgrundsfärg, och ladda eventuellt upp en hero-bild för toppområdet — båda tonar ut i det låsta landskapet.</value></data>
+  <data name="PlayerBgRedTopHint" xml:space="preserve"><value>Spelar-bakgrundsfärgen färgar endast det röda övre bandet; det tonar alltid ut i det låsta nattlandskapet. Fullskärms-bakgrundsuppladdningar är avstängda.</value></data>
+  <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
+  <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Lämna varumärket tomt för att bara visa logotypen. Ladda upp en hero-logotyp under Bilder; varumärkestexten döljs när fältet är tomt.</value></data>
+  <data name="Fonts" xml:space="preserve"><value>Typsnitt</value></data>
+  <data name="FontsHint" xml:space="preserve"><value>Varumärkestypsnittet används för den stora hero-titeln. Brödtexttypsnittet används för resten av spel-UI.</value></data>
+  <data name="FontsPreviewHint" xml:space="preserve"><value>Varje alternativ nedan visas i det typsnittet så du kan jämföra innan du sparar.</value></data>
+  <data name="BrandFont" xml:space="preserve"><value>Varumärkes- / hero-typsnitt</value></data>
+  <data name="BodyFont" xml:space="preserve"><value>Spel-brödtexttypsnitt</value></data>
+</root>

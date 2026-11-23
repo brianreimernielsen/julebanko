@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Brand" xml:space="preserve"><value>Julebanko</value></data>
+  <data name="TodaysNumbers" xml:space="preserve"><value>Today's numbers</value></data>
+  <data name="AllNumbers" xml:space="preserve"><value>All numbers</value></data>
+  <data name="DrawOrder" xml:space="preserve"><value>Draw order</value></data>
+  <data name="SortedNumerically" xml:space="preserve"><value>Numerically sorted</value></data>
+  <data name="AllNumbersDrawOrder" xml:space="preserve"><value>All numbers (draw order)</value></data>
+  <data name="AllNumbersSorted" xml:space="preserve"><value>All numbers (sorted)</value></data>
+  <data name="HaveYouWon" xml:space="preserve"><value>Have you won?</value></data>
+  <data name="ClaimHint" xml:space="preserve"><value>Report it here — first come, first served.</value></data>
+  <data name="YourName" xml:space="preserve"><value>Your name</value></data>
+  <data name="WinType" xml:space="preserve"><value>Win type</value></data>
+  <data name="OneRow" xml:space="preserve"><value>1 row</value></data>
+  <data name="TwoRows" xml:space="preserve"><value>2 rows</value></data>
+  <data name="FullBoard" xml:space="preserve"><value>Full board</value></data>
+  <data name="Send" xml:space="preserve"><value>Send</value></data>
+  <data name="ConfirmedWinners" xml:space="preserve"><value>Winners</value></data>
+  <data name="NoWinnersYet" xml:space="preserve"><value>No winners yet.</value></data>
+  <data name="ConfirmedWinner" xml:space="preserve"><value>Confirmed winner</value></data>
+  <data name="PendingClaim" xml:space="preserve"><value>Awaiting confirmation</value></data>
+  <data name="ClaimSubmitted" xml:space="preserve"><value>Thanks! Your claim was sent and awaits confirmation.</value></data>
+  <data name="NoNumbersYet" xml:space="preserve"><value>No numbers drawn yet.</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="LanguageAndBranding" xml:space="preserve"><value>Language and branding</value></data>
+  <data name="DefaultLanguage" xml:space="preserve"><value>Default language</value></data>
+  <data name="DefaultLanguageHint" xml:space="preserve"><value>Used for the public site when visitors have not chosen a language. The DA/EN/SV switcher still overrides per browser.</value></data>
+  <data name="BrandNames" xml:space="preserve"><value>Brand name per language</value></data>
+  <data name="BrandNamesHint" xml:space="preserve"><value>Shown as the large hero title (and browser title) when that language is active. Season title on Theme stays separate.</value></data>
+  <data name="BrandNameDa" xml:space="preserve"><value>Brand (Danish)</value></data>
+  <data name="BrandNameEn" xml:space="preserve"><value>Brand (English)</value></data>
+  <data name="BrandNameSv" xml:space="preserve"><value>Brand (Swedish)</value></data>
+  <data name="AdminLogin" xml:space="preserve"><value>Admin login</value></data>
+  <data name="Username" xml:space="preserve"><value>Username</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Login" xml:space="preserve"><value>Log in</value></data>
+  <data name="Logout" xml:space="preserve"><value>Log out</value></data>
+  <data name="DrawNumbers" xml:space="preserve"><value>Draw numbers</value></data>
+  <data name="NumbersToDraw" xml:space="preserve"><value>Numbers to draw</value></data>
+  <data name="DrawTodays" xml:space="preserve"><value>Draw today's numbers</value></data>
+  <data name="PendingClaims" xml:space="preserve"><value>Pending claims</value></data>
+  <data name="Approve" xml:space="preserve"><value>Approve</value></data>
+  <data name="Reject" xml:space="preserve"><value>Reject</value></data>
+  <data name="Setup" xml:space="preserve"><value>Setup</value></data>
+  <data name="Theme" xml:space="preserve"><value>Theme</value></data>
+  <data name="Media" xml:space="preserve"><value>Images</value></data>
+  <data name="Passwords" xml:space="preserve"><value>Passwords</value></data>
+  <data name="ClaimEmail" xml:space="preserve"><value>Claim email</value></data>
+  <data name="SeasonReset" xml:space="preserve"><value>Season reset</value></data>
+  <data name="Winners" xml:space="preserve"><value>Winners</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="BackToPlayer" xml:space="preserve"><value>Player page</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="InvalidLogin" xml:space="preserve"><value>Invalid username or password.</value></data>
+  <data name="Drawn" xml:space="preserve"><value>Drawn</value></data>
+  <data name="NonePending" xml:space="preserve"><value>No pending claims.</value></data>
+  <data name="AdminAutoRefreshHint" xml:space="preserve"><value>This board refreshes automatically about every 15 seconds while the tab is visible.</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>This will clear all drawn numbers and claims for the active season after creating a backup. Continue?</value></data>
+  <data name="ResetSeason" xml:space="preserve"><value>Reset season</value></data>
+  <data name="UndoBackup" xml:space="preserve"><value>Restore backup</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Restore this backup? Current season draws and claims will be replaced.</value></data>
+  <data name="Undo" xml:space="preserve"><value>Undo</value></data>
+  <data name="OK" xml:space="preserve"><value>OK</value></data>
+  <data name="BackupRestoredOk" xml:space="preserve"><value>Backup restored.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Season reset and backup created.</value></data>
+  <data name="ConfirmRequired" xml:space="preserve"><value>Confirm is required.</value></data>
+  <data name="BackupNotFound" xml:space="preserve"><value>Backup not found.</value></data>
+  <data name="BackupAlreadyRestored" xml:space="preserve"><value>This backup was already restored.</value></data>
+  <data name="BackupFileMissing" xml:space="preserve"><value>Backup file is missing.</value></data>
+  <data name="BackupCorrupt" xml:space="preserve"><value>Backup file is corrupt.</value></data>
+  <data name="BackupSeasonMismatch" xml:space="preserve"><value>Backup does not match the active season.</value></data>
+  <data name="BackupRestoreFailed" xml:space="preserve"><value>Could not restore backup.</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Upload" xml:space="preserve"><value>Upload</value></data>
+  <data name="HeroImage" xml:space="preserve"><value>Hero image</value></data>
+  <data name="HeroLogo" xml:space="preserve"><value>Hero logo (wordmark image; can replace brand text)</value></data>
+  <data name="BackgroundImage" xml:space="preserve"><value>Background image</value></data>
+  <data name="DecorationImage" xml:space="preserve"><value>Decoration image (unused on player page)</value></data>
+  <data name="PlayerColors" xml:space="preserve"><value>Player colors</value></data>
+  <data name="AdminColors" xml:space="preserve"><value>Admin colors</value></data>
+  <data name="Accent" xml:space="preserve"><value>Accent</value></data>
+  <data name="NotifyTo" xml:space="preserve"><value>Claim notification To:</value></data>
+  <data name="MailFrom" xml:space="preserve"><value>Mail From:</value></data>
+  <data name="SmtpSettings" xml:space="preserve"><value>SMTP server</value></data>
+  <data name="SmtpHint" xml:space="preserve"><value>Claim To/From and SMTP provider. Values are stored in the database and override appsettings.json when set. Defaults seed from the Smtp section on first run.</value></data>
+  <data name="SmtpHost" xml:space="preserve"><value>SMTP host</value></data>
+  <data name="SmtpPort" xml:space="preserve"><value>Port</value></data>
+  <data name="SmtpUseSsl" xml:space="preserve"><value>Use SSL / StartTLS</value></data>
+  <data name="SmtpUsername" xml:space="preserve"><value>Username (optional)</value></data>
+  <data name="SmtpPassword" xml:space="preserve"><value>Password (optional)</value></data>
+  <data name="SmtpPasswordKeep" xml:space="preserve"><value>Leave blank to keep current password</value></data>
+  <data name="SmtpPasswordHint" xml:space="preserve"><value>Leave password blank to keep the stored value. Clear username if the provider uses IP allowlisting only.</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
+  <data name="Saved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="Deleted" xml:space="preserve"><value>Deleted.</value></data>
+  <data name="ResetToDefaults" xml:space="preserve"><value>Reset to defaults</value></data>
+  <data name="ConfirmResetMedia" xml:space="preserve"><value>Restore the bundled sample hero, logo, and decoration images? Custom uploads for those slots will be replaced. The night landscape stays locked.</value></data>
+  <data name="ResetMediaHint" xml:space="preserve"><value>Restore shipped hero band, Christmas logo, and decoration samples. Night landscape is never replaced — tweak the red top under Theme → Player bg color.</value></data>
+  <data name="MediaResetOk" xml:space="preserve"><value>Player media restored to bundled defaults.</value></data>
+  <data name="MediaResetFailed" xml:space="preserve"><value>Could not restore sample media.</value></data>
+  <data name="ResetMediaThemeHint" xml:space="preserve"><value>To undo custom player images and restore samples, use Images →</value></data>
+  <data name="MediaLandscapeLockedHint" xml:space="preserve"><value>The blue night + snow landscape is locked and cannot be replaced by uploads. Customize the red upper band with Theme → Player bg color, and optionally upload a Hero image for the top content area — both fade into the locked landscape.</value></data>
+  <data name="PlayerBgRedTopHint" xml:space="preserve"><value>Player bg color tints only the red upper band; it always fades into the locked night landscape below. Full-bleed background uploads are disabled.</value></data>
+  <data name="AdminArea" xml:space="preserve"><value>Banko Admin</value></data>
+  <data name="AppVersion" xml:space="preserve"><value>Version</value></data>
+  <data name="BrandLogoOnlyHint" xml:space="preserve"><value>Leave brand blank to show logo only. Upload a hero logo under Images; the brand text element is hidden when empty.</value></data>
+  <data name="Fonts" xml:space="preserve"><value>Fonts</value></data>
+  <data name="FontsHint" xml:space="preserve"><value>Brand font styles the large hero wordmark. Body font is used for the rest of the player UI.</value></data>
+  <data name="FontsPreviewHint" xml:space="preserve"><value>Each option below is shown in that font so you can compare before saving.</value></data>
+  <data name="BrandFont" xml:space="preserve"><value>Brand / hero font</value></data>
+  <data name="BodyFont" xml:space="preserve"><value>Player body font</value></data>
+</root>
