@@ -12,4 +12,18 @@ public class Claim
     public DateTime? ReviewedAt { get; set; }
     public int? ReviewedByAdminId { get; set; }
     public AdminUser? ReviewedByAdmin { get; set; }
+
+    /// <summary>Player-entered plate series (digits; leading zeros ignored when parsing).</summary>
+    public string? SeriesNumber { get; set; }
+
+    public int? BingoCardId { get; set; }
+    public BingoCard? BingoCard { get; set; }
+
+    public ClaimValidationStatus ValidationStatus { get; set; } = ClaimValidationStatus.NotChecked;
+
+    /// <summary>True when auto-validate ran and the plate matched the claimed win type.</summary>
+    public bool AutoValidated { get; set; }
+
+    /// <summary>Short note for admin/email (e.g. which rows hit, or why mismatch).</summary>
+    public string? ValidationNote { get; set; }
 }

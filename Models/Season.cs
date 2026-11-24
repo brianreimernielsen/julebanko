@@ -10,4 +10,6 @@ public class Season
 
     public ICollection<DrawnNumber> DrawnNumbers { get; set; } = new List<DrawnNumber>();
     public ICollection<Claim> Claims { get; set; } = new List<Claim>();
+    public ICollection<BingoCardBatch> BingoCardBatches { get; set; } = new List<BingoCardBatch>();
+    public ICollection<BingoCard> BingoCards { get; set; } = new List<BingoCard>();
 }

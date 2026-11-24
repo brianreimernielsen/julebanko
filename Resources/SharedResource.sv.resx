@@ -114,4 +114,42 @@
   <data name="FontsPreviewHint" xml:space="preserve"><value>Varje alternativ nedan visas i det typsnittet så du kan jämföra innan du sparar.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Varumärkes- / hero-typsnitt</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Spel-brödtexttypsnitt</value></data>
+  <data name="BingoCards" xml:space="preserve"><value>Bingobrickor</value></data>
+  <data name="BingoCardsGenerate" xml:space="preserve"><value>Generera brickor</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Skapar unika danska bankoplattor (1–90), sparar dem i databasen och laddar ner en PDF (standard 6 per A4-sida).</value></data>
+  <data name="BingoPlateCount" xml:space="preserve"><value>Antal brickor</value></data>
+  <data name="BingoPlatesPerPage" xml:space="preserve"><value>Brickor per sida</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Banner för denna batch (valfritt)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Lämna tomt för att använda sajtens varumärke / bannerinställning</value></data>
+  <data name="BingoBatchNote" xml:space="preserve"><value>Anteckning (valfritt)</value></data>
+  <data name="BingoGenerateDownload" xml:space="preserve"><value>Generera och ladda ner PDF</value></data>
+  <data name="BingoSettings" xml:space="preserve"><value>Brickinställningar</value></data>
+  <data name="BingoAutoValidate" xml:space="preserve"><value>Autovalidera claims mot brickor</value></data>
+  <data name="BingoAutoValidateHint" xml:space="preserve"><value>Varnar spelaren vid mismatch men tillåter fortfarande manuell inlämning. E-post markerar claims som inte autovaliderades.</value></data>
+  <data name="BingoPrizeOncePerType" xml:space="preserve"><value>Högst ett pris per vinsttyp per spelare</value></data>
+  <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Standard: varje spelare får högst en 1-rad, en 2-rader och en full bricka per säsong. Stäng av för att tillåta upprepningar.</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Standard PDF-bannertext</value></data>
+  <data name="BingoPrimaryColor" xml:space="preserve"><value>Brickans primärfärg (hex, valfritt)</value></data>
+  <data name="BingoAccentColor" xml:space="preserve"><value>Brickans accentfärg (hex, valfritt)</value></data>
+  <data name="BingoFestiveLook" xml:space="preserve"><value>Festlig PDF-stil</value></data>
+  <data name="BingoBatches" xml:space="preserve"><value>Genererade batcher</value></data>
+  <data name="BingoNoBatches" xml:space="preserve"><value>Inga batcher ännu.</value></data>
+  <data name="BingoDownloadPdf" xml:space="preserve"><value>Ladda ner PDF</value></data>
+  <data name="BingoBrowse" xml:space="preserve"><value>Bläddra bland säsongens brickor</value></data>
+  <data name="BingoSeriesNumber" xml:space="preserve"><value>Serienummer</value></data>
+  <data name="BingoSearch" xml:space="preserve"><value>Sök</value></data>
+  <data name="BingoShowing" xml:space="preserve"><value>Visar</value></data>
+  <data name="BingoNoCards" xml:space="preserve"><value>Inga brickor hittades.</value></data>
+  <data name="BingoHitRows" xml:space="preserve"><value>Rader träffade</value></data>
+  <data name="BingoWinStatus" xml:space="preserve"><value>Vinststatus</value></data>
+  <data name="BingoPreview" xml:space="preserve"><value>Bricka</value></data>
+  <data name="BingoBatch" xml:space="preserve"><value>Batch</value></data>
+  <data name="BingoNoWin" xml:space="preserve"><value>Ingen godkänd vinst</value></data>
+  <data name="BingoValidation" xml:space="preserve"><value>Validering</value></data>
+  <data name="SeriesRequired" xml:space="preserve"><value>Ange brickans serienummer.</value></data>
+  <data name="SeriesNotFound" xml:space="preserve"><value>Ingen bricka med det serienumret hittades. Du kan fortfarande skicka in för manuell granskning.</value></data>
+  <data name="ValidationMismatch" xml:space="preserve"><value>De dragna siffrorna matchar inte denna bricka för den valda vinsttypen. Du kan fortfarande skicka in för manuell granskning.</value></data>
+  <data name="PrizeOnceUsed" xml:space="preserve"><value>Du har redan en anmälan för denna vinsttyp den här säsongen.</value></data>
+  <data name="ForceSubmitClaim" xml:space="preserve"><value>Skicka ändå för manuell granskning</value></data>
+  <data name="ForceSubmitHint" xml:space="preserve"><value>Din anmälan markeras som ej autovaliderad så en admin kan kontrollera den.</value></data>
 </root>

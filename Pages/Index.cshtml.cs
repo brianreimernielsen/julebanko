@@ -20,6 +20,12 @@ public class IndexModel(
     [BindProperty]
     public WinType WinType { get; set; } = WinType.OneRow;
 
+    [BindProperty]
+    public string SeriesNumber { get; set; } = string.Empty;
+
+    [BindProperty]
+    public bool ForceDespiteMismatch { get; set; }
+
     public string SeasonTitle { get; private set; } = "Julebanko";
     public string BrandName { get; private set; } = CultureSupport.DefaultBrandDa;
     public IReadOnlyList<DrawnNumber> TodayNumbers { get; private set; } = Array.Empty<DrawnNumber>();
@@ -30,6 +36,7 @@ public class IndexModel(
     public string? LogoUrl { get; private set; }
     public string? StatusMessage { get; private set; }
     public bool StatusIsError { get; private set; }
+    public bool ShowForceSubmit { get; private set; }
 
     public async Task OnGetAsync(string? status = null)
     {
@@ -61,12 +68,14 @@ public class IndexModel(
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var result = await claims.SubmitAsync(PlayerName, WinType);
+        var result = await claims.SubmitAsync(PlayerName, WinType, SeriesNumber, ForceDespiteMismatch);
         if (!result.Ok)
         {
             await LoadAsync();
             StatusMessage = result.Error;
             StatusIsError = true;
+            ShowForceSubmit = result.ForceAllowed == true
+                              && (result.Error is "ValidationMismatch" or "SeriesNotFound");
             return Page();
         }
 

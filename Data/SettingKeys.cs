@@ -25,4 +25,17 @@ public static class SettingKeys
     public const string BrandNameSv = "BrandNameSv";
     public const string BrandFont = "BrandFont";
     public const string BodyFont = "BodyFont";
+
+    /// <summary>When true, claims are checked against plate + drawn numbers on submit.</summary>
+    public const string BingoAutoValidate = "BingoAutoValidate";
+
+    /// <summary>When true (default), each player may win each win type at most once per season.</summary>
+    public const string BingoPrizeOncePerType = "BingoPrizeOncePerType";
+
+    /// <summary>Optional banner override printed on PDF plates (falls back to BrandName).</summary>
+    public const string BingoBannerText = "BingoBannerText";
+
+    public const string BingoPrimaryColor = "BingoPrimaryColor";
+    public const string BingoAccentColor = "BingoAccentColor";
+    public const string BingoFestiveLook = "BingoFestiveLook";
 }

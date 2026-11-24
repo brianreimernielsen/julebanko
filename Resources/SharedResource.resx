@@ -114,4 +114,42 @@
   <data name="FontsPreviewHint" xml:space="preserve"><value>Each option below is shown in that font so you can compare before saving.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Brand / hero font</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Player body font</value></data>
+  <data name="BingoCards" xml:space="preserve"><value>Bingo plates</value></data>
+  <data name="BingoCardsGenerate" xml:space="preserve"><value>Generate plates</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Creates unique Danish banko plates (1–90), stores them in the database, and downloads a PDF (default 6 per A4 page).</value></data>
+  <data name="BingoPlateCount" xml:space="preserve"><value>Number of plates</value></data>
+  <data name="BingoPlatesPerPage" xml:space="preserve"><value>Plates per page</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Banner for this batch (optional)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Leave blank to use site brand / banner setting</value></data>
+  <data name="BingoBatchNote" xml:space="preserve"><value>Note (optional)</value></data>
+  <data name="BingoGenerateDownload" xml:space="preserve"><value>Generate &amp; download PDF</value></data>
+  <data name="BingoSettings" xml:space="preserve"><value>Plate settings</value></data>
+  <data name="BingoAutoValidate" xml:space="preserve"><value>Auto-validate claims against plates</value></data>
+  <data name="BingoAutoValidateHint" xml:space="preserve"><value>Warns the player on mismatch but still allows a manual submit. Email marks claims that were not auto-validated.</value></data>
+  <data name="BingoPrizeOncePerType" xml:space="preserve"><value>One prize per win type per player</value></data>
+  <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Default: each player may claim at most one 1-row, one 2-row, and one full board in the season. Turn off to allow repeats.</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Default PDF banner text</value></data>
+  <data name="BingoPrimaryColor" xml:space="preserve"><value>Plate primary color (hex, optional)</value></data>
+  <data name="BingoAccentColor" xml:space="preserve"><value>Plate accent color (hex, optional)</value></data>
+  <data name="BingoFestiveLook" xml:space="preserve"><value>Festive PDF styling</value></data>
+  <data name="BingoBatches" xml:space="preserve"><value>Generated batches</value></data>
+  <data name="BingoNoBatches" xml:space="preserve"><value>No batches yet.</value></data>
+  <data name="BingoDownloadPdf" xml:space="preserve"><value>Download PDF</value></data>
+  <data name="BingoBrowse" xml:space="preserve"><value>Browse season plates</value></data>
+  <data name="BingoSeriesNumber" xml:space="preserve"><value>Series number</value></data>
+  <data name="BingoSearch" xml:space="preserve"><value>Search</value></data>
+  <data name="BingoShowing" xml:space="preserve"><value>Showing</value></data>
+  <data name="BingoNoCards" xml:space="preserve"><value>No plates found.</value></data>
+  <data name="BingoHitRows" xml:space="preserve"><value>Rows hit</value></data>
+  <data name="BingoWinStatus" xml:space="preserve"><value>Win status</value></data>
+  <data name="BingoPreview" xml:space="preserve"><value>Plate</value></data>
+  <data name="BingoBatch" xml:space="preserve"><value>Batch</value></data>
+  <data name="BingoNoWin" xml:space="preserve"><value>No approved win</value></data>
+  <data name="BingoValidation" xml:space="preserve"><value>Validation</value></data>
+  <data name="SeriesRequired" xml:space="preserve"><value>Enter your plate series number.</value></data>
+  <data name="SeriesNotFound" xml:space="preserve"><value>No plate with that series number was found. You can still submit for manual review.</value></data>
+  <data name="ValidationMismatch" xml:space="preserve"><value>The drawn numbers do not match this plate for the win type you selected. You can still submit for manual review.</value></data>
+  <data name="PrizeOnceUsed" xml:space="preserve"><value>You already have a claim for this win type this season.</value></data>
+  <data name="ForceSubmitClaim" xml:space="preserve"><value>Submit anyway for manual review</value></data>
+  <data name="ForceSubmitHint" xml:space="preserve"><value>Your claim will be marked as not auto-validated so an admin can check it.</value></data>
 </root>

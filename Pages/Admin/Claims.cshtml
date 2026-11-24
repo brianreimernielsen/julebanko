@@ -16,7 +16,9 @@
             <thead>
                 <tr>
                     <th>@Localizer["YourName"]</th>
+                    <th>@Localizer["BingoSeriesNumber"]</th>
                     <th>@Localizer["WinType"]</th>
+                    <th>@Localizer["BingoValidation"]</th>
                     <th></th>
                 </tr>
             </thead>
@@ -25,7 +27,15 @@
             {
                 <tr>
                     <td>@c.PlayerName</td>
+                    <td>@(c.SeriesNumber ?? "—")</td>
                     <td>@Model.WinLabel(c.WinType)</td>
+                    <td>
+                        <span class="@(c.AutoValidated ? "badge-ok" : "badge-warn")">@Model.ValidationLabel(c.ValidationStatus)</span>
+                        @if (!string.IsNullOrEmpty(c.ValidationNote) && c.ValidationNote.StartsWith("RowsHit:"))
+                        {
+                            <div class="muted" style="font-size:0.85em;">@Localizer["BingoHitRows"]: @c.ValidationNote["RowsHit:".Length..]</div>
+                        }
+                    </td>
                     <td>
                         <div class="inline-actions">
                             <form method="post" asp-page-handler="Approve">

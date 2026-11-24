@@ -42,7 +42,12 @@ public class SeasonResetService(AppDbContext db, SeasonService seasons, IWebHost
                 Status = c.Status,
                 CreatedAt = c.CreatedAt,
                 ReviewedAt = c.ReviewedAt,
-                ReviewedByAdminId = c.ReviewedByAdminId
+                ReviewedByAdminId = c.ReviewedByAdminId,
+                SeriesNumber = c.SeriesNumber,
+                BingoCardId = c.BingoCardId,
+                ValidationStatus = c.ValidationStatus,
+                AutoValidated = c.AutoValidated,
+                ValidationNote = c.ValidationNote
             }).ToList()
         };
 
@@ -128,7 +133,12 @@ public class SeasonResetService(AppDbContext db, SeasonService seasons, IWebHost
                 Status = c.Status,
                 CreatedAt = c.CreatedAt,
                 ReviewedAt = c.ReviewedAt,
-                ReviewedByAdminId = c.ReviewedByAdminId
+                ReviewedByAdminId = c.ReviewedByAdminId,
+                SeriesNumber = c.SeriesNumber,
+                BingoCardId = c.BingoCardId,
+                ValidationStatus = c.ValidationStatus,
+                AutoValidated = c.AutoValidated,
+                ValidationNote = c.ValidationNote
             });
         }
 
@@ -161,5 +171,10 @@ public class SeasonResetService(AppDbContext db, SeasonService seasons, IWebHost
         public DateTime CreatedAt { get; set; }
         public DateTime? ReviewedAt { get; set; }
         public int? ReviewedByAdminId { get; set; }
+        public string? SeriesNumber { get; set; }
+        public int? BingoCardId { get; set; }
+        public ClaimValidationStatus ValidationStatus { get; set; }
+        public bool AutoValidated { get; set; }
+        public string? ValidationNote { get; set; }
     }
 }

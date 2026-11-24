@@ -20,11 +20,19 @@ public class EmailService(
         var from = string.IsNullOrWhiteSpace(smtp.From) ? "julebanko@example.com" : smtp.From;
         var brand = await settings.GetBrandNameOrFallbackAsync("da");
         var winLabel = ClaimService.WinTypeLabel(claim.WinType, "da");
+        var series = string.IsNullOrWhiteSpace(claim.SeriesNumber) ? "—" : claim.SeriesNumber;
+        var validation = ClaimService.ValidationLabel(claim.ValidationStatus, "da");
+        var needsManual = !claim.AutoValidated;
+        var manualLine = needsManual
+            ? "⚠ Pladen kunne ikke auto-valideres — manuel gennemgang påkrævet."
+            : "Auto-valideret: plade matcher trukne tal for den angivne type.";
 
         var message = new MimeMessage();
         message.From.Add(MailboxAddress.Parse(from));
         message.To.Add(MailboxAddress.Parse(to));
-        message.Subject = $"{brand} claim: {claim.PlayerName} — {winLabel}";
+        message.Subject = needsManual
+            ? $"{brand} claim (manuel review): {claim.PlayerName} — {winLabel}"
+            : $"{brand} claim: {claim.PlayerName} — {winLabel}";
         message.Body = new TextPart("plain")
         {
             Text =
@@ -33,6 +41,10 @@ public class EmailService(
 
                 Navn / Name: {claim.PlayerName}
                 Type: {winLabel}
+                Serienummer / Series: {series}
+                Validering: {validation}
+                {manualLine}
+                Note: {claim.ValidationNote ?? "—"}
                 Tidspunkt / Time (UTC): {claim.CreatedAt:yyyy-MM-dd HH:mm:ss}
                 Status: Pending
 

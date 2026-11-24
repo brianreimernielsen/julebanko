@@ -27,3 +27,18 @@ public enum MediaSlot
     PlayerDecoration = 3,
     PlayerHeroLogo = 4
 }
+
+/// <summary>
+/// Result of checking a claim's plate series against drawn numbers.
+/// </summary>
+public enum ClaimValidationStatus
+{
+    /// <summary>Auto-validate off or not yet checked.</summary>
+    NotChecked = 0,
+    /// <summary>Plate found and claimed win type matches drawn numbers.</summary>
+    Valid = 1,
+    /// <summary>Plate found but drawn numbers do not support the claimed win type.</summary>
+    Mismatch = 2,
+    /// <summary>No plate with that series in the active season.</summary>
+    CardNotFound = 3
+}

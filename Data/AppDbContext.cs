@@ -12,6 +12,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AppSetting> AppSettings => Set<AppSetting>();
     public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
     public DbSet<SeasonBackup> SeasonBackups => Set<SeasonBackup>();
+    public DbSet<BingoCardBatch> BingoCardBatches => Set<BingoCardBatch>();
+    public DbSet<BingoCard> BingoCards => Set<BingoCard>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,7 +35,33 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.HasOne(x => x.Season).WithMany(s => s.Claims).HasForeignKey(x => x.SeasonId);
             e.HasOne(x => x.ReviewedByAdmin).WithMany().HasForeignKey(x => x.ReviewedByAdminId)
                 .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(x => x.BingoCard).WithMany().HasForeignKey(x => x.BingoCardId)
+                .OnDelete(DeleteBehavior.SetNull);
             e.Property(x => x.PlayerName).HasMaxLength(120).IsRequired();
+            e.Property(x => x.SeriesNumber).HasMaxLength(32);
+            e.Property(x => x.ValidationNote).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<BingoCardBatch>(e =>
+        {
+            e.HasOne(x => x.Season).WithMany(s => s.BingoCardBatches).HasForeignKey(x => x.SeasonId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.CreatedByAdmin).WithMany().HasForeignKey(x => x.CreatedByAdminId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.Property(x => x.BannerText).HasMaxLength(200);
+            e.Property(x => x.Note).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<BingoCard>(e =>
+        {
+            e.HasOne(x => x.Batch).WithMany(b => b.Cards).HasForeignKey(x => x.BatchId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.Season).WithMany(s => s.BingoCards).HasForeignKey(x => x.SeasonId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.SeasonId, x.SeriesNumber }).IsUnique();
+            e.HasIndex(x => new { x.SeasonId, x.Fingerprint }).IsUnique();
+            e.Property(x => x.Fingerprint).HasMaxLength(120).IsRequired();
+            e.Property(x => x.CellsJson).HasMaxLength(2000).IsRequired();
         });
 
         modelBuilder.Entity<AdminUser>(e =>

@@ -38,4 +38,7 @@ public class ClaimsModel(ClaimService claims) : PageModel
 
     public string WinLabel(Models.WinType type) =>
         ClaimService.WinTypeLabel(type, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
+
+    public string ValidationLabel(Models.ClaimValidationStatus status) =>
+        ClaimService.ValidationLabel(status, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
 }

@@ -99,6 +99,12 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.BrandNameSv, CultureSupport.DefaultBrandSv);
         await EnsureSettingAsync(db, SettingKeys.BrandFont, FontCatalog.DefaultBrandFont);
         await EnsureSettingAsync(db, SettingKeys.BodyFont, FontCatalog.DefaultBodyFont);
+        await EnsureSettingAsync(db, SettingKeys.BingoAutoValidate, "true");
+        await EnsureSettingAsync(db, SettingKeys.BingoPrizeOncePerType, "true");
+        await EnsureSettingAsync(db, SettingKeys.BingoBannerText, "");
+        await EnsureSettingAsync(db, SettingKeys.BingoPrimaryColor, "");
+        await EnsureSettingAsync(db, SettingKeys.BingoAccentColor, "");
+        await EnsureSettingAsync(db, SettingKeys.BingoFestiveLook, "true");
 
         await db.SaveChangesAsync(cancellationToken);
 

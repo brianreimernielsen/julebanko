@@ -2278,3 +2278,42 @@ body.nisse-night::after {
 @media (prefers-reduced-motion: reduce) {
   .nisse-decoration--globe.is-scrooge-shaking > :is(img:first-child, .nisse-globe-snow) { animation: none; }
 }
+
+/* Bankoplader admin preview + claim validation badges */
+.bingo-mini-grid {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+  font-variant-numeric: tabular-nums;
+}
+.bingo-mini-row {
+  display: flex;
+  gap: 1px;
+}
+.bingo-mini-cell {
+  width: 1.35rem;
+  height: 1.15rem;
+  font-size: 0.62rem;
+  line-height: 1.15rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+.bingo-mini-cell.empty {
+  background: transparent;
+  opacity: 0.35;
+}
+.badge-ok {
+  color: #b7f0c4;
+  font-weight: 600;
+}
+.badge-warn {
+  color: #ffd27a;
+  font-weight: 600;
+}
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

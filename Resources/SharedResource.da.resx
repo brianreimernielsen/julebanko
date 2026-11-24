@@ -114,4 +114,42 @@
   <data name="FontsPreviewHint" xml:space="preserve"><value>Hver mulighed nedenfor vises i den pågældende skrifttype, så du kan sammenligne før du gemmer.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Brand- / hero-skrift</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Spiller-brødtekstskrift</value></data>
+  <data name="BingoCards" xml:space="preserve"><value>Bankoplader</value></data>
+  <data name="BingoCardsGenerate" xml:space="preserve"><value>Generér plader</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Opretter unikke danske bankoplader (1–90), gemmer dem i databasen og downloader en PDF (standard 6 pr. A4-side).</value></data>
+  <data name="BingoPlateCount" xml:space="preserve"><value>Antal plader</value></data>
+  <data name="BingoPlatesPerPage" xml:space="preserve"><value>Plader pr. side</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Banner for dette batch (valgfrit)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Lad stå tom for at bruge site-brand / banner-indstilling</value></data>
+  <data name="BingoBatchNote" xml:space="preserve"><value>Note (valgfri)</value></data>
+  <data name="BingoGenerateDownload" xml:space="preserve"><value>Generér og download PDF</value></data>
+  <data name="BingoSettings" xml:space="preserve"><value>Plade-indstillinger</value></data>
+  <data name="BingoAutoValidate" xml:space="preserve"><value>Auto-valider claims mod plader</value></data>
+  <data name="BingoAutoValidateHint" xml:space="preserve"><value>Advarer spilleren ved mismatch, men tillader stadig manuel indsendelse. E-mail markerer claims der ikke blev auto-valideret.</value></data>
+  <data name="BingoPrizeOncePerType" xml:space="preserve"><value>Højst én præmie pr. vintype pr. spiller</value></data>
+  <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Standard: hver spiller må højst melde én 1-række, én 2-rækker og én fuld plade i sæsonen. Slå fra for at tillade gentagelser.</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Standard PDF-bannertekst</value></data>
+  <data name="BingoPrimaryColor" xml:space="preserve"><value>Plade-primærfarve (hex, valgfri)</value></data>
+  <data name="BingoAccentColor" xml:space="preserve"><value>Plade-accentfarve (hex, valgfri)</value></data>
+  <data name="BingoFestiveLook" xml:space="preserve"><value>Juleagtig PDF-stil</value></data>
+  <data name="BingoBatches" xml:space="preserve"><value>Genererede batches</value></data>
+  <data name="BingoNoBatches" xml:space="preserve"><value>Ingen batches endnu.</value></data>
+  <data name="BingoDownloadPdf" xml:space="preserve"><value>Download PDF</value></data>
+  <data name="BingoBrowse" xml:space="preserve"><value>Gennemse sæsonens plader</value></data>
+  <data name="BingoSeriesNumber" xml:space="preserve"><value>Serienummer</value></data>
+  <data name="BingoSearch" xml:space="preserve"><value>Søg</value></data>
+  <data name="BingoShowing" xml:space="preserve"><value>Viser</value></data>
+  <data name="BingoNoCards" xml:space="preserve"><value>Ingen plader fundet.</value></data>
+  <data name="BingoHitRows" xml:space="preserve"><value>Rækker ramt</value></data>
+  <data name="BingoWinStatus" xml:space="preserve"><value>Vindestatus</value></data>
+  <data name="BingoPreview" xml:space="preserve"><value>Plade</value></data>
+  <data name="BingoBatch" xml:space="preserve"><value>Batch</value></data>
+  <data name="BingoNoWin" xml:space="preserve"><value>Ingen godkendt gevinst</value></data>
+  <data name="BingoValidation" xml:space="preserve"><value>Validering</value></data>
+  <data name="SeriesRequired" xml:space="preserve"><value>Angiv pladens serienummer.</value></data>
+  <data name="SeriesNotFound" xml:space="preserve"><value>Ingen plade med det serienummer blev fundet. Du kan stadig indsende til manuel gennemgang.</value></data>
+  <data name="ValidationMismatch" xml:space="preserve"><value>De trukne tal matcher ikke denne plade for den valgte vintype. Du kan stadig indsende til manuel gennemgang.</value></data>
+  <data name="PrizeOnceUsed" xml:space="preserve"><value>Du har allerede en melding for denne vintype i denne sæson.</value></data>
+  <data name="ForceSubmitClaim" xml:space="preserve"><value>Indsend alligevel til manuel gennemgang</value></data>
+  <data name="ForceSubmitHint" xml:space="preserve"><value>Din melding markeres som ikke auto-valideret, så en admin kan tjekke den.</value></data>
 </root>
