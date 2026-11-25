@@ -116,11 +116,14 @@
   <data name="BodyFont" xml:space="preserve"><value>Spel-brödtexttypsnitt</value></data>
   <data name="BingoCards" xml:space="preserve"><value>Bingobrickor</value></data>
   <data name="BingoCardsGenerate" xml:space="preserve"><value>Generera brickor</value></data>
-  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Skapar unika danska bankoplattor (1–90), sparar dem i databasen och laddar ner en PDF (standard 6 per A4-sida).</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Ange antal sidor; skapar sidor × brickor per sida unika danska bankoplattor (1–90), sparar dem och laddar ner en PDF (standard 6 per A4-sida).</value></data>
+  <data name="BingoPageCount" xml:space="preserve"><value>Antal sidor</value></data>
+  <data name="BingoPageCountHint" xml:space="preserve"><value>Antal brickor = antal sidor × brickor per sida.</value></data>
   <data name="BingoPlateCount" xml:space="preserve"><value>Antal brickor</value></data>
   <data name="BingoPlatesPerPage" xml:space="preserve"><value>Brickor per sida</value></data>
-  <data name="BingoBannerOverride" xml:space="preserve"><value>Banner för denna batch (valfritt)</value></data>
-  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Lämna tomt för att använda sajtens varumärke / bannerinställning</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Batch-banner (åsidosätter standard)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Tomt = använd standardbanner</value></data>
+  <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Valfri åsidosättning för denna batch. Tomt: använder Setup-standardbanner; är den också tom används varumärkesnamnet.</value></data>
   <data name="BingoBatchNote" xml:space="preserve"><value>Anteckning (valfritt)</value></data>
   <data name="BingoGenerateDownload" xml:space="preserve"><value>Generera och ladda ner PDF</value></data>
   <data name="BingoSettings" xml:space="preserve"><value>Brickinställningar</value></data>
@@ -128,7 +131,9 @@
   <data name="BingoAutoValidateHint" xml:space="preserve"><value>Varnar spelaren vid mismatch men tillåter fortfarande manuell inlämning. E-post markerar claims som inte autovaliderades.</value></data>
   <data name="BingoPrizeOncePerType" xml:space="preserve"><value>Högst ett pris per vinsttyp per spelare</value></data>
   <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Standard: varje spelare får högst en 1-rad, en 2-rader och en full bricka per säsong. Stäng av för att tillåta upprepningar.</value></data>
-  <data name="BingoBannerText" xml:space="preserve"><value>Standard PDF-bannertext</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Standardbanner (Setup)</value></data>
+  <data name="BingoBannerTextHint" xml:space="preserve"><value>Tomt = varumärkesnamn</value></data>
+  <data name="BingoBannerTextHelp" xml:space="preserve"><value>Standardtext på alla PDF-brickor. Tomt: varumärkesnamnet. Batch-banner kan åsidosätta per generering.</value></data>
   <data name="BingoPrimaryColor" xml:space="preserve"><value>Brickans primärfärg (hex, valfritt)</value></data>
   <data name="BingoAccentColor" xml:space="preserve"><value>Brickans accentfärg (hex, valfritt)</value></data>
   <data name="BingoFestiveLook" xml:space="preserve"><value>Festlig PDF-stil</value></data>

@@ -32,7 +32,7 @@ public static class SettingKeys
     /// <summary>When true (default), each player may win each win type at most once per season.</summary>
     public const string BingoPrizeOncePerType = "BingoPrizeOncePerType";
 
-    /// <summary>Optional banner override printed on PDF plates (falls back to BrandName).</summary>
+    /// <summary>Default PDF plate banner (Setup). Empty → BrandName. Batch banner overrides this.</summary>
     public const string BingoBannerText = "BingoBannerText";
 
     public const string BingoPrimaryColor = "BingoPrimaryColor";

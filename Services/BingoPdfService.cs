@@ -17,6 +17,9 @@ public class BingoPdfService(SettingsService settings)
     {
         platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
 
+        // 1–6: larger cells so plates fill A4 width/height (less empty bottom). >6: compact current sizing.
+        var fillPage = platesPerPage <= 6;
+
         var brand = await settings.GetBrandNameOrFallbackAsync("da");
         var banner = !string.IsNullOrWhiteSpace(batchBanner)
             ? batchBanner.Trim()
@@ -53,6 +56,8 @@ public class BingoPdfService(SettingsService settings)
             .Select(g => g.Select(x => x.card).ToList())
             .ToList();
 
+        var plateScale = PlateScaleFor(platesPerPage, fillPage);
+
         var document = Document.Create(container =>
         {
             foreach (var pageCards in pages)
@@ -60,7 +65,7 @@ public class BingoPdfService(SettingsService settings)
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(18);
+                    page.Margin(fillPage ? 14 : 18);
                     page.PageColor(paper);
                     page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
 
@@ -78,20 +83,28 @@ public class BingoPdfService(SettingsService settings)
                         }
                     });
 
-                    page.Content().PaddingTop(8).Column(col =>
+                    page.Content().PaddingTop(fillPage ? 6 : 8).Column(col =>
                     {
                         for (var row = 0; row < layouts.Rows; row++)
                         {
-                            col.Item().PaddingBottom(10).Row(r =>
+                            col.Item().PaddingBottom(fillPage ? 8 : 10).Row(r =>
                             {
                                 for (var c = 0; c < layouts.Cols; c++)
                                 {
                                     var idx = row * layouts.Cols + c;
-                                    r.RelativeItem().Padding(4).Element(e =>
+                                    r.RelativeItem().Padding(fillPage ? 3 : 4).Element(e =>
                                     {
                                         if (idx < pageCards.Count)
                                         {
-                                            RenderPlate(e, pageCards[idx], banner, primaryColor, accentColor, festive, ink);
+                                            RenderPlate(
+                                                e,
+                                                pageCards[idx],
+                                                banner,
+                                                primaryColor,
+                                                accentColor,
+                                                festive,
+                                                ink,
+                                                plateScale);
                                         }
                                         else
                                         {
@@ -124,53 +137,89 @@ public class BingoPdfService(SettingsService settings)
         Color primary,
         Color accent,
         bool festive,
-        Color ink)
+        Color ink,
+        PlateScale scale)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var series = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
 
-        container.Border(1.2f).BorderColor(primary).Background(Colors.White).Padding(6).Column(col =>
-        {
-            col.Item().Row(r =>
+        container
+            .Border(1.2f)
+            .BorderColor(primary)
+            .Background(Colors.White)
+            .Padding(scale.Padding)
+            .Column(col =>
             {
-                r.RelativeItem().Text(banner).FontSize(9).SemiBold().FontColor(primary);
-                r.ConstantItem(70).AlignRight().Text($"Nr. {series}")
-                    .FontSize(9).SemiBold().FontColor(accent);
-            });
-
-            if (festive)
-            {
-                col.Item().PaddingVertical(3).LineHorizontal(0.8f).LineColor(accent);
-            }
-
-            col.Item().PaddingTop(4).Table(table =>
-            {
-                table.ColumnsDefinition(columns =>
+                col.Item().Row(r =>
                 {
-                    for (var i = 0; i < BingoPlateGenerator.Cols; i++)
-                    {
-                        columns.RelativeColumn();
-                    }
+                    r.RelativeItem().Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(primary);
+                    r.ConstantItem(scale.SeriesWidth).AlignRight().Text($"Nr. {series}")
+                        .FontSize(scale.BannerFont).SemiBold().FontColor(accent);
                 });
 
-                for (var row = 0; row < BingoPlateGenerator.Rows; row++)
+                if (festive)
                 {
-                    for (var c = 0; c < BingoPlateGenerator.Cols; c++)
-                    {
-                        var n = grid[row, c];
-                        table.Cell().Border(0.6f).BorderColor(Colors.Grey.Darken1)
-                            .Background(n is null ? Color.FromHex("#F3F3F3") : Colors.White)
-                            .MinHeight(22)
-                            .AlignMiddle()
-                            .AlignCenter()
-                            .Text(n?.ToString() ?? "")
-                            .FontSize(11)
-                            .SemiBold()
-                            .FontColor(ink);
-                    }
+                    col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(accent);
                 }
+
+                col.Item().PaddingTop(scale.TablePad).Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        for (var i = 0; i < BingoPlateGenerator.Cols; i++)
+                        {
+                            columns.RelativeColumn();
+                        }
+                    });
+
+                    for (var row = 0; row < BingoPlateGenerator.Rows; row++)
+                    {
+                        for (var c = 0; c < BingoPlateGenerator.Cols; c++)
+                        {
+                            var n = grid[row, c];
+                            table.Cell()
+                                .Border(0.6f)
+                                .BorderColor(Colors.Grey.Darken1)
+                                .Background(n is null ? Color.FromHex("#F3F3F3") : Colors.White)
+                                .MinHeight(scale.CellMinHeight)
+                                .AlignMiddle()
+                                .AlignCenter()
+                                .Text(n?.ToString() ?? "")
+                                .FontSize(scale.CellFont)
+                                .SemiBold()
+                                .FontColor(ink);
+                        }
+                    }
+                });
             });
-        });
+    }
+
+    private readonly record struct PlateScale(
+        float Padding,
+        float BannerFont,
+        float CellFont,
+        float CellMinHeight,
+        float TablePad,
+        float LinePad,
+        float SeriesWidth);
+
+    private static PlateScale PlateScaleFor(int platesPerPage, bool fillPage)
+    {
+        if (!fillPage)
+        {
+            // Compact (>6): keep prior sizing so 8/9 still fit.
+            return new PlateScale(6, 9, 11, 22, 4, 3, 70);
+        }
+
+        // Fill A4 for 1–6: cell heights sized so plate block reaches near the footer (full content width via RelativeItem).
+        return platesPerPage switch
+        {
+            1 => new PlateScale(14, 18, 32, 200, 12, 8, 120),
+            2 => new PlateScale(12, 14, 24, 105, 8, 5, 100),
+            3 => new PlateScale(10, 12, 18, 70, 6, 4, 90),
+            4 => new PlateScale(8, 12, 16, 100, 6, 4, 90),
+            _ => new PlateScale(7, 11, 15, 68, 5, 3, 85) // 6
+        };
     }
 
     private static (int Rows, int Cols) LayoutFor(int platesPerPage) => platesPerPage switch

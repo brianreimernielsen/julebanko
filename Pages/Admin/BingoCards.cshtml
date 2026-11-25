@@ -12,9 +12,10 @@
     }
     <form method="post" asp-page-handler="Generate" class="form-stack">
         <label>
-            @Localizer["BingoPlateCount"]
-            <input asp-for="PlateCount" type="number" min="1" max="500" required />
+            @Localizer["BingoPageCount"]
+            <input asp-for="PageCount" type="number" min="1" max="500" required />
         </label>
+        <p class="muted" style="margin-top:0;">@Localizer["BingoPageCountHint"]</p>
         <label>
             @Localizer["BingoPlatesPerPage"]
             <select asp-for="PlatesPerPage">
@@ -31,6 +32,7 @@
             @Localizer["BingoBannerOverride"]
             <input asp-for="BannerText" maxlength="200" placeholder="@Localizer["BingoBannerOverrideHint"]" />
         </label>
+        <p class="muted" style="margin-top:0;">@Localizer["BingoBannerOverrideHelp"]</p>
         <label>
             @Localizer["BingoBatchNote"]
             <input asp-for="Note" maxlength="500" />
@@ -60,8 +62,9 @@
             <p class="muted" style="margin-top:0;">@Localizer["BingoPrizeOncePerTypeHint"]</p>
             <label>
                 @Localizer["BingoBannerText"]
-                <input asp-for="BingoBannerText" maxlength="200" />
+                <input asp-for="BingoBannerText" maxlength="200" placeholder="@Localizer["BingoBannerTextHint"]" />
             </label>
+            <p class="muted" style="margin-top:0;">@Localizer["BingoBannerTextHelp"]</p>
             <label>
                 @Localizer["BingoPrimaryColor"]
                 <input asp-for="BingoPrimaryColor" maxlength="20" placeholder="#8B1E1E" />

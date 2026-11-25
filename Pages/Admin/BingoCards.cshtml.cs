@@ -7,8 +7,9 @@ namespace Julebanko.Pages.Admin;
 
 public class BingoCardsModel(BingoCardService bingo, SettingsService settings) : PageModel
 {
+    /// <summary>Number of PDF pages to generate. Total plates = PageCount × PlatesPerPage.</summary>
     [BindProperty]
-    public int PlateCount { get; set; } = 24;
+    public int PageCount { get; set; } = 4;
 
     [BindProperty]
     public int PlatesPerPage { get; set; } = 6;
@@ -48,8 +49,18 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings) :
         try
         {
             var adminId = AdminAuthService.GetUserId(User) ?? 0;
+            var platesPerPage = PlatesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? PlatesPerPage : 6;
+            var pageCount = PageCount < 1 ? 1 : PageCount;
+            var plateCount = checked(pageCount * platesPerPage);
+            if (plateCount > 500)
+            {
+                Error = $"Too many plates ({plateCount}). Max is 500 (pages × plates per page).";
+                await LoadAsync();
+                return Page();
+            }
+
             var (batch, pdfBytes) = await bingo.GenerateBatchAsync(
-                PlateCount, PlatesPerPage, adminId, BannerText, Note);
+                plateCount, platesPerPage, adminId, BannerText, Note);
 
             var fileName = $"bankoplader-{batch.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
             return File(pdfBytes, "application/pdf", fileName);

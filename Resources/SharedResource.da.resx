@@ -116,11 +116,14 @@
   <data name="BodyFont" xml:space="preserve"><value>Spiller-brødtekstskrift</value></data>
   <data name="BingoCards" xml:space="preserve"><value>Bankoplader</value></data>
   <data name="BingoCardsGenerate" xml:space="preserve"><value>Generér plader</value></data>
-  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Opretter unikke danske bankoplader (1–90), gemmer dem i databasen og downloader en PDF (standard 6 pr. A4-side).</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Angiv antal sider; der oprettes sider × plader pr. side unikke danske bankoplader (1–90), gemmes i databasen, og PDF downloades (standard 6 pr. A4-side).</value></data>
+  <data name="BingoPageCount" xml:space="preserve"><value>Antal sider</value></data>
+  <data name="BingoPageCountHint" xml:space="preserve"><value>Antal plader = antal sider × plader pr. side.</value></data>
   <data name="BingoPlateCount" xml:space="preserve"><value>Antal plader</value></data>
   <data name="BingoPlatesPerPage" xml:space="preserve"><value>Plader pr. side</value></data>
-  <data name="BingoBannerOverride" xml:space="preserve"><value>Banner for dette batch (valgfrit)</value></data>
-  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Lad stå tom for at bruge site-brand / banner-indstilling</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Batch-banner (overstyrer standard)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Tom = brug standard-banner</value></data>
+  <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Valgfri overstyring for dette batch. Tom: bruger Setup-standardbanner; er den også tom, bruges brandnavnet.</value></data>
   <data name="BingoBatchNote" xml:space="preserve"><value>Note (valgfri)</value></data>
   <data name="BingoGenerateDownload" xml:space="preserve"><value>Generér og download PDF</value></data>
   <data name="BingoSettings" xml:space="preserve"><value>Plade-indstillinger</value></data>
@@ -128,7 +131,9 @@
   <data name="BingoAutoValidateHint" xml:space="preserve"><value>Advarer spilleren ved mismatch, men tillader stadig manuel indsendelse. E-mail markerer claims der ikke blev auto-valideret.</value></data>
   <data name="BingoPrizeOncePerType" xml:space="preserve"><value>Højst én præmie pr. vintype pr. spiller</value></data>
   <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Standard: hver spiller må højst melde én 1-række, én 2-rækker og én fuld plade i sæsonen. Slå fra for at tillade gentagelser.</value></data>
-  <data name="BingoBannerText" xml:space="preserve"><value>Standard PDF-bannertekst</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Standard-banner (Setup)</value></data>
+  <data name="BingoBannerTextHint" xml:space="preserve"><value>Tom = brandnavn</value></data>
+  <data name="BingoBannerTextHelp" xml:space="preserve"><value>Standardtekst på alle PDF-plader. Tom: brandnavnet. Batch-banner kan overstyre pr. generering.</value></data>
   <data name="BingoPrimaryColor" xml:space="preserve"><value>Plade-primærfarve (hex, valgfri)</value></data>
   <data name="BingoAccentColor" xml:space="preserve"><value>Plade-accentfarve (hex, valgfri)</value></data>
   <data name="BingoFestiveLook" xml:space="preserve"><value>Juleagtig PDF-stil</value></data>

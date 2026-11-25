@@ -116,11 +116,14 @@
   <data name="BodyFont" xml:space="preserve"><value>Player body font</value></data>
   <data name="BingoCards" xml:space="preserve"><value>Bingo plates</value></data>
   <data name="BingoCardsGenerate" xml:space="preserve"><value>Generate plates</value></data>
-  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Creates unique Danish banko plates (1–90), stores them in the database, and downloads a PDF (default 6 per A4 page).</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Enter number of pages; creates pages × plates-per-page unique Danish banko plates (1–90), stores them, and downloads a PDF (default 6 per A4 page).</value></data>
+  <data name="BingoPageCount" xml:space="preserve"><value>Number of pages</value></data>
+  <data name="BingoPageCountHint" xml:space="preserve"><value>Total plates = pages × plates per page.</value></data>
   <data name="BingoPlateCount" xml:space="preserve"><value>Number of plates</value></data>
   <data name="BingoPlatesPerPage" xml:space="preserve"><value>Plates per page</value></data>
-  <data name="BingoBannerOverride" xml:space="preserve"><value>Banner for this batch (optional)</value></data>
-  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Leave blank to use site brand / banner setting</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Batch banner (overrides default)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Blank = use default banner</value></data>
+  <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Optional override for this batch. Blank: uses the Setup default banner; if that is also blank, uses the brand name.</value></data>
   <data name="BingoBatchNote" xml:space="preserve"><value>Note (optional)</value></data>
   <data name="BingoGenerateDownload" xml:space="preserve"><value>Generate &amp; download PDF</value></data>
   <data name="BingoSettings" xml:space="preserve"><value>Plate settings</value></data>
@@ -128,7 +131,9 @@
   <data name="BingoAutoValidateHint" xml:space="preserve"><value>Warns the player on mismatch but still allows a manual submit. Email marks claims that were not auto-validated.</value></data>
   <data name="BingoPrizeOncePerType" xml:space="preserve"><value>One prize per win type per player</value></data>
   <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Default: each player may claim at most one 1-row, one 2-row, and one full board in the season. Turn off to allow repeats.</value></data>
-  <data name="BingoBannerText" xml:space="preserve"><value>Default PDF banner text</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Default banner (Setup)</value></data>
+  <data name="BingoBannerTextHint" xml:space="preserve"><value>Blank = brand name</value></data>
+  <data name="BingoBannerTextHelp" xml:space="preserve"><value>Default text on all PDF plates. Blank: brand name. Batch banner can override per generation.</value></data>
   <data name="BingoPrimaryColor" xml:space="preserve"><value>Plate primary color (hex, optional)</value></data>
   <data name="BingoAccentColor" xml:space="preserve"><value>Plate accent color (hex, optional)</value></data>
   <data name="BingoFestiveLook" xml:space="preserve"><value>Festive PDF styling</value></data>
