@@ -118,7 +118,10 @@
   <data name="BingoDesign" xml:space="preserve"><value>Designera/generera brickor</value></data>
   <data name="BingoDesignHint" xml:space="preserve"><value>PDF-inställningar, generering och nedladdning av batcher.</value></data>
   <data name="BingoCheck" xml:space="preserve"><value>Kontrollera brickor</value></data>
-  <data name="BingoCheckHint" xml:space="preserve"><value>Sök serienummer, se träffade rader och claims för dagens banko.</value></data>
+  <data name="BingoCheckHint" xml:space="preserve"><value>Daglig adminväg: sök serienummer (eller skanna), se celler/rader träffade av dragna nummer, och godkända claims med stjärna.</value></data>
+  <data name="BingoCheckLiveHint" xml:space="preserve"><value>Markering följer säsongens dragna nummer live.</value></data>
+  <data name="BingoDrawnCount" xml:space="preserve"><value>Dragna nummer</value></data>
+  <data name="BingoRowLabel" xml:space="preserve"><value>Rad {0}</value></data>
   <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>T.ex. 000123 eller skanna streckkod</value></data>
   <data name="BingoLookupResult" xml:space="preserve"><value>Sökresultat</value></data>
   <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims för denna bricka</value></data>

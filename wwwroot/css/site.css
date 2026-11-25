@@ -2290,15 +2290,71 @@ body.nisse-night::after {
 }
 
 /* Bankoplader admin preview + claim validation badges */
+.bingo-check-live-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+}
+.bingo-check-drawn-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent, #D4A017) 55%, rgba(255, 255, 255, 0.2));
+  background: color-mix(in srgb, var(--accent, #D4A017) 22%, transparent);
+  font-size: 0.9rem;
+}
+.bingo-hit-row-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.bingo-hit-row-chip {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--accent, #D4A017) 50%, rgba(255, 255, 255, 0.25));
+  background: color-mix(in srgb, var(--accent, #D4A017) 28%, transparent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.bingo-check-win-bubbles,
+.bingo-check-claim-bubbles {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.bingo-check-win-bubbles .winner-bubble,
+.bingo-check-claim-bubbles .winner-bubble {
+  padding: 0.28rem 0.55rem;
+}
+.bingo-check-win-bubbles .winner-badge,
+.bingo-check-claim-bubbles .winner-badge {
+  width: 0.95rem;
+  height: 0.95rem;
+}
 .bingo-mini-grid {
   display: inline-flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   font-variant-numeric: tabular-nums;
 }
 .bingo-mini-row {
   display: flex;
   gap: 1px;
+  padding: 1px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+.bingo-mini-row.is-complete {
+  border-color: color-mix(in srgb, var(--accent, #D4A017) 90%, #fff 8%);
+  background: color-mix(in srgb, var(--accent, #D4A017) 28%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--accent, #D4A017) 55%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent, #D4A017) 40%, transparent);
 }
 .bingo-mini-cell {
   width: 1.35rem;
@@ -2311,10 +2367,14 @@ body.nisse-night::after {
   border-radius: 2px;
 }
 .bingo-mini-cell.hit {
-    background: color-mix(in srgb, var(--accent, #D4A017) 55%, transparent);
-    font-weight: 700;
+  background: color-mix(in srgb, var(--accent, #D4A017) 62%, #1a1208);
+  color: #fff8e6;
+  border-color: color-mix(in srgb, var(--accent, #D4A017) 80%, #fff);
+  font-weight: 700;
 }
-
+.bingo-mini-row.is-complete .bingo-mini-cell.hit {
+  background: color-mix(in srgb, var(--accent, #D4A017) 78%, #2a1800);
+}
 .bingo-mini-cell.empty {
   background: transparent;
   opacity: 0.35;

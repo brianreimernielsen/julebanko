@@ -16,10 +16,12 @@ public class BingoCheckModel(BingoCardService bingo, ClaimService claims, DrawSe
     public IReadOnlyList<Claim> RelatedClaims { get; private set; } = Array.Empty<Claim>();
     public bool HasExactSeriesQuery { get; private set; }
     public HashSet<int> DrawnSet { get; private set; } = new();
+    public int DrawnCount { get; private set; }
 
     public async Task OnGetAsync()
     {
         DrawnSet = (await draws.GetAllAsync()).Select(d => d.Number).ToHashSet();
+        DrawnCount = DrawnSet.Count;
 
         // Exact series lookup shows a focused result; blank query lists a sample of season plates.
         var take = string.IsNullOrWhiteSpace(SeriesQuery) ? 50 : 20;

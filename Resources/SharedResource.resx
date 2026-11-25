@@ -118,7 +118,10 @@
   <data name="BingoDesign" xml:space="preserve"><value>Design/generate plates</value></data>
   <data name="BingoDesignHint" xml:space="preserve"><value>PDF settings, generation, and batch downloads.</value></data>
   <data name="BingoCheck" xml:space="preserve"><value>Check plates</value></data>
-  <data name="BingoCheckHint" xml:space="preserve"><value>Look up series numbers, hit rows, and claims for today's banko.</value></data>
+  <data name="BingoCheckHint" xml:space="preserve"><value>Daily admin path: look up a series (or scan), see cells/rows hit by drawn numbers, and approved claims with a star.</value></data>
+  <data name="BingoCheckLiveHint" xml:space="preserve"><value>Highlights follow the season's drawn numbers live.</value></data>
+  <data name="BingoDrawnCount" xml:space="preserve"><value>Numbers drawn</value></data>
+  <data name="BingoRowLabel" xml:space="preserve"><value>Row {0}</value></data>
   <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>E.g. 000123 or scan barcode</value></data>
   <data name="BingoLookupResult" xml:space="preserve"><value>Lookup result</value></data>
   <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims for this plate</value></data>
