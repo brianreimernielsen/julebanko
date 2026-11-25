@@ -135,6 +135,11 @@
   <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Valgfri overstyring for dette batch. Tom: bruger Setup-standardbanner; er den også tom, bruges brandnavnet.</value></data>
   <data name="BingoBatchNote" xml:space="preserve"><value>Note (valgfri)</value></data>
   <data name="BingoGenerateDownload" xml:space="preserve"><value>Generér og download PDF</value></data>
+  <data name="BingoLayoutPreview" xml:space="preserve"><value>Forhåndsvisning</value></data>
+  <data name="BingoLayoutPreviewHint" xml:space="preserve"><value>Én eksempel-side med dummy-serienumre (990001…). Opretter ikke plader i databasen og bruger ikke rigtige serienumre. Opdateres når du ændrer plader/side, banner, skema eller farver.</value></data>
+  <data name="BingoRefreshPreview" xml:space="preserve"><value>Opdater forhåndsvisning</value></data>
+  <data name="BingoDownloadPreviewPdf" xml:space="preserve"><value>Download forhåndsvisnings-PDF</value></data>
+  <data name="BingoPreviewFallback" xml:space="preserve"><value>Browseren kan ikke vise PDF her. Brug download i stedet:</value></data>
   <data name="BingoSettings" xml:space="preserve"><value>Plade-indstillinger</value></data>
   <data name="BingoAutoValidate" xml:space="preserve"><value>Auto-valider claims mod plader</value></data>
   <data name="BingoAutoValidateHint" xml:space="preserve"><value>Advarer spilleren ved mismatch, men tillader stadig manuel indsendelse. E-mail markerer claims der ikke blev auto-valideret.</value></data>

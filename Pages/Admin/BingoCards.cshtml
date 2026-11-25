@@ -37,8 +37,29 @@
             @Localizer["BingoBatchNote"]
             <input asp-for="Note" maxlength="500" />
         </label>
-        <button class="btn btn-primary" type="submit">@Localizer["BingoGenerateDownload"]</button>
+        <div class="form-actions-row">
+            <button class="btn btn-primary" type="submit">@Localizer["BingoGenerateDownload"]</button>
+            <button class="btn btn-ghost" type="button" data-bingo-preview-refresh>@Localizer["BingoRefreshPreview"]</button>
+            <a class="btn btn-ghost" href="#" data-bingo-preview-download>@Localizer["BingoDownloadPreviewPdf"]</a>
+        </div>
     </form>
+</div>
+
+<div class="admin-card" data-bingo-layout-preview
+     data-preview-base="@Url.Page("/Admin/BingoCards", "Preview")">
+    <h2>@Localizer["BingoLayoutPreview"]</h2>
+    <p class="muted">@Localizer["BingoLayoutPreviewHint"]</p>
+    <div class="bingo-preview-frame">
+        <object class="bingo-preview-object"
+                type="application/pdf"
+                data=""
+                aria-label="@Localizer["BingoLayoutPreview"]">
+            <p class="muted">
+                @Localizer["BingoPreviewFallback"]
+                <a href="#" data-bingo-preview-download>@Localizer["BingoDownloadPreviewPdf"]</a>
+            </p>
+        </object>
+    </div>
 </div>
 
 @if (Model.IsSetup)

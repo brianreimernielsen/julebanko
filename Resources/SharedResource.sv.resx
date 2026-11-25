@@ -135,6 +135,11 @@
   <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Valfri åsidosättning för denna batch. Tomt: använder Setup-standardbanner; är den också tom används varumärkesnamnet.</value></data>
   <data name="BingoBatchNote" xml:space="preserve"><value>Anteckning (valfritt)</value></data>
   <data name="BingoGenerateDownload" xml:space="preserve"><value>Generera och ladda ner PDF</value></data>
+  <data name="BingoLayoutPreview" xml:space="preserve"><value>Förhandsvisning</value></data>
+  <data name="BingoLayoutPreviewHint" xml:space="preserve"><value>En exempel-sida med dummy-serienummer (990001…). Skapar inte brickor i databasen och förbrukar inte riktiga serienummer. Uppdateras när du ändrar brickor/sida, banner, schema eller färger.</value></data>
+  <data name="BingoRefreshPreview" xml:space="preserve"><value>Uppdatera förhandsvisning</value></data>
+  <data name="BingoDownloadPreviewPdf" xml:space="preserve"><value>Ladda ner förhandsvisnings-PDF</value></data>
+  <data name="BingoPreviewFallback" xml:space="preserve"><value>Webbläsaren kan inte visa PDF här. Ladda ner i stället:</value></data>
   <data name="BingoSettings" xml:space="preserve"><value>Brickinställningar</value></data>
   <data name="BingoAutoValidate" xml:space="preserve"><value>Autovalidera claims mot brickor</value></data>
   <data name="BingoAutoValidateHint" xml:space="preserve"><value>Varnar spelaren vid mismatch men tillåter fortfarande manuell inlämning. E-post markerar claims som inte autovaliderades.</value></data>

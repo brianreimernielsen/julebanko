@@ -13,7 +13,14 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         QuestPDF.Settings.License = LicenseType.Community;
     }
 
-    public async Task<byte[]> BuildPdfAsync(IReadOnlyList<BingoCard> cards, int platesPerPage, string? batchBanner)
+    public Task<byte[]> BuildPdfAsync(IReadOnlyList<BingoCard> cards, int platesPerPage, string? batchBanner)
+        => BuildPdfAsync(cards, platesPerPage, batchBanner, styleOverrides: null);
+
+    public async Task<byte[]> BuildPdfAsync(
+        IReadOnlyList<BingoCard> cards,
+        int platesPerPage,
+        string? batchBanner,
+        BingoPdfStyleOverrides? styleOverrides)
     {
         platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
 
@@ -29,11 +36,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             banner = brand;
         }
 
-        var schemeId = await settings.GetAsync(SettingKeys.BingoPlateScheme, BingoPlateSchemes.DefaultId);
+        var schemeId = !string.IsNullOrWhiteSpace(styleOverrides?.PlateScheme)
+            ? styleOverrides!.PlateScheme!
+            : await settings.GetAsync(SettingKeys.BingoPlateScheme, BingoPlateSchemes.DefaultId);
         var scheme = BingoPlateSchemes.GetOrDefault(schemeId);
         var seriesColor = ParseColor(scheme.ColorB, Colors.Amber.Darken2);
 
-        var frameHex = await settings.GetAsync(SettingKeys.BingoFrameColor, "");
+        var frameHex = !string.IsNullOrWhiteSpace(styleOverrides?.FrameColor)
+            ? styleOverrides!.FrameColor!
+            : await settings.GetAsync(SettingKeys.BingoFrameColor, "");
         if (string.IsNullOrWhiteSpace(frameHex))
         {
             // Legacy fallback: BingoPrimaryColor → scheme ColorA
@@ -44,13 +55,17 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             }
         }
 
-        var bannerHex = await settings.GetAsync(SettingKeys.BingoBannerColor, "");
+        var bannerHex = !string.IsNullOrWhiteSpace(styleOverrides?.BannerColor)
+            ? styleOverrides!.BannerColor!
+            : await settings.GetAsync(SettingKeys.BingoBannerColor, "");
         if (string.IsNullOrWhiteSpace(bannerHex))
         {
             bannerHex = frameHex;
         }
 
-        var bgHex = await settings.GetAsync(SettingKeys.BingoPdfBackgroundColor, "#FFFFFF");
+        var bgHex = !string.IsNullOrWhiteSpace(styleOverrides?.BackgroundColor)
+            ? styleOverrides!.BackgroundColor!
+            : await settings.GetAsync(SettingKeys.BingoPdfBackgroundColor, "#FFFFFF");
         if (string.IsNullOrWhiteSpace(bgHex))
         {
             bgHex = "#FFFFFF";
@@ -339,4 +354,13 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             return fallback;
         }
     }
+}
+
+/// <summary>Optional style overrides for preview PDF (does not persist settings).</summary>
+public sealed class BingoPdfStyleOverrides
+{
+    public string? PlateScheme { get; init; }
+    public string? FrameColor { get; init; }
+    public string? BannerColor { get; init; }
+    public string? BackgroundColor { get; init; }
 }

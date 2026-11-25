@@ -135,6 +135,11 @@
   <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Optional override for this batch. Blank: uses the Setup default banner; if that is also blank, uses the brand name.</value></data>
   <data name="BingoBatchNote" xml:space="preserve"><value>Note (optional)</value></data>
   <data name="BingoGenerateDownload" xml:space="preserve"><value>Generate &amp; download PDF</value></data>
+  <data name="BingoLayoutPreview" xml:space="preserve"><value>Layout preview</value></data>
+  <data name="BingoLayoutPreviewHint" xml:space="preserve"><value>One sample page with dummy series numbers (990001…). Does not create plates in the database and does not consume real series numbers. Updates when you change plates/page, banner, scheme, or colors.</value></data>
+  <data name="BingoRefreshPreview" xml:space="preserve"><value>Refresh preview</value></data>
+  <data name="BingoDownloadPreviewPdf" xml:space="preserve"><value>Download preview PDF</value></data>
+  <data name="BingoPreviewFallback" xml:space="preserve"><value>Your browser cannot display PDFs here. Download instead:</value></data>
   <data name="BingoSettings" xml:space="preserve"><value>Plate settings</value></data>
   <data name="BingoAutoValidate" xml:space="preserve"><value>Auto-validate claims against plates</value></data>
   <data name="BingoAutoValidateHint" xml:space="preserve"><value>Warns the player on mismatch but still allows a manual submit. Email marks claims that were not auto-validated.</value></data>

@@ -1670,4 +1670,93 @@
   } else {
     bootPickers();
   }
+
+  // Design page: in-browser PDF layout preview (dummy series; no DB writes).
+  const bootBingoPreview = () => {
+    const root = document.querySelector("[data-bingo-layout-preview]");
+    if (!root) return;
+
+    const base = root.getAttribute("data-preview-base");
+    const objectEl = root.querySelector(".bingo-preview-object");
+    if (!base || !objectEl) return;
+
+    const platesSelect = document.querySelector('select[name="PlatesPerPage"]');
+    const bannerOverride = document.querySelector('input[name="BannerText"]');
+    const defaultBanner = document.querySelector('input[name="BingoBannerText"]');
+    const frameHex = document.querySelector('input[name="BingoFrameColor"]');
+    const bannerColorHex = document.querySelector('input[name="BingoBannerColor"]');
+    const bgHex = document.querySelector('input[name="BingoPdfBackgroundColor"]');
+
+    const readScheme = () => {
+      const checked = document.querySelector('input[name="BingoPlateScheme"]:checked');
+      return checked ? checked.value : "";
+    };
+
+    const buildUrl = (download) => {
+      const params = new URLSearchParams();
+      const plates = Number(platesSelect?.value || "6");
+      params.set("platesPerPage", String([1, 2, 3, 4, 6, 8, 9].includes(plates) ? plates : 6));
+
+      const override = (bannerOverride?.value || "").trim();
+      if (override) params.set("banner", override);
+      else if ((defaultBanner?.value || "").trim()) params.set("banner", defaultBanner.value.trim());
+
+      const scheme = readScheme();
+      if (scheme) params.set("scheme", scheme);
+      if (frameHex?.value) params.set("frame", frameHex.value);
+      if (bannerColorHex?.value) params.set("bannerColor", bannerColorHex.value);
+      if (bgHex?.value) params.set("bg", bgHex.value);
+      if (download) params.set("download", "true");
+      // Cache-bust so object reloads when settings change.
+      params.set("t", String(Date.now()));
+      const sep = base.includes("?") ? "&" : "?";
+      const url = base + sep + params.toString();
+      // Chrome PDF viewer: hide nav pane / fit page width in the embed (ignored on download).
+      if (!download) {
+        return url + "#navpanes=0&zoom=page-width";
+      }
+      return url;
+    };
+
+    let timer = 0;
+    const refresh = () => {
+      const url = buildUrl(false);
+      objectEl.setAttribute("data", url);
+      document.querySelectorAll("[data-bingo-preview-download]").forEach((a) => {
+        a.setAttribute("href", buildUrl(true));
+      });
+    };
+
+    const schedule = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(refresh, 280);
+    };
+
+    refresh();
+
+    platesSelect?.addEventListener("change", schedule);
+    bannerOverride?.addEventListener("input", schedule);
+    defaultBanner?.addEventListener("input", schedule);
+    frameHex?.addEventListener("input", schedule);
+    bannerColorHex?.addEventListener("input", schedule);
+    bgHex?.addEventListener("input", schedule);
+    document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {
+      el.addEventListener("change", schedule);
+    });
+    document.querySelectorAll("[data-color-swatch]").forEach((el) => {
+      el.addEventListener("input", schedule);
+    });
+    document.querySelectorAll("[data-bingo-preview-refresh]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        refresh();
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootBingoPreview, { once: true });
+  } else {
+    bootBingoPreview();
+  }
 })();

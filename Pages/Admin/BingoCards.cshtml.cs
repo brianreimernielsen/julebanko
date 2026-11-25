@@ -86,6 +86,50 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         return File(pdf, "application/pdf", $"bankoplader-batch-{batchId}.pdf");
     }
 
+    /// <summary>
+    /// Inline PDF stream for in-browser preview. No batch/card rows; dummy series only.
+    /// Query params override saved settings so unsaved Design form values are reflected.
+    /// </summary>
+    public async Task<IActionResult> OnGetPreviewAsync(
+        int platesPerPage = 6,
+        string? banner = null,
+        string? scheme = null,
+        string? frame = null,
+        string? bannerColor = null,
+        string? bg = null,
+        bool download = false)
+    {
+        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
+
+        var style = new BingoPdfStyleOverrides
+        {
+            PlateScheme = string.IsNullOrWhiteSpace(scheme) ? null : scheme.Trim(),
+            FrameColor = NormalizeOptionalHex(frame),
+            BannerColor = NormalizeOptionalHex(bannerColor),
+            BackgroundColor = NormalizeOptionalHex(bg)
+        };
+
+        var pdfBytes = await bingo.BuildPreviewPdfAsync(platesPerPage, banner, style);
+        if (download)
+        {
+            return File(pdfBytes, "application/pdf", $"bankoplader-preview-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf");
+        }
+
+        // Inline so <iframe>/<object> can display without forcing a download.
+        Response.Headers.CacheControl = "no-store";
+        return File(pdfBytes, "application/pdf");
+    }
+
+    private static string? NormalizeOptionalHex(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return null;
+        }
+
+        return ColorHex.TryNormalize(raw, out var n) ? n : null;
+    }
+
     public async Task<IActionResult> OnPostSaveSettingsAsync()
     {
         if (!IsSetup)

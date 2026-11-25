@@ -23,6 +23,37 @@ public class BingoCardService(
         return !string.Equals(raw, "false", StringComparison.OrdinalIgnoreCase) && raw != "0";
     }
 
+    /// <summary>
+    /// Builds a one-page sample PDF using dummy series numbers.
+    /// Does not create BingoCardBatch/BingoCard rows and does not consume series numbers.
+    /// </summary>
+    public async Task<byte[]> BuildPreviewPdfAsync(
+        int platesPerPage,
+        string? bannerText,
+        BingoPdfStyleOverrides? styleOverrides = null)
+    {
+        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
+
+        // Deterministic sample plates so preview is stable across refreshes with the same settings.
+        var rng = new Random(20261125);
+        var cards = new List<BingoCard>(platesPerPage);
+        // High dummy series range — never written to DB; visually distinct from real 000001… series.
+        const int previewSeriesBase = 990001;
+        for (var i = 0; i < platesPerPage; i++)
+        {
+            var grid = BingoPlateGenerator.Generate(rng);
+            cards.Add(new BingoCard
+            {
+                SeriesNumber = previewSeriesBase + i,
+                CellsJson = BingoPlateGenerator.ToJson(grid),
+                Fingerprint = BingoPlateGenerator.Fingerprint(grid),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        return await pdf.BuildPdfAsync(cards, platesPerPage, bannerText, styleOverrides);
+    }
+
     public async Task<(BingoCardBatch Batch, byte[] Pdf)> GenerateBatchAsync(
         int plateCount,
         int platesPerPage,
