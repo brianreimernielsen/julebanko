@@ -115,6 +115,15 @@
   <data name="BrandFont" xml:space="preserve"><value>Brand / hero font</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Player body font</value></data>
   <data name="BingoCards" xml:space="preserve"><value>Bingo plates</value></data>
+  <data name="BingoDesign" xml:space="preserve"><value>Design/generate plates</value></data>
+  <data name="BingoDesignHint" xml:space="preserve"><value>PDF settings, generation, and batch downloads.</value></data>
+  <data name="BingoCheck" xml:space="preserve"><value>Check plates</value></data>
+  <data name="BingoCheckHint" xml:space="preserve"><value>Look up series numbers, hit rows, and claims for today's banko.</value></data>
+  <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>E.g. 000123 or scan barcode</value></data>
+  <data name="BingoLookupResult" xml:space="preserve"><value>Lookup result</value></data>
+  <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims for this plate</value></data>
+  <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="BingoApprovedClaim" xml:space="preserve"><value>Approved claim</value></data>
   <data name="BingoCardsGenerate" xml:space="preserve"><value>Generate plates</value></data>
   <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Enter number of pages; creates pages × plates-per-page unique Danish banko plates (1–90), stores them, and downloads a PDF (default 6 per A4 page).</value></data>
   <data name="BingoPageCount" xml:space="preserve"><value>Number of pages</value></data>

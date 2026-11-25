@@ -2300,6 +2300,11 @@ body.nisse-night::after {
   border: 1px solid var(--line);
   border-radius: 2px;
 }
+.bingo-mini-cell.hit {
+    background: color-mix(in srgb, var(--accent, #D4A017) 55%, transparent);
+    font-weight: 700;
+}
+
 .bingo-mini-cell.empty {
   background: transparent;
   opacity: 0.35;

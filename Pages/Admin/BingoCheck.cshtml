@@ -1,0 +1,132 @@
+@page
+@model Julebanko.Pages.Admin.BingoCheckModel
+@{
+    ViewData["Title"] = Localizer["BingoCheck"].Value;
+}
+<div class="admin-card">
+    <h2>@Localizer["BingoCheck"]</h2>
+    <p class="muted">@Localizer["BingoCheckHint"]</p>
+    <form method="get" class="form-stack" style="margin-bottom:1rem;">
+        <label>
+            @Localizer["BingoSeriesNumber"]
+            <input name="SeriesQuery"
+                   value="@Model.SeriesQuery"
+                   maxlength="32"
+                   autofocus
+                   autocomplete="off"
+                   inputmode="numeric"
+                   placeholder="@Localizer["BingoSeriesLookupPlaceholder"]" />
+        </label>
+        <div class="inline-actions">
+            <button class="btn btn-primary" type="submit">@Localizer["BingoSearch"]</button>
+            <a class="btn btn-ghost" href="/Admin/Claims">@Localizer["PendingClaims"]</a>
+        </div>
+    </form>
+</div>
+
+@if (Model.HasExactSeriesQuery && Model.RelatedClaims.Count > 0)
+{
+    <div class="admin-card">
+        <h2>@Localizer["BingoRelatedClaims"]</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Localizer["YourName"]</th>
+                    <th>@Localizer["WinType"]</th>
+                    <th>@Localizer["BingoValidation"]</th>
+                    <th>@Localizer["BingoClaimStatus"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model.RelatedClaims)
+            {
+                <tr>
+                    <td>@c.PlayerName</td>
+                    <td>@Model.WinLabel(c.WinType)</td>
+                    <td>
+                        <span class="@(c.AutoValidated ? "badge-ok" : "badge-warn")">@Model.ValidationLabel(c.ValidationStatus)</span>
+                    </td>
+                    <td>@Model.ClaimStatusLabel(c.Status)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="admin-card">
+    <h2>@(Model.HasExactSeriesQuery ? Localizer["BingoLookupResult"].Value : Localizer["BingoBrowse"].Value)</h2>
+    <p class="muted">@Localizer["BingoShowing"]: @Model.Cards.Count / @Model.TotalCards</p>
+    @if (Model.Cards.Count == 0)
+    {
+        <p class="empty-note">@Localizer["BingoNoCards"]</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Localizer["BingoSeriesNumber"]</th>
+                    <th>@Localizer["BingoHitRows"]</th>
+                    <th>@Localizer["BingoWinStatus"]</th>
+                    <th>@Localizer["BingoPreview"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model.Cards)
+            {
+                <tr>
+                    <td>
+                        <strong>@c.SeriesDisplay</strong>
+                        <span class="muted">(@Localizer["BingoBatch"] @c.BatchId)</span>
+                        @if (c.HasApprovedWin)
+                        {
+                            <span class="badge-ok" title="@Localizer["BingoApprovedClaim"]">★</span>
+                        }
+                    </td>
+                    <td>
+                        @if (c.HitRows.Count == 0)
+                        {
+                            <span class="muted">—</span>
+                        }
+                        else
+                        {
+                            @string.Join(", ", c.HitRows)
+                        }
+                    </td>
+                    <td>
+                        @if (c.HasApprovedWin)
+                        {
+                            @string.Join(", ", c.ApprovedWinTypes.Select(Model.WinLabel))
+                        }
+                        else
+                        {
+                            <span class="muted">@Localizer["BingoNoWin"]</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="bingo-mini-grid" aria-hidden="true">
+                            @for (var r = 0; r < 3; r++)
+                            {
+                                <div class="bingo-mini-row">
+                                    @for (var col = 0; col < 9; col++)
+                                    {
+                                        var n = c.Grid[r, col];
+                                        var hit = n is not null && Model.DrawnSet.Contains(n.Value);
+                                        <span class="bingo-mini-cell@(n is null ? " empty" : "")@(hit ? " hit" : "")">@(n?.ToString() ?? "")</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>
+
+<p class="muted">
+    <a href="/Admin/BingoCards">@Localizer["BingoDesign"]</a>
+    — @Localizer["BingoDesignHint"]
+</p>

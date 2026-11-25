@@ -1,3 +1,4 @@
+using System.Globalization;
 using Julebanko.Data;
 using Julebanko.Models;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,26 @@ public class ClaimService(
         var season = await seasons.GetActiveSeasonAsync();
         return await db.Claims.AsNoTracking()
             .Where(c => c.SeasonId == season.Id)
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+    }
+
+    /// <summary>Claims (any status) that reference the given series number.</summary>
+    public async Task<IReadOnlyList<Claim>> GetBySeriesAsync(string? seriesInput)
+    {
+        if (!BingoPlateGenerator.TryParseSeries(seriesInput, out var series))
+        {
+            return Array.Empty<Claim>();
+        }
+
+        var season = await seasons.GetActiveSeasonAsync();
+        var display = BingoPlateGenerator.FormatSeries(series);
+        // Also match raw digit strings players may have typed without zero-padding.
+        var raw = series.ToString(CultureInfo.InvariantCulture);
+        return await db.Claims.AsNoTracking()
+            .Where(c => c.SeasonId == season.Id
+                        && c.SeriesNumber != null
+                        && (c.SeriesNumber == display || c.SeriesNumber == raw))
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
     }

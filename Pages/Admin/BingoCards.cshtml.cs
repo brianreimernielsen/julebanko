@@ -1,4 +1,3 @@
-using System.Globalization;
 using Julebanko.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,14 +19,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings) :
     [BindProperty]
     public string? Note { get; set; }
 
-    [BindProperty(SupportsGet = true)]
-    public string? SeriesQuery { get; set; }
-
     public IReadOnlyList<Models.BingoCardBatch> Batches { get; private set; } = Array.Empty<Models.BingoCardBatch>();
-    public IReadOnlyList<BingoCardListItem> Cards { get; private set; } = Array.Empty<BingoCardListItem>();
-    public int TotalCards { get; private set; }
     public string? Error { get; private set; }
-    public string? Success { get; private set; }
     public bool IsSetup => AdminAuthService.IsSetupAdmin(User);
 
     // Setup settings (bound only when setup posts settings)
@@ -108,9 +101,6 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings) :
     private async Task LoadAsync()
     {
         Batches = await bingo.ListBatchesAsync();
-        var (items, total) = await bingo.SearchCardsAsync(SeriesQuery, 0, 50);
-        Cards = items;
-        TotalCards = total;
 
         var auto = await settings.GetAsync(Data.SettingKeys.BingoAutoValidate, "true");
         BingoAutoValidate = !string.Equals(auto, "false", StringComparison.OrdinalIgnoreCase) && auto != "0";
@@ -122,7 +112,4 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings) :
         var festive = await settings.GetAsync(Data.SettingKeys.BingoFestiveLook, "true");
         BingoFestiveLook = !string.Equals(festive, "false", StringComparison.OrdinalIgnoreCase) && festive != "0";
     }
-
-    public string WinLabel(Models.WinType type) =>
-        ClaimService.WinTypeLabel(type, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
 }
