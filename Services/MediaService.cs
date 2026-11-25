@@ -40,8 +40,34 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
     [
         MediaSlot.PlayerHero,
         MediaSlot.PlayerHeroLogo,
-        MediaSlot.PlayerDecoration
+        MediaSlot.PlayerDecoration,
+        MediaSlot.BingoPdfBackground
     ];
+
+    /// <summary>Read uploaded file bytes for a media slot, or null if missing.</summary>
+    public async Task<(byte[] Bytes, string ContentType)?> TryReadBytesAsync(MediaSlot slot)
+    {
+        var asset = await db.MediaAssets.AsNoTracking().FirstOrDefaultAsync(m => m.Slot == slot);
+        if (asset is null)
+        {
+            return null;
+        }
+
+        var name = Path.GetFileName(asset.RelativePath);
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return null;
+        }
+
+        var path = Path.Combine(env.ContentRootPath, "App_Data", "uploads", name);
+        if (!File.Exists(path))
+        {
+            return null;
+        }
+
+        var bytes = await File.ReadAllBytesAsync(path);
+        return (bytes, asset.ContentType);
+    }
 
     public async Task<(bool Ok, string? Error)> UploadAsync(MediaSlot slot, IFormFile file, int? adminId)
     {

@@ -6,7 +6,7 @@ using QuestPDF.Infrastructure;
 
 namespace Julebanko.Services;
 
-public class BingoPdfService(SettingsService settings)
+public class BingoPdfService(SettingsService settings, MediaService media)
 {
     static BingoPdfService()
     {
@@ -29,25 +29,46 @@ public class BingoPdfService(SettingsService settings)
             banner = brand;
         }
 
-        var primary = await settings.GetAsync(SettingKeys.BingoPrimaryColor, "");
-        if (string.IsNullOrWhiteSpace(primary))
+        var schemeId = await settings.GetAsync(SettingKeys.BingoPlateScheme, BingoPlateSchemes.DefaultId);
+        var scheme = BingoPlateSchemes.GetOrDefault(schemeId);
+        var seriesColor = ParseColor(scheme.ColorB, Colors.Amber.Darken2);
+
+        var frameHex = await settings.GetAsync(SettingKeys.BingoFrameColor, "");
+        if (string.IsNullOrWhiteSpace(frameHex))
         {
-            primary = await settings.GetAsync(SettingKeys.PlayerBgColor, "#8B1E1E");
+            // Legacy fallback: BingoPrimaryColor → scheme ColorA
+            frameHex = await settings.GetAsync(SettingKeys.BingoPrimaryColor, "");
+            if (string.IsNullOrWhiteSpace(frameHex))
+            {
+                frameHex = scheme.ColorA;
+            }
         }
 
-        var accent = await settings.GetAsync(SettingKeys.BingoAccentColor, "");
-        if (string.IsNullOrWhiteSpace(accent))
+        var bannerHex = await settings.GetAsync(SettingKeys.BingoBannerColor, "");
+        if (string.IsNullOrWhiteSpace(bannerHex))
         {
-            accent = await settings.GetAsync(SettingKeys.AccentColor, "#D4A017");
+            bannerHex = frameHex;
         }
 
-        var festiveRaw = await settings.GetAsync(SettingKeys.BingoFestiveLook, "true");
-        var festive = !string.Equals(festiveRaw, "false", StringComparison.OrdinalIgnoreCase) && festiveRaw != "0";
+        var bgHex = await settings.GetAsync(SettingKeys.BingoPdfBackgroundColor, "#FFFFFF");
+        if (string.IsNullOrWhiteSpace(bgHex))
+        {
+            bgHex = "#FFFFFF";
+        }
 
-        var primaryColor = ParseColor(primary, Colors.Red.Darken3);
-        var accentColor = ParseColor(accent, Colors.Amber.Darken2);
-        var paper = festive ? Color.FromHex("#FFF8F0") : Colors.White;
+        var frameColor = ParseColor(frameHex, ParseColor(scheme.ColorA, Colors.Red.Darken3));
+        var bannerColor = ParseColor(bannerHex, frameColor);
+        var paper = ParseColor(bgHex, Colors.White);
         var ink = Color.FromHex("#1A1A1A");
+        var plateFill = BlendTowardWhite(scheme.ColorA, 0.88f);
+        var emptyCell = BlendTowardWhite(scheme.ColorA, 0.75f);
+
+        byte[]? bgImage = null;
+        var bgAsset = await media.TryReadBytesAsync(MediaSlot.BingoPdfBackground);
+        if (bgAsset is not null)
+        {
+            bgImage = bgAsset.Value.Bytes;
+        }
 
         var layouts = LayoutFor(platesPerPage);
         var pages = cards
@@ -69,18 +90,17 @@ public class BingoPdfService(SettingsService settings)
                     page.PageColor(paper);
                     page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
 
+                    if (bgImage is { Length: > 0 })
+                    {
+                        page.Background().Image(bgImage).FitUnproportionally();
+                    }
+
                     page.Header().Column(col =>
                     {
                         col.Item().AlignCenter().Text(banner)
-                            .FontSize(festive ? 18 : 16)
+                            .FontSize(16)
                             .SemiBold()
-                            .FontColor(primaryColor);
-                        if (festive)
-                        {
-                            col.Item().PaddingTop(2).AlignCenter().Text("Bankoplader")
-                                .FontSize(9)
-                                .FontColor(accentColor);
-                        }
+                            .FontColor(bannerColor);
                     });
 
                     page.Content().PaddingTop(fillPage ? 6 : 8).Column(col =>
@@ -100,9 +120,11 @@ public class BingoPdfService(SettingsService settings)
                                                 e,
                                                 pageCards[idx],
                                                 banner,
-                                                primaryColor,
-                                                accentColor,
-                                                festive,
+                                                frameColor,
+                                                bannerColor,
+                                                plateFill,
+                                                emptyCell,
+                                                seriesColor,
                                                 ink,
                                                 plateScale);
                                         }
@@ -134,33 +156,32 @@ public class BingoPdfService(SettingsService settings)
         IContainer container,
         BingoCard card,
         string banner,
-        Color primary,
-        Color accent,
-        bool festive,
+        Color frame,
+        Color bannerText,
+        Color plateFill,
+        Color emptyCell,
+        Color series,
         Color ink,
         PlateScale scale)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
-        var series = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
+        var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
 
         container
-            .Border(1.2f)
-            .BorderColor(primary)
-            .Background(Colors.White)
+            .Border(1.4f)
+            .BorderColor(frame)
+            .Background(plateFill)
             .Padding(scale.Padding)
             .Column(col =>
             {
                 col.Item().Row(r =>
                 {
-                    r.RelativeItem().Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(primary);
-                    r.ConstantItem(scale.SeriesWidth).AlignRight().Text($"Nr. {series}")
-                        .FontSize(scale.BannerFont).SemiBold().FontColor(accent);
+                    r.RelativeItem().Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
+                    r.ConstantItem(scale.SeriesWidth).AlignRight().Text($"Nr. {seriesText}")
+                        .FontSize(scale.BannerFont).SemiBold().FontColor(series);
                 });
 
-                if (festive)
-                {
-                    col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(accent);
-                }
+                col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(series);
 
                 col.Item().PaddingTop(scale.TablePad).Table(table =>
                 {
@@ -180,7 +201,7 @@ public class BingoPdfService(SettingsService settings)
                             table.Cell()
                                 .Border(0.6f)
                                 .BorderColor(Colors.Grey.Darken1)
-                                .Background(n is null ? Color.FromHex("#F3F3F3") : Colors.White)
+                                .Background(n is null ? emptyCell : Colors.White)
                                 .MinHeight(scale.CellMinHeight)
                                 .AlignMiddle()
                                 .AlignCenter()
@@ -192,6 +213,22 @@ public class BingoPdfService(SettingsService settings)
                     }
                 });
             });
+    }
+
+    /// <summary>Mix hex color toward white by amount (0–1) for readable plate fills.</summary>
+    private static Color BlendTowardWhite(string hex, float amount)
+    {
+        amount = Math.Clamp(amount, 0f, 1f);
+        if (!ColorHex.TryNormalize(hex, out var n))
+        {
+            return Colors.White;
+        }
+
+        var rgb = ColorHex.ToRgb(n)!.Value;
+        var r = (byte)(rgb.R + (255 - rgb.R) * amount);
+        var g = (byte)(rgb.G + (255 - rgb.G) * amount);
+        var b = (byte)(rgb.B + (255 - rgb.B) * amount);
+        return Color.FromRGB(r, g, b);
     }
 
     private readonly record struct PlateScale(
@@ -238,12 +275,12 @@ public class BingoPdfService(SettingsService settings)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(hex))
+            if (!ColorHex.TryNormalize(hex, out var n))
             {
                 return fallback;
             }
 
-            return Color.FromHex(hex.Trim());
+            return Color.FromHex(n);
         }
         catch
         {

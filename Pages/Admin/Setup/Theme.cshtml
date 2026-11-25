@@ -9,20 +9,44 @@
     {
         <div class="alert alert-success">@Localizer["Saved"]</div>
     }
+    @if (!string.IsNullOrEmpty(Model.ColorError))
+    {
+        <div class="alert alert-error">@Model.ColorError</div>
+    }
     <form method="post" class="form-stack" id="theme-form">
         <label>
             Season title
             <input asp-for="SeasonTitle" maxlength="200" />
         </label>
         <div class="field-row colors">
-            <label>@Localizer["PlayerColors"] (bg)<input asp-for="PlayerBgColor" type="color" /></label>
-            <label>@Localizer["AdminColors"] (bg)<input asp-for="AdminBgColor" type="color" /></label>
-            <label>@Localizer["Accent"]<input asp-for="AccentColor" type="color" /></label>
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "PlayerBgColor",
+                Value = Model.PlayerBgColor,
+                Label = Localizer["PlayerColors"].Value + " (bg)"
+            }' />
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "AdminBgColor",
+                Value = Model.AdminBgColor,
+                Label = Localizer["AdminColors"].Value + " (bg)"
+            }' />
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "AccentColor",
+                Value = Model.AccentColor,
+                Label = Localizer["Accent"].Value
+            }' />
         </div>
         <p class="muted" style="margin:0;">@Localizer["PlayerBgRedTopHint"]</p>
         <div class="field-row colors">
-            <label>Player text<input asp-for="PlayerTextColor" type="color" /></label>
-            <label>Admin text<input asp-for="AdminTextColor" type="color" /></label>
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "PlayerTextColor",
+                Value = Model.PlayerTextColor,
+                Label = "Player text"
+            }' />
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "AdminTextColor",
+                Value = Model.AdminTextColor,
+                Label = "Admin text"
+            }' />
         </div>
         <label style="display:flex; gap:0.55rem; align-items:center;">
             <input asp-for="PlayerSnowEnabled" type="checkbox" style="width:auto;" />

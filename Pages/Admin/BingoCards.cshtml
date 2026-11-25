@@ -49,7 +49,15 @@
         {
             <div class="alert alert-success">@Localizer["Saved"]</div>
         }
-        <form method="post" asp-page-handler="SaveSettings" class="form-stack">
+        @if (!string.IsNullOrEmpty(Model.MediaMessage) && Model.MediaMessage is not "ok" and not "deleted")
+        {
+            <div class="alert @(Model.MediaError ? "alert-error" : "alert-success")">@Model.MediaMessage</div>
+        }
+        else if (Model.MediaMessage == "deleted")
+        {
+            <div class="alert alert-success">@Localizer["Deleted"]</div>
+        }
+        <form method="post" asp-page-handler="SaveSettings" class="form-stack" id="bingo-settings-form">
             <label class="checkbox-row">
                 <input asp-for="BingoAutoValidate" type="checkbox" />
                 @Localizer["BingoAutoValidate"]
@@ -65,20 +73,67 @@
                 <input asp-for="BingoBannerText" maxlength="200" placeholder="@Localizer["BingoBannerTextHint"]" />
             </label>
             <p class="muted" style="margin-top:0;">@Localizer["BingoBannerTextHelp"]</p>
-            <label>
-                @Localizer["BingoPrimaryColor"]
-                <input asp-for="BingoPrimaryColor" maxlength="20" placeholder="#8B1E1E" />
-            </label>
-            <label>
-                @Localizer["BingoAccentColor"]
-                <input asp-for="BingoAccentColor" maxlength="20" placeholder="#D4A017" />
-            </label>
-            <label class="checkbox-row">
-                <input asp-for="BingoFestiveLook" type="checkbox" />
-                @Localizer["BingoFestiveLook"]
-            </label>
+
+            <fieldset class="plate-scheme-picker">
+                <legend>@Localizer["BingoPlateScheme"]</legend>
+                <p class="muted" style="margin-top:0;">@Localizer["BingoPlateSchemeHint"]</p>
+                <div class="plate-scheme-grid">
+                    @foreach (var scheme in Model.PlateSchemes)
+                    {
+                        var selected = string.Equals(Model.BingoPlateScheme, scheme.Id, StringComparison.OrdinalIgnoreCase);
+                        <label class="plate-scheme-option @(selected ? "is-selected" : null)">
+                            <input type="radio" name="BingoPlateScheme" value="@scheme.Id" @(selected ? "checked" : null) />
+                            <span class="plate-scheme-swatches" aria-hidden="true">
+                                <span style="background:@scheme.ColorA"></span>
+                                <span style="background:@scheme.ColorB"></span>
+                            </span>
+                            <span class="plate-scheme-name">@BingoPlateSchemes.LocalizedName(scheme, Model.UiCulture)</span>
+                            <span class="plate-scheme-hex muted">@scheme.ColorA · @scheme.ColorB</span>
+                        </label>
+                    }
+                </div>
+            </fieldset>
+
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "BingoPdfBackgroundColor",
+                Value = Model.BingoPdfBackgroundColor,
+                Label = Localizer["BingoPdfBackgroundColor"].Value,
+                Hint = Localizer["BingoPdfBackgroundColorHint"].Value
+            }' />
+
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "BingoFrameColor",
+                Value = Model.BingoFrameColor,
+                Label = Localizer["BingoFrameColor"].Value,
+                Hint = Localizer["BingoFrameColorHint"].Value
+            }' />
+
+            <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "BingoBannerColor",
+                Value = Model.BingoBannerColor,
+                Label = Localizer["BingoBannerColor"].Value,
+                Hint = Localizer["BingoBannerColorHint"].Value
+            }' />
+
             <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
         </form>
+
+        <div class="pdf-bg-upload" style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--line);">
+            <h3>@Localizer["BingoPdfBackgroundImage"]</h3>
+            <p class="muted">@Localizer["BingoPdfBackgroundImageHint"]</p>
+            @if (Model.PdfBackgroundAsset is not null)
+            {
+                <img class="media-preview" src="@Model.PdfBackgroundAsset.RelativePath?v=@Model.PdfBackgroundAsset.UploadedAt.Ticks" alt="@Model.PdfBackgroundAsset.FileName" />
+                <p class="muted">@Model.PdfBackgroundAsset.FileName</p>
+                <form method="post" asp-page-handler="DeletePdfBackground" style="margin-bottom:0.75rem;">
+                    <button class="btn btn-danger btn-small" type="submit">@Localizer["Delete"]</button>
+                </form>
+            }
+            <form method="post" enctype="multipart/form-data" asp-page-handler="UploadPdfBackground" class="form-stack" style="max-width:420px;">
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/*" required />
+                <button class="btn btn-primary btn-small" type="submit">@Localizer["Upload"]</button>
+            </form>
+        </div>
     </div>
 }
 

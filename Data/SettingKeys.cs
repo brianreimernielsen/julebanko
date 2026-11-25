@@ -35,7 +35,24 @@ public static class SettingKeys
     /// <summary>Default PDF plate banner (Setup). Empty → BrandName. Batch banner overrides this.</summary>
     public const string BingoBannerText = "BingoBannerText";
 
+    /// <summary>Legacy; prefer BingoPlateScheme + BingoFrameColor / BingoBannerColor.</summary>
     public const string BingoPrimaryColor = "BingoPrimaryColor";
+
+    /// <summary>Legacy; series color now comes from BingoPlateScheme.</summary>
     public const string BingoAccentColor = "BingoAccentColor";
+
+    /// <summary>Deprecated — festive checkbox removed; keep key for old DBs.</summary>
     public const string BingoFestiveLook = "BingoFestiveLook";
+
+    /// <summary>Id from <see cref="Services.BingoPlateSchemes"/> (two contrasting plate colors; series follows).</summary>
+    public const string BingoPlateScheme = "BingoPlateScheme";
+
+    /// <summary>PDF page background when no BingoPdfBackground image is uploaded.</summary>
+    public const string BingoPdfBackgroundColor = "BingoPdfBackgroundColor";
+
+    /// <summary>Plate frame / border color.</summary>
+    public const string BingoFrameColor = "BingoFrameColor";
+
+    /// <summary>Banner text color on plates and page header.</summary>
+    public const string BingoBannerColor = "BingoBannerColor";
 }

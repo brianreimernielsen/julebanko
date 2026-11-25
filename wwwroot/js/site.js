@@ -1588,3 +1588,86 @@
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+/* Shared admin color picker: hex without required #, RGB readout, native swatch */
+(() => {
+  const HEX_RE = /^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+
+  const normalize = (raw) => {
+    const m = String(raw || "").trim().match(HEX_RE);
+    if (!m) return null;
+    let d = m[1];
+    if (d.length === 3) d = d.split("").map((c) => c + c).join("");
+    return "#" + d.toUpperCase();
+  };
+
+  const toRgbText = (hex) => {
+    const n = normalize(hex);
+    if (!n) return "";
+    const r = parseInt(n.slice(1, 3), 16);
+    const g = parseInt(n.slice(3, 5), 16);
+    const b = parseInt(n.slice(5, 7), 16);
+    return `RGB ${r}, ${g}, ${b}`;
+  };
+
+  const bindPicker = (root) => {
+    const hexInput = root.querySelector("[data-color-hex]");
+    const swatch = root.querySelector("[data-color-swatch]");
+    const rgbEl = root.querySelector("[data-color-rgb]");
+    const errEl = root.querySelector("[data-color-error]");
+    if (!hexInput || !swatch) return;
+
+    const showRgb = root.getAttribute("data-show-rgb") !== "0";
+
+    const apply = (raw, { fromSwatch } = {}) => {
+      const n = normalize(raw);
+      if (!n) {
+        root.classList.add("is-invalid");
+        if (errEl) errEl.hidden = false;
+        return false;
+      }
+      root.classList.remove("is-invalid");
+      if (errEl) errEl.hidden = true;
+      hexInput.value = n.slice(1);
+      if (!fromSwatch) swatch.value = n;
+      if (showRgb && rgbEl) rgbEl.textContent = toRgbText(n);
+      return true;
+    };
+
+    hexInput.addEventListener("input", () => {
+      const digits = hexInput.value.replace(/[^0-9A-Fa-f]/g, "").slice(0, 6);
+      if (digits !== hexInput.value) hexInput.value = digits;
+      if (digits.length === 3 || digits.length === 6) apply(digits);
+      else {
+        root.classList.add("is-invalid");
+        if (errEl) errEl.hidden = false;
+        if (showRgb && rgbEl) rgbEl.textContent = "";
+      }
+    });
+
+    hexInput.addEventListener("blur", () => {
+      apply(hexInput.value);
+    });
+
+    swatch.addEventListener("input", () => {
+      apply(swatch.value, { fromSwatch: true });
+    });
+
+    const form = root.closest("form");
+    form?.addEventListener("submit", (e) => {
+      if (!apply(hexInput.value)) {
+        e.preventDefault();
+        hexInput.focus();
+      }
+    });
+  };
+
+  const bootPickers = () => {
+    document.querySelectorAll("[data-color-picker]").forEach(bindPicker);
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootPickers, { once: true });
+  } else {
+    bootPickers();
+  }
+})();

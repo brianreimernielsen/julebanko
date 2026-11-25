@@ -146,6 +146,17 @@
   <data name="BingoPrimaryColor" xml:space="preserve"><value>Brickans primärfärg (hex, valfritt)</value></data>
   <data name="BingoAccentColor" xml:space="preserve"><value>Brickans accentfärg (hex, valfritt)</value></data>
   <data name="BingoFestiveLook" xml:space="preserve"><value>Festlig PDF-stil</value></data>
+  <data name="BingoPlateScheme" xml:space="preserve"><value>Brickans färgschema</value></data>
+  <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Välj ett fördefinierat högkontrastschema (två färger). Serienumret följer schemats accentfärg.</value></data>
+  <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-bakgrundsfärg</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Används när ingen bakgrundsbild är uppladdad.</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Ramfärg</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Färg på brickans ram/kant.</value></data>
+  <data name="BingoBannerColor" xml:space="preserve"><value>Bannertextfärg</value></data>
+  <data name="BingoBannerColorHint" xml:space="preserve"><value>Färg på bannertext på brickor och sidhuvud.</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-bakgrundsbild</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Valfri helsidesbild bakom brickorna (jpg/png/webp/gif, max 2 MB). Använd t.ex. ett julmotiv som bakgrund.</value></data>
+  <data name="ColorHexInvalid" xml:space="preserve"><value>Ogiltig hex-färg. Använd 3 eller 6 hex-siffror (# valfritt).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererade batcher</value></data>
   <data name="BingoNoBatches" xml:space="preserve"><value>Inga batcher ännu.</value></data>
   <data name="BingoDownloadPdf" xml:space="preserve"><value>Ladda ner PDF</value></data>

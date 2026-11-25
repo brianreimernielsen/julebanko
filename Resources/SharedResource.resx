@@ -146,6 +146,17 @@
   <data name="BingoPrimaryColor" xml:space="preserve"><value>Plate primary color (hex, optional)</value></data>
   <data name="BingoAccentColor" xml:space="preserve"><value>Plate accent color (hex, optional)</value></data>
   <data name="BingoFestiveLook" xml:space="preserve"><value>Festive PDF styling</value></data>
+  <data name="BingoPlateScheme" xml:space="preserve"><value>Plate color scheme</value></data>
+  <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Pick a predefined high-contrast scheme (two colors). The series number uses the scheme accent.</value></data>
+  <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF background color</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Used when no background image is uploaded.</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Frame color</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Color of the plate border/frame.</value></data>
+  <data name="BingoBannerColor" xml:space="preserve"><value>Banner text color</value></data>
+  <data name="BingoBannerColorHint" xml:space="preserve"><value>Color of banner text on plates and the page header.</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF background image</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Optional full-page image behind the plates (jpg/png/webp/gif, max 2 MB). Use e.g. a Christmas motif as background.</value></data>
+  <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Generated batches</value></data>
   <data name="BingoNoBatches" xml:space="preserve"><value>No batches yet.</value></data>
   <data name="BingoDownloadPdf" xml:space="preserve"><value>Download PDF</value></data>

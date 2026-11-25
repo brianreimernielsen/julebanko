@@ -113,7 +113,11 @@ USING (VALUES
     (N'BingoBannerText',        N''),
     (N'BingoPrimaryColor',      N''),
     (N'BingoAccentColor',       N''),
-    (N'BingoFestiveLook',       N'true')
+    (N'BingoFestiveLook',       N'true'),
+    (N'BingoPlateScheme',       N'crimson-gold'),
+    (N'BingoPdfBackgroundColor',N'#FFFFFF'),
+    (N'BingoFrameColor',        N'#8B1E1E'),
+    (N'BingoBannerColor',       N'#8B1E1E')
 ) AS s([Key], Value)
 ON t.[Key] = s.[Key]
 WHEN NOT MATCHED THEN

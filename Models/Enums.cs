@@ -25,7 +25,9 @@ public enum MediaSlot
     PlayerHero = 1,
     PlayerBackground = 2,
     PlayerDecoration = 3,
-    PlayerHeroLogo = 4
+    PlayerHeroLogo = 4,
+    /// <summary>Full-page background image behind bankoplader PDF plates.</summary>
+    BingoPdfBackground = 5
 }
 
 /// <summary>
