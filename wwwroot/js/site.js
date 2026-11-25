@@ -21,10 +21,10 @@
     }, ms);
   });
 
-  // Season backup restore: require Undo / OK before POSTing restore.
-  document.querySelectorAll("[data-backup-restore]").forEach((root) => {
-    const openBtn = root.querySelector("[data-restore-open]");
-    const cancelBtn = root.querySelector("[data-restore-cancel]");
+  // Season reset / plates reset / backup restore: require Undo / OK before POST.
+  document.querySelectorAll("[data-confirm-panel]").forEach((root) => {
+    const openBtn = root.querySelector("[data-confirm-open], [data-restore-open]");
+    const cancelBtn = root.querySelector("[data-confirm-cancel], [data-restore-cancel]");
     const panel = root.querySelector(".backup-restore-confirm");
     if (!openBtn || !panel) return;
 

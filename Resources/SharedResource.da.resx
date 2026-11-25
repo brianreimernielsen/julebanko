@@ -59,14 +59,26 @@
   <data name="Drawn" xml:space="preserve"><value>Trukket</value></data>
   <data name="NonePending" xml:space="preserve"><value>Ingen afventende meldinger.</value></data>
   <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denne tavle opdateres automatisk ca. hvert 15. sekund, mens fanen er synlig.</value></data>
-  <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter alle trukne tal og claims for den aktive sæson efter backup. Fortsæt?</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter trukne tal og claims for den aktive sæson efter backup. Med «Medtag bankoplader» slettes også batches og plader. Fortsæt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Nulstil sæson</value></data>
+  <data name="SeasonResetNote" xml:space="preserve"><value>Note</value></data>
+  <data name="IncludePlatesInReset" xml:space="preserve"><value>Medtag bankoplader</value></data>
+  <data name="IncludePlatesInResetHint" xml:space="preserve"><value>Standard: til. Sletter BingoCardBatches og BingoCards sammen med sæsonen. Backup indeholder pladerne, så Gendan kan genskabe dem.</value></data>
+  <data name="ResetPlatesOnly" xml:space="preserve"><value>Nulstil plader</value></data>
+  <data name="ConfirmResetPlatesOnly" xml:space="preserve"><value>Sletter alle bankoplader og batches for den aktive sæson efter backup. Trukne tal og claims beholdes (plade-link fjernes). Fortsæt?</value></data>
+  <data name="PlatesResetOk" xml:space="preserve"><value>Bankoplader nulstillet og backup oprettet.</value></data>
+  <data name="SeasonResetOkWithPlates" xml:space="preserve"><value>Sæson og bankoplader nulstillet; backup oprettet.</value></data>
+  <data name="Backups" xml:space="preserve"><value>Backups</value></data>
+  <data name="NoBackupsYet" xml:space="preserve"><value>Ingen backups endnu.</value></data>
+  <data name="BackupWhenUtc" xml:space="preserve"><value>Tidspunkt (UTC)</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>gendannet</value></data>
+  <data name="BackupPlatesHint" xml:space="preserve"><value>Når en backup indeholder plader (sæson-reset med plader, eller «Nulstil plader»), gendanner Undo også batches og plader.</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Gendan backup</value></data>
-  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Gendan denne backup? Aktuelle sæsons trukne tal og claims bliver erstattet.</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Gendan denne backup? Aktuelle sæsons data (og plader, hvis de er i backup) bliver erstattet.</value></data>
   <data name="Undo" xml:space="preserve"><value>Fortryd</value></data>
   <data name="OK" xml:space="preserve"><value>OK</value></data>
   <data name="BackupRestoredOk" xml:space="preserve"><value>Backup gendannet.</value></data>
-  <data name="SeasonResetOk" xml:space="preserve"><value>Sæson nulstillet og backup oprettet.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Sæson nulstillet og backup oprettet (plader beholdt).</value></data>
   <data name="ConfirmRequired" xml:space="preserve"><value>Bekræftelse er påkrævet.</value></data>
   <data name="BackupNotFound" xml:space="preserve"><value>Backup ikke fundet.</value></data>
   <data name="BackupAlreadyRestored" xml:space="preserve"><value>Denne backup er allerede gendannet.</value></data>

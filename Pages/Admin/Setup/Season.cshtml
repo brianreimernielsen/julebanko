@@ -11,32 +11,68 @@
     {
         <div class="alert @(Model.IsError ? "alert-error" : "alert-success")">@Model.Message</div>
     }
-    <form method="post" asp-page-handler="Reset" class="form-stack" style="max-width:480px;"
-          onsubmit="return confirm('@Localizer["ConfirmReset"]');">
+    <div class="form-stack" style="max-width:480px;" data-confirm-panel>
         <label>
-            Note
-            <input asp-for="Note" maxlength="500" />
+            @Localizer["SeasonResetNote"]
+            <input asp-for="Note" maxlength="500" form="season-reset-form" />
         </label>
         <label style="display:flex; gap:0.5rem; align-items:center;">
-            <input asp-for="Confirm" type="checkbox" style="width:auto;" />
-            Confirm
+            @* Checkbox before hidden so binder sees "true" first when checked. *@
+            <input asp-for="IncludePlates" type="checkbox" value="true" style="width:auto;" form="season-reset-form" />
+            <input type="hidden" name="IncludePlates" value="false" form="season-reset-form" />
+            @Localizer["IncludePlatesInReset"]
         </label>
-        <button class="btn btn-danger" type="submit">@Localizer["ResetSeason"]</button>
-    </form>
+        <p class="muted" style="margin:0;">@Localizer["IncludePlatesInResetHint"]</p>
+        <button type="button" class="btn btn-danger" data-confirm-open>@Localizer["ResetSeason"]</button>
+        <div class="backup-restore-confirm" hidden>
+            <p class="muted" style="margin:0 0 0.5rem;">@Localizer["ConfirmReset"]</p>
+            <div class="inline-actions">
+                <button type="button" class="btn btn-ghost btn-small" data-confirm-cancel>
+                    @Localizer["Undo"]
+                </button>
+                <form id="season-reset-form" method="post" asp-page-handler="Reset">
+                    <button class="btn btn-primary btn-small" type="submit">@Localizer["OK"]</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="admin-card" style="margin-bottom:1rem;">
+    <h2>@Localizer["ResetPlatesOnly"]</h2>
+    <p class="muted">@Localizer["ConfirmResetPlatesOnly"]</p>
+    <div class="form-stack" style="max-width:480px;" data-confirm-panel>
+        <label>
+            @Localizer["SeasonResetNote"]
+            <input asp-for="PlatesNote" maxlength="500" form="plates-reset-form" />
+        </label>
+        <button type="button" class="btn btn-danger" data-confirm-open>@Localizer["ResetPlatesOnly"]</button>
+        <div class="backup-restore-confirm" hidden>
+            <p class="muted" style="margin:0 0 0.5rem;">@Localizer["ConfirmResetPlatesOnly"]</p>
+            <div class="inline-actions">
+                <button type="button" class="btn btn-ghost btn-small" data-confirm-cancel>
+                    @Localizer["Undo"]
+                </button>
+                <form id="plates-reset-form" method="post" asp-page-handler="ResetPlates">
+                    <button class="btn btn-primary btn-small" type="submit">@Localizer["OK"]</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="admin-card">
-    <h2>Backups</h2>
+    <h2>@Localizer["Backups"]</h2>
+    <p class="muted">@Localizer["BackupPlatesHint"]</p>
     @if (Model.Backups.Count == 0)
     {
-        <p class="empty-note">No backups yet.</p>
+        <p class="empty-note">@Localizer["NoBackupsYet"]</p>
     }
     else
     {
         <table class="table">
             <thead>
                 <tr>
-                    <th>When (UTC)</th>
-                    <th>Note</th>
+                    <th>@Localizer["BackupWhenUtc"]</th>
+                    <th>@Localizer["SeasonResetNote"]</th>
                     <th></th>
                 </tr>
             </thead>
@@ -45,18 +81,18 @@
             {
                 <tr>
                     <td>@b.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@b.Note @(b.IsRestored ? "(restored)" : "")</td>
+                    <td>@b.Note @(b.IsRestored ? $"({Localizer["BackupRestored"]})" : "")</td>
                     <td>
                         @if (!b.IsRestored)
                         {
-                            <div class="backup-restore" data-backup-restore>
-                                <button type="button" class="btn btn-ghost btn-small" data-restore-open>
+                            <div class="backup-restore" data-confirm-panel>
+                                <button type="button" class="btn btn-ghost btn-small" data-confirm-open>
                                     @Localizer["UndoBackup"]
                                 </button>
                                 <div class="backup-restore-confirm" hidden>
                                     <p class="muted" style="margin:0 0 0.5rem;">@Localizer["ConfirmRestoreBackup"]</p>
                                     <div class="inline-actions">
-                                        <button type="button" class="btn btn-ghost btn-small" data-restore-cancel>
+                                        <button type="button" class="btn btn-ghost btn-small" data-confirm-cancel>
                                             @Localizer["Undo"]
                                         </button>
                                         <form method="post" asp-page-handler="Undo">

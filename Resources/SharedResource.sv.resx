@@ -59,14 +59,26 @@
   <data name="Drawn" xml:space="preserve"><value>Draget</value></data>
   <data name="NonePending" xml:space="preserve"><value>Inga väntande anmälningar.</value></data>
   <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denna tavla uppdateras automatiskt ungefär var 15:e sekund medan fliken syns.</value></data>
-  <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar alla dragna nummer och claims för den aktiva säsongen efter backup. Fortsätt?</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar dragna nummer och claims för den aktiva säsongen efter backup. Med «Inkludera bingoplattor» raderas även batcher och plattor. Fortsätt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Återställ säsong</value></data>
+  <data name="SeasonResetNote" xml:space="preserve"><value>Anteckning</value></data>
+  <data name="IncludePlatesInReset" xml:space="preserve"><value>Inkludera bingoplattor</value></data>
+  <data name="IncludePlatesInResetHint" xml:space="preserve"><value>Standard: på. Raderar BingoCardBatches och BingoCards tillsammans med säsongen. Backupen innehåller plattorna så Återställ kan skapa dem igen.</value></data>
+  <data name="ResetPlatesOnly" xml:space="preserve"><value>Återställ endast plattor</value></data>
+  <data name="ConfirmResetPlatesOnly" xml:space="preserve"><value>Raderar alla bingoplattor och batcher för den aktiva säsongen efter backup. Dragna nummer och claims behålls (plattlänkar tas bort). Fortsätt?</value></data>
+  <data name="PlatesResetOk" xml:space="preserve"><value>Bingoplattor återställda och backup skapad.</value></data>
+  <data name="SeasonResetOkWithPlates" xml:space="preserve"><value>Säsong och bingoplattor återställda; backup skapad.</value></data>
+  <data name="Backups" xml:space="preserve"><value>Backups</value></data>
+  <data name="NoBackupsYet" xml:space="preserve"><value>Inga backups ännu.</value></data>
+  <data name="BackupWhenUtc" xml:space="preserve"><value>Tidpunkt (UTC)</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>återställd</value></data>
+  <data name="BackupPlatesHint" xml:space="preserve"><value>När en backup innehåller plattor (säsongsåterställning med plattor, eller «Återställ endast plattor») återställer Ångra även batcher och plattor.</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Återställ backup</value></data>
-  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Återställ den här backupen? Aktuell säsongs dragna nummer och claims ersätts.</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Återställ den här backupen? Aktuell säsongsdata (och plattor om de finns i backupen) ersätts.</value></data>
   <data name="Undo" xml:space="preserve"><value>Ångra</value></data>
   <data name="OK" xml:space="preserve"><value>OK</value></data>
   <data name="BackupRestoredOk" xml:space="preserve"><value>Backup återställd.</value></data>
-  <data name="SeasonResetOk" xml:space="preserve"><value>Säsong återställd och backup skapad.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Säsong återställd och backup skapad (plattor behållna).</value></data>
   <data name="ConfirmRequired" xml:space="preserve"><value>Bekräftelse krävs.</value></data>
   <data name="BackupNotFound" xml:space="preserve"><value>Backup hittades inte.</value></data>
   <data name="BackupAlreadyRestored" xml:space="preserve"><value>Den här backupen har redan återställts.</value></data>

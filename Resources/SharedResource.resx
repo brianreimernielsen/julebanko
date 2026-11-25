@@ -59,14 +59,26 @@
   <data name="Drawn" xml:space="preserve"><value>Drawn</value></data>
   <data name="NonePending" xml:space="preserve"><value>No pending claims.</value></data>
   <data name="AdminAutoRefreshHint" xml:space="preserve"><value>This board refreshes automatically about every 15 seconds while the tab is visible.</value></data>
-  <data name="ConfirmReset" xml:space="preserve"><value>This will clear all drawn numbers and claims for the active season after creating a backup. Continue?</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>This clears drawn numbers and claims for the active season after backup. With “Include bingo plates” checked, batches and plates are deleted too. Continue?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Reset season</value></data>
+  <data name="SeasonResetNote" xml:space="preserve"><value>Note</value></data>
+  <data name="IncludePlatesInReset" xml:space="preserve"><value>Include bingo plates</value></data>
+  <data name="IncludePlatesInResetHint" xml:space="preserve"><value>Default: on. Deletes BingoCardBatches and BingoCards with the season. The backup stores the plates so Restore can bring them back.</value></data>
+  <data name="ResetPlatesOnly" xml:space="preserve"><value>Reset plates only</value></data>
+  <data name="ConfirmResetPlatesOnly" xml:space="preserve"><value>Deletes all bingo plates and batches for the active season after backup. Drawn numbers and claims are kept (plate links cleared). Continue?</value></data>
+  <data name="PlatesResetOk" xml:space="preserve"><value>Bingo plates reset and backup created.</value></data>
+  <data name="SeasonResetOkWithPlates" xml:space="preserve"><value>Season and bingo plates reset; backup created.</value></data>
+  <data name="Backups" xml:space="preserve"><value>Backups</value></data>
+  <data name="NoBackupsYet" xml:space="preserve"><value>No backups yet.</value></data>
+  <data name="BackupWhenUtc" xml:space="preserve"><value>When (UTC)</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>restored</value></data>
+  <data name="BackupPlatesHint" xml:space="preserve"><value>When a backup includes plates (season reset with plates, or “Reset plates only”), Undo also restores batches and plates.</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Restore backup</value></data>
-  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Restore this backup? Current season draws and claims will be replaced.</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Restore this backup? Current season data (and plates, if present in the backup) will be replaced.</value></data>
   <data name="Undo" xml:space="preserve"><value>Undo</value></data>
   <data name="OK" xml:space="preserve"><value>OK</value></data>
   <data name="BackupRestoredOk" xml:space="preserve"><value>Backup restored.</value></data>
-  <data name="SeasonResetOk" xml:space="preserve"><value>Season reset and backup created.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Season reset and backup created (plates kept).</value></data>
   <data name="ConfirmRequired" xml:space="preserve"><value>Confirm is required.</value></data>
   <data name="BackupNotFound" xml:space="preserve"><value>Backup not found.</value></data>
   <data name="BackupAlreadyRestored" xml:space="preserve"><value>This backup was already restored.</value></data>
