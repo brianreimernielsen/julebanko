@@ -411,7 +411,7 @@ namespace Julebanko.Data.Migrations
                     b.HasOne("Julebanko.Models.BingoCard", "BingoCard")
                         .WithMany()
                         .HasForeignKey("BingoCardId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Julebanko.Models.AdminUser", "ReviewedByAdmin")
                         .WithMany()

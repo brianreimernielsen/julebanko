@@ -97,7 +97,7 @@ IF NOT EXISTS (
 )
 BEGIN
     ALTER TABLE dbo.Claims ADD CONSTRAINT FK_Claims_BingoCards_BingoCardId
-        FOREIGN KEY (BingoCardId) REFERENCES dbo.BingoCards(Id) ON DELETE SET NULL;
+        FOREIGN KEY (BingoCardId) REFERENCES dbo.BingoCards(Id) ON DELETE NO ACTION;
 END
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Claims_BingoCardId' AND object_id = OBJECT_ID(N'dbo.Claims'))

@@ -144,7 +144,7 @@ namespace Julebanko.Data.Migrations
                 column: "BingoCardId",
                 principalTable: "BingoCards",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />

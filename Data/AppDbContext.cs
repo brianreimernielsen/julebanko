@@ -36,7 +36,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.HasOne(x => x.ReviewedByAdmin).WithMany().HasForeignKey(x => x.ReviewedByAdminId)
                 .OnDelete(DeleteBehavior.SetNull);
             e.HasOne(x => x.BingoCard).WithMany().HasForeignKey(x => x.BingoCardId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
             e.Property(x => x.PlayerName).HasMaxLength(120).IsRequired();
             e.Property(x => x.SeriesNumber).HasMaxLength(32);
             e.Property(x => x.ValidationNote).HasMaxLength(500);
