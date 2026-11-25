@@ -103,40 +103,86 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                             .FontColor(bannerColor);
                     });
 
-                    page.Content().PaddingTop(fillPage ? 6 : 8).Column(col =>
+                    if (fillPage)
                     {
-                        for (var row = 0; row < layouts.Rows; row++)
+                        // ≤6: single full-width column; equal heights under header/footer (no ExtendVertical —
+                        // nested extend overflows and QuestPDF paginates mid-plate).
+                        const float contentTopPad = 6f;
+                        const float gap = 4f;
+                        var margin = 14f;
+                        var headerEstimate = 28f;
+                        var footerEstimate = 20f;
+                        var available = PageSizes.A4.Height - (2 * margin) - headerEstimate - footerEstimate - contentTopPad;
+                        var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
+                        var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
+                        // Banner row + line + pads inside plate → leftover for 3 grid rows.
+                        var chrome = (plateScale.Padding * 2) + plateScale.BannerFont + 6f
+                            + (plateScale.LinePad * 2) + 2f + plateScale.TablePad + 4f; // +4 safety vs overflow
+                        var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
+                        var fillScale = plateScale with { CellMinHeight = cellHeight };
+
+                        page.Content().PaddingTop(contentTopPad).Column(col =>
                         {
-                            col.Item().PaddingBottom(fillPage ? 8 : 10).Row(r =>
+                            for (var i = 0; i < pageCards.Count; i++)
                             {
-                                for (var c = 0; c < layouts.Cols; c++)
+                                col.Item().Height(plateHeight).Element(e => RenderPlate(
+                                    e,
+                                    pageCards[i],
+                                    banner,
+                                    frameColor,
+                                    bannerColor,
+                                    plateFill,
+                                    emptyCell,
+                                    seriesColor,
+                                    ink,
+                                    fillScale,
+                                    fillHeight: true));
+
+                                if (i < pageCards.Count - 1)
                                 {
-                                    var idx = row * layouts.Cols + c;
-                                    r.RelativeItem().Padding(fillPage ? 3 : 4).Element(e =>
-                                    {
-                                        if (idx < pageCards.Count)
-                                        {
-                                            RenderPlate(
-                                                e,
-                                                pageCards[idx],
-                                                banner,
-                                                frameColor,
-                                                bannerColor,
-                                                plateFill,
-                                                emptyCell,
-                                                seriesColor,
-                                                ink,
-                                                plateScale);
-                                        }
-                                        else
-                                        {
-                                            e.Height(1);
-                                        }
-                                    });
+                                    col.Item().Height(gap);
                                 }
-                            });
-                        }
-                    });
+                            }
+                        });
+                    }
+                    else
+                    {
+                        page.Content().PaddingTop(8).Column(col =>
+                        {
+                            for (var row = 0; row < layouts.Rows; row++)
+                            {
+                                col.Item().PaddingBottom(10).Row(r =>
+                                {
+                                    for (var c = 0; c < layouts.Cols; c++)
+                                    {
+                                        var idx = row * layouts.Cols + c;
+                                        r.RelativeItem().Padding(4).Element(e =>
+                                        {
+                                            if (idx < pageCards.Count)
+                                            {
+                                                RenderPlate(
+                                                    e,
+                                                    pageCards[idx],
+                                                    banner,
+                                                    frameColor,
+                                                    bannerColor,
+                                                    plateFill,
+                                                    emptyCell,
+                                                    seriesColor,
+                                                    ink,
+                                                    plateScale,
+                                                    fillHeight: false);
+                                            }
+                                            else
+                                            {
+                                                e.Height(1);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
 
                     page.Footer().AlignCenter().Text(text =>
                     {
@@ -162,10 +208,14 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         Color emptyCell,
         Color series,
         Color ink,
-        PlateScale scale)
+        PlateScale scale,
+        bool fillHeight)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
+
+        // fillHeight: parent already set equal Height(plateHeight); keep content ≤ that (no ExtendVertical).
+        _ = fillHeight;
 
         container
             .Border(1.4f)
@@ -173,46 +223,46 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .Background(plateFill)
             .Padding(scale.Padding)
             .Column(col =>
+        {
+            col.Item().Row(r =>
             {
-                col.Item().Row(r =>
+                r.RelativeItem().Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
+                r.ConstantItem(scale.SeriesWidth).AlignRight().Text($"Nr. {seriesText}")
+                    .FontSize(scale.BannerFont).SemiBold().FontColor(series);
+            });
+
+            col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(series);
+
+            col.Item().PaddingTop(scale.TablePad).Table(table =>
+            {
+                table.ColumnsDefinition(columns =>
                 {
-                    r.RelativeItem().Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
-                    r.ConstantItem(scale.SeriesWidth).AlignRight().Text($"Nr. {seriesText}")
-                        .FontSize(scale.BannerFont).SemiBold().FontColor(series);
-                });
-
-                col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(series);
-
-                col.Item().PaddingTop(scale.TablePad).Table(table =>
-                {
-                    table.ColumnsDefinition(columns =>
+                    for (var i = 0; i < BingoPlateGenerator.Cols; i++)
                     {
-                        for (var i = 0; i < BingoPlateGenerator.Cols; i++)
-                        {
-                            columns.RelativeColumn();
-                        }
-                    });
-
-                    for (var row = 0; row < BingoPlateGenerator.Rows; row++)
-                    {
-                        for (var c = 0; c < BingoPlateGenerator.Cols; c++)
-                        {
-                            var n = grid[row, c];
-                            table.Cell()
-                                .Border(0.6f)
-                                .BorderColor(Colors.Grey.Darken1)
-                                .Background(n is null ? emptyCell : Colors.White)
-                                .MinHeight(scale.CellMinHeight)
-                                .AlignMiddle()
-                                .AlignCenter()
-                                .Text(n?.ToString() ?? "")
-                                .FontSize(scale.CellFont)
-                                .SemiBold()
-                                .FontColor(ink);
-                        }
+                        columns.RelativeColumn();
                     }
                 });
+
+                for (var row = 0; row < BingoPlateGenerator.Rows; row++)
+                {
+                    for (var c = 0; c < BingoPlateGenerator.Cols; c++)
+                    {
+                        var n = grid[row, c];
+                        table.Cell()
+                            .Border(0.6f)
+                            .BorderColor(Colors.Grey.Darken1)
+                            .Background(n is null ? emptyCell : Colors.White)
+                            .MinHeight(scale.CellMinHeight)
+                            .AlignMiddle()
+                            .AlignCenter()
+                            .Text(n?.ToString() ?? "")
+                            .FontSize(scale.CellFont)
+                            .SemiBold()
+                            .FontColor(ink);
+                    }
+                }
             });
+        });
     }
 
     /// <summary>Mix hex color toward white by amount (0–1) for readable plate fills.</summary>
@@ -248,27 +298,29 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             return new PlateScale(6, 9, 11, 22, 4, 3, 70);
         }
 
-        // Fill A4 for 1–6: cell heights sized so plate block reaches near the footer (full content width via RelativeItem).
+        // ≤6 use single-column fillHeight layout; CellMinHeight unused there (ExtendVertical).
+        // Fonts sized for readable full-width stacked plates (6 is tightest).
         return platesPerPage switch
         {
-            1 => new PlateScale(14, 18, 32, 200, 12, 8, 120),
-            2 => new PlateScale(12, 14, 24, 105, 8, 5, 100),
-            3 => new PlateScale(10, 12, 18, 70, 6, 4, 90),
-            4 => new PlateScale(8, 12, 16, 100, 6, 4, 90),
-            _ => new PlateScale(7, 11, 15, 68, 5, 3, 85) // 6
+            1 => new PlateScale(10, 16, 22, 0, 8, 5, 110),
+            2 => new PlateScale(8, 14, 18, 0, 6, 4, 100),
+            3 => new PlateScale(6, 12, 15, 0, 4, 3, 90),
+            4 => new PlateScale(5, 11, 13, 0, 3, 2, 85),
+            _ => new PlateScale(4, 9, 11, 0, 2, 2, 75) // 6
         };
     }
 
+    /// <summary>≤6 → single column (N×1). &gt;6 → compact multi-column grid.</summary>
     private static (int Rows, int Cols) LayoutFor(int platesPerPage) => platesPerPage switch
     {
         1 => (1, 1),
         2 => (2, 1),
         3 => (3, 1),
-        4 => (2, 2),
-        6 => (3, 2),
+        4 => (4, 1),
+        6 => (6, 1),
         8 => (4, 2),
         9 => (3, 3),
-        _ => (3, 2)
+        _ => (6, 1)
     };
 
     private static Color ParseColor(string hex, Color fallback)
