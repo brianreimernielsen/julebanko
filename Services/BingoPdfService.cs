@@ -11,6 +11,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
     static BingoPdfService()
     {
         QuestPDF.Settings.License = LicenseType.Community;
+        BingoPdfTitleFonts.EnsureRegistered(AppContext.BaseDirectory);
     }
 
     public Task<byte[]> BuildPdfAsync(IReadOnlyList<BingoCard> cards, int platesPerPage, string? batchBanner)
@@ -35,6 +36,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         {
             banner = brand;
         }
+
+        var titleFontId = !string.IsNullOrWhiteSpace(styleOverrides?.TitleFont)
+            ? BingoPdfTitleFonts.Resolve(styleOverrides!.TitleFont).Id
+            : BingoPdfTitleFonts.Resolve(
+                await settings.GetAsync(SettingKeys.BingoPdfTitleFont, BingoPdfTitleFonts.DefaultFontId)).Id;
+        var titleSize = styleOverrides?.TitleSize is int overrideSize
+            ? BingoPdfTitleFonts.ResolveSize(overrideSize)
+            : BingoPdfTitleFonts.ResolveSize(
+                await settings.GetAsync(SettingKeys.BingoPdfTitleSize, BingoPdfTitleFonts.DefaultSize.ToString()));
 
         var schemeId = !string.IsNullOrWhiteSpace(styleOverrides?.PlateScheme)
             ? styleOverrides!.PlateScheme!
@@ -93,6 +103,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .ToList();
 
         var plateScale = PlateScaleFor(platesPerPage, fillPage);
+        // Document header: main title only (Setup font/size). Page nums live in the footer.
+        var docHeaderHeight = titleSize + 12f;
 
         var document = Document.Create(container =>
         {
@@ -101,7 +113,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(fillPage ? 14 : 18);
+                    page.Margin(fillPage ? 12 : 18);
                     page.PageColor(paper);
                     page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
 
@@ -110,29 +122,25 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         page.Background().Image(bgImage).FitUnproportionally();
                     }
 
-                    page.Header().Column(col =>
-                    {
-                        col.Item().AlignCenter().Text(banner)
-                            .FontSize(16)
-                            .SemiBold()
-                            .FontColor(bannerColor);
-                    });
+                    page.Header().AlignCenter().Text(banner)
+                        .FontFamily(titleFontId)
+                        .FontSize(titleSize)
+                        .SemiBold()
+                        .FontColor(bannerColor);
 
                     if (fillPage)
                     {
                         // ≤6: single full-width column; equal heights under header/footer (no ExtendVertical —
                         // nested extend overflows and QuestPDF paginates mid-plate).
-                        const float contentTopPad = 6f;
-                        const float gap = 4f;
-                        var margin = 14f;
-                        var headerEstimate = 28f;
-                        var footerEstimate = 20f;
-                        var available = PageSizes.A4.Height - (2 * margin) - headerEstimate - footerEstimate - contentTopPad;
+                        const float contentTopPad = 4f;
+                        const float gap = 3f;
+                        var margin = 12f;
+                        var footerEstimate = 18f;
+                        var available = PageSizes.A4.Height - (2 * margin) - docHeaderHeight - footerEstimate - contentTopPad;
                         var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
                         var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
-                        // Banner/QR row + line + pads inside plate → leftover for 3 grid rows.
-                        // Header height follows the taller of banner text vs compact corner QR.
-                        var headerRow = Math.Max(plateScale.BannerFont + 6f, plateScale.QrSize);
+                        // ~2× taller plate header (brand + series + print-scan QR).
+                        var headerRow = Math.Max(plateScale.BannerFont + 8f, plateScale.QrSize);
                         var chrome = (plateScale.Padding * 2) + headerRow
                             + (plateScale.LinePad * 2) + 2f + plateScale.TablePad + 4f; // +4 safety vs overflow
                         var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
@@ -201,12 +209,13 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         });
                     }
 
-                    page.Footer().AlignCenter().Text(text =>
+                    // Footer only: «Brand 1/4» — not on plates.
+                    page.Footer().AlignCenter().DefaultTextStyle(x => x.FontSize(9).FontColor(Colors.Grey.Darken1)).Text(text =>
                     {
-                        text.Span($"{brand} · ").FontSize(8).FontColor(Colors.Grey.Darken1);
-                        text.CurrentPageNumber().FontSize(8).FontColor(Colors.Grey.Darken1);
-                        text.Span(" / ").FontSize(8).FontColor(Colors.Grey.Darken1);
-                        text.TotalPages().FontSize(8).FontColor(Colors.Grey.Darken1);
+                        text.Span($"{brand} ");
+                        text.CurrentPageNumber();
+                        text.Span("/");
+                        text.TotalPages();
                     });
                 });
             }
@@ -230,7 +239,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
-        // Compact QR in the header corner (preferred over Code128 when 6/page is tight).
+        // Header-corner QR (preferred over Code128); sized for phone scan from printed A4.
         var qrPng = BingoSeriesBarcode.CreateQrPng(seriesText);
 
         // fillHeight: parent already set equal Height(plateHeight); keep content ≤ that (no ExtendVertical).
@@ -243,16 +252,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .Padding(scale.Padding)
             .Column(col =>
         {
-            col.Item().Height(Math.Max(scale.BannerFont + 2f, scale.QrSize)).Row(r =>
+            col.Item().Height(Math.Max(scale.BannerFont + 4f, scale.QrSize)).Row(r =>
             {
                 r.RelativeItem().AlignMiddle()
                     .Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
                 r.ConstantItem(scale.SeriesWidth).AlignMiddle().AlignRight()
                     .Text($"Nr. {seriesText}")
                     .FontSize(scale.BannerFont).SemiBold().FontColor(series);
-                // Discrete corner QR — encodes the same zero-padded series the Tjek field accepts.
-                // ConstantItem width includes a small left gap so the image is not squeezed.
-                r.ConstantItem(scale.QrSize + 3f).PaddingLeft(3f).AlignMiddle()
+                // Corner QR — same zero-padded series the Tjek field accepts.
+                r.ConstantItem(scale.QrSize + 4f).PaddingLeft(4f).AlignMiddle()
                     .Image(qrPng).FitArea();
             });
 
@@ -273,6 +281,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                     for (var c = 0; c < BingoPlateGenerator.Cols; c++)
                     {
                         var n = grid[row, c];
+                        // Grid number face/size stay fixed (Brian: clear & not configurable).
                         table.Cell()
                             .Border(0.6f)
                             .BorderColor(Colors.Grey.Darken1)
@@ -320,19 +329,20 @@ public class BingoPdfService(SettingsService settings, MediaService media)
     {
         if (!fillPage)
         {
-            // Compact (>6): keep prior sizing so 8/9 still fit; tiny corner QR.
-            return new PlateScale(6, 9, 11, 22, 4, 3, 70, 18);
+            // Compact (>6): keep prior sizing so 8/9 still fit; smaller corner QR.
+            return new PlateScale(5, 10, 11, 22, 3, 2, 72, 36);
         }
 
-        // ≤6 use single-column fillHeight layout; CellMinHeight unused there (set per page).
-        // Fonts sized for readable full-width stacked plates (6 is tightest → smallest QR).
+        // ≤6 single-column fillHeight; CellMinHeight set per page.
+        // 6/page: ~2× plate header vs original 16pt QR row; QR ≈ 56pt (~20mm) for phone scan from print.
+        // CellFont stays locked at these sizes (not Setup-configurable).
         return platesPerPage switch
         {
-            1 => new PlateScale(10, 16, 22, 0, 8, 5, 110, 36),
-            2 => new PlateScale(8, 14, 18, 0, 6, 4, 100, 30),
-            3 => new PlateScale(6, 12, 15, 0, 4, 3, 90, 26),
-            4 => new PlateScale(5, 11, 13, 0, 3, 2, 85, 22),
-            _ => new PlateScale(4, 9, 11, 0, 2, 2, 68, 16) // 6 — compact QR in header corner
+            1 => new PlateScale(10, 18, 22, 0, 8, 5, 120, 72),
+            2 => new PlateScale(8, 16, 18, 0, 6, 4, 110, 64),
+            3 => new PlateScale(6, 14, 15, 0, 4, 3, 100, 60),
+            4 => new PlateScale(5, 13, 13, 0, 3, 2, 90, 56),
+            _ => new PlateScale(3, 12, 11, 0, 1, 1, 78, 56) // 6 — tall header + print-scan QR
         };
     }
 
@@ -374,4 +384,6 @@ public sealed class BingoPdfStyleOverrides
     public string? FrameColor { get; init; }
     public string? BannerColor { get; init; }
     public string? BackgroundColor { get; init; }
+    public string? TitleFont { get; init; }
+    public int? TitleSize { get; init; }
 }

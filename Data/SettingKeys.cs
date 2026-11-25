@@ -55,4 +55,10 @@ public static class SettingKeys
 
     /// <summary>Banner text color on plates and page header.</summary>
     public const string BingoBannerColor = "BingoBannerColor";
+
+    /// <summary>PDF document-title font id from <see cref="Services.BingoPdfTitleFonts"/>.</summary>
+    public const string BingoPdfTitleFont = "BingoPdfTitleFont";
+
+    /// <summary>PDF document-title font size (pt) from <see cref="Services.BingoPdfTitleFonts.Sizes"/>.</summary>
+    public const string BingoPdfTitleSize = "BingoPdfTitleSize";
 }

@@ -1686,6 +1686,8 @@
     const frameHex = document.querySelector('input[name="BingoFrameColor"]');
     const bannerColorHex = document.querySelector('input[name="BingoBannerColor"]');
     const bgHex = document.querySelector('input[name="BingoPdfBackgroundColor"]');
+    const titleFontSelect = document.querySelector('select[name="BingoPdfTitleFont"]');
+    const titleSizeSelect = document.querySelector('select[name="BingoPdfTitleSize"]');
 
     const readScheme = () => {
       const checked = document.querySelector('input[name="BingoPlateScheme"]:checked');
@@ -1706,6 +1708,8 @@
       if (frameHex?.value) params.set("frame", frameHex.value);
       if (bannerColorHex?.value) params.set("bannerColor", bannerColorHex.value);
       if (bgHex?.value) params.set("bg", bgHex.value);
+      if (titleFontSelect?.value) params.set("titleFont", titleFontSelect.value);
+      if (titleSizeSelect?.value) params.set("titleSize", titleSizeSelect.value);
       if (download) params.set("download", "true");
       // Cache-bust so object reloads when settings change.
       params.set("t", String(Date.now()));
@@ -1740,6 +1744,8 @@
     frameHex?.addEventListener("input", schedule);
     bannerColorHex?.addEventListener("input", schedule);
     bgHex?.addEventListener("input", schedule);
+    titleFontSelect?.addEventListener("change", schedule);
+    titleSizeSelect?.addEventListener("change", schedule);
     document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {
       el.addEventListener("change", schedule);
     });

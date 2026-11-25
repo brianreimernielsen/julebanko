@@ -9,7 +9,7 @@ namespace Julebanko.Services;
 public static class BingoSeriesBarcode
 {
     /// <summary>PNG bytes for a quiet, scannable QR of the series display string.</summary>
-    public static byte[] CreateQrPng(string seriesDisplay, int pixelsPerModule = 3)
+    public static byte[] CreateQrPng(string seriesDisplay, int pixelsPerModule = 4)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(seriesDisplay);
         pixelsPerModule = Math.Clamp(pixelsPerModule, 2, 8);
@@ -18,7 +18,7 @@ public static class BingoSeriesBarcode
         // Short numeric payload → version-1 QR; ECC M is a good print/scan balance.
         var data = generator.CreateQrCode(seriesDisplay.Trim(), QRCodeGenerator.ECCLevel.M);
         var png = new PngByteQRCode(data);
-        // Quiet zone keeps phone/USB scanners happy without enlarging the plate chrome.
+        // Quiet zone keeps phone/USB scanners happy; FitArea scales to plate QrSize.
         return png.GetGraphic(pixelsPerModule, drawQuietZones: true);
     }
 }

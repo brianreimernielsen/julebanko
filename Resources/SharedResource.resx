@@ -174,7 +174,11 @@
   <data name="BingoFrameColor" xml:space="preserve"><value>Frame color</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Color of the plate border/frame.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner text color</value></data>
-  <data name="BingoBannerColorHint" xml:space="preserve"><value>Color of banner text on plates and the page header.</value></data>
+  <data name="BingoBannerColorHint" xml:space="preserve"><value>Color of plate banner text and the document title in the page header.</value></data>
+  <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF title font</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Font for the document title in the page header only. Plate grid numbers stay on the clear default face.</value></data>
+  <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF title size</value></data>
+  <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Limited presets so the title stays printable above 6 plates per A4 page.</value></data>
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF background image</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Optional full-page image behind the plates (jpg/png/webp/gif, max 2 MB). Use e.g. a Christmas motif as background.</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>

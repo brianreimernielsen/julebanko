@@ -29,6 +29,8 @@
   <!-- Keep upload/backup folder stubs in IIS publish zip -->
   <ItemGroup>
     <Content Include="App_Data\**\.gitkeep" CopyToPublishDirectory="PreserveNewest" />
+    <!-- Embedded PDF title fonts (QuestPDF); grid cell face stays default -->
+    <Content Include="Fonts\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
