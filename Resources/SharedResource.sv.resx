@@ -123,6 +123,7 @@
   <data name="BingoDrawnCount" xml:space="preserve"><value>Dragna nummer</value></data>
   <data name="BingoRowLabel" xml:space="preserve"><value>Rad {0}</value></data>
   <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>T.ex. 000123 eller skanna streckkod</value></data>
+  <data name="BingoScannerHint" xml:space="preserve"><value>USB-scanner: håll fältet i fokus — Enter (keyboard wedge) skickar sökningen.</value></data>
   <data name="BingoLookupResult" xml:space="preserve"><value>Sökresultat</value></data>
   <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims för denna bricka</value></data>
   <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>

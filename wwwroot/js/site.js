@@ -1759,4 +1759,44 @@
   } else {
     bootBingoPreview();
   }
+
+  // Tjek plader: USB keyboard-wedge scanners type digits then Enter.
+  // Keep the series field focused and selected so the next scan replaces the previous.
+  const bootBingoScannerField = () => {
+    const input = document.querySelector("[data-bingo-scanner-input]");
+    if (!input || !(input instanceof HTMLInputElement)) return;
+
+    const focusSelect = () => {
+      input.focus({ preventScroll: true });
+      // Select-all so a new wedge scan overwrites without backspacing.
+      try {
+        input.select();
+      } catch {
+        /* ignore — some browsers reject select() when hidden */
+      }
+    };
+
+    input.addEventListener("focus", () => {
+      try {
+        input.select();
+      } catch {
+        /* ignore */
+      }
+    });
+
+    // Trim stray CR/LF some wedges leave before native Enter submit.
+    input.form?.addEventListener("submit", () => {
+      input.value = (input.value || "").trim();
+    });
+
+    focusSelect();
+    // After GET navigation the field may lose caret timing — re-assert once paint settles.
+    window.requestAnimationFrame(focusSelect);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootBingoScannerField, { once: true });
+  } else {
+    bootBingoScannerField();
+  }
 })();

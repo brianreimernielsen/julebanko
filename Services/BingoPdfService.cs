@@ -130,8 +130,10 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         var available = PageSizes.A4.Height - (2 * margin) - headerEstimate - footerEstimate - contentTopPad;
                         var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
                         var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
-                        // Banner row + line + pads inside plate → leftover for 3 grid rows.
-                        var chrome = (plateScale.Padding * 2) + plateScale.BannerFont + 6f
+                        // Banner/QR row + line + pads inside plate → leftover for 3 grid rows.
+                        // Header height follows the taller of banner text vs compact corner QR.
+                        var headerRow = Math.Max(plateScale.BannerFont + 6f, plateScale.QrSize);
+                        var chrome = (plateScale.Padding * 2) + headerRow
                             + (plateScale.LinePad * 2) + 2f + plateScale.TablePad + 4f; // +4 safety vs overflow
                         var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
                         var fillScale = plateScale with { CellMinHeight = cellHeight };
@@ -228,6 +230,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
+        // Compact QR in the header corner (preferred over Code128 when 6/page is tight).
+        var qrPng = BingoSeriesBarcode.CreateQrPng(seriesText);
 
         // fillHeight: parent already set equal Height(plateHeight); keep content ≤ that (no ExtendVertical).
         _ = fillHeight;
@@ -239,11 +243,17 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .Padding(scale.Padding)
             .Column(col =>
         {
-            col.Item().Row(r =>
+            col.Item().Height(Math.Max(scale.BannerFont + 2f, scale.QrSize)).Row(r =>
             {
-                r.RelativeItem().Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
-                r.ConstantItem(scale.SeriesWidth).AlignRight().Text($"Nr. {seriesText}")
+                r.RelativeItem().AlignMiddle()
+                    .Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
+                r.ConstantItem(scale.SeriesWidth).AlignMiddle().AlignRight()
+                    .Text($"Nr. {seriesText}")
                     .FontSize(scale.BannerFont).SemiBold().FontColor(series);
+                // Discrete corner QR — encodes the same zero-padded series the Tjek field accepts.
+                // ConstantItem width includes a small left gap so the image is not squeezed.
+                r.ConstantItem(scale.QrSize + 3f).PaddingLeft(3f).AlignMiddle()
+                    .Image(qrPng).FitArea();
             });
 
             col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(series);
@@ -303,25 +313,26 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         float CellMinHeight,
         float TablePad,
         float LinePad,
-        float SeriesWidth);
+        float SeriesWidth,
+        float QrSize);
 
     private static PlateScale PlateScaleFor(int platesPerPage, bool fillPage)
     {
         if (!fillPage)
         {
-            // Compact (>6): keep prior sizing so 8/9 still fit.
-            return new PlateScale(6, 9, 11, 22, 4, 3, 70);
+            // Compact (>6): keep prior sizing so 8/9 still fit; tiny corner QR.
+            return new PlateScale(6, 9, 11, 22, 4, 3, 70, 18);
         }
 
-        // ≤6 use single-column fillHeight layout; CellMinHeight unused there (ExtendVertical).
-        // Fonts sized for readable full-width stacked plates (6 is tightest).
+        // ≤6 use single-column fillHeight layout; CellMinHeight unused there (set per page).
+        // Fonts sized for readable full-width stacked plates (6 is tightest → smallest QR).
         return platesPerPage switch
         {
-            1 => new PlateScale(10, 16, 22, 0, 8, 5, 110),
-            2 => new PlateScale(8, 14, 18, 0, 6, 4, 100),
-            3 => new PlateScale(6, 12, 15, 0, 4, 3, 90),
-            4 => new PlateScale(5, 11, 13, 0, 3, 2, 85),
-            _ => new PlateScale(4, 9, 11, 0, 2, 2, 75) // 6
+            1 => new PlateScale(10, 16, 22, 0, 8, 5, 110, 36),
+            2 => new PlateScale(8, 14, 18, 0, 6, 4, 100, 30),
+            3 => new PlateScale(6, 12, 15, 0, 4, 3, 90, 26),
+            4 => new PlateScale(5, 11, 13, 0, 3, 2, 85, 22),
+            _ => new PlateScale(4, 9, 11, 0, 2, 2, 68, 16) // 6 — compact QR in header corner
         };
     }
 

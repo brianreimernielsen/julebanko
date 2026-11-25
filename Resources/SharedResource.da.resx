@@ -123,6 +123,7 @@
   <data name="BingoDrawnCount" xml:space="preserve"><value>Trukne tal</value></data>
   <data name="BingoRowLabel" xml:space="preserve"><value>Række {0}</value></data>
   <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>Fx 000123 eller skan stregkode</value></data>
+  <data name="BingoScannerHint" xml:space="preserve"><value>USB-scanner: hold feltet i fokus — Enter (keyboard wedge) sender søgningen.</value></data>
   <data name="BingoLookupResult" xml:space="preserve"><value>Opslag</value></data>
   <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims for denne plade</value></data>
   <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>

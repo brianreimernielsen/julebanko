@@ -23,6 +23,9 @@ public class BingoCheckModel(BingoCardService bingo, ClaimService claims, DrawSe
         DrawnSet = (await draws.GetAllAsync()).Select(d => d.Number).ToHashSet();
         DrawnCount = DrawnSet.Count;
 
+        // USB keyboard-wedge scanners append CR/LF or trailing spaces — trim before parse/search.
+        SeriesQuery = string.IsNullOrWhiteSpace(SeriesQuery) ? null : SeriesQuery.Trim();
+
         // Exact series lookup shows a focused result; blank query lists a sample of season plates.
         var take = string.IsNullOrWhiteSpace(SeriesQuery) ? 50 : 20;
         var (items, total) = await bingo.SearchCardsAsync(SeriesQuery, 0, take);

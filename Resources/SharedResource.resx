@@ -123,6 +123,7 @@
   <data name="BingoDrawnCount" xml:space="preserve"><value>Numbers drawn</value></data>
   <data name="BingoRowLabel" xml:space="preserve"><value>Row {0}</value></data>
   <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>E.g. 000123 or scan barcode</value></data>
+  <data name="BingoScannerHint" xml:space="preserve"><value>USB scanner: keep this field focused — it submits on Enter (keyboard wedge).</value></data>
   <data name="BingoLookupResult" xml:space="preserve"><value>Lookup result</value></data>
   <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims for this plate</value></data>
   <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>

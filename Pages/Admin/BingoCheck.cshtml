@@ -13,20 +13,26 @@
         <a class="btn btn-ghost btn-small" href="/Admin/Draw">@Localizer["DrawNumbers"]</a>
         <a class="btn btn-ghost btn-small" href="/Admin/Claims">@Localizer["PendingClaims"]</a>
     </p>
-    <form method="get" class="form-stack" style="margin-bottom:1rem;">
+    <form method="get" class="form-stack bingo-check-scan-form" style="margin-bottom:1rem;" data-bingo-scanner-form>
         <label>
             @Localizer["BingoSeriesNumber"]
-            <input name="SeriesQuery"
+            <input id="bingo-series-query"
+                   name="SeriesQuery"
                    value="@Model.SeriesQuery"
                    maxlength="32"
                    autofocus
                    autocomplete="off"
+                   autocorrect="off"
+                   spellcheck="false"
                    inputmode="numeric"
+                   enterkeyhint="search"
+                   data-bingo-scanner-input
                    placeholder="@Localizer["BingoSeriesLookupPlaceholder"]" />
         </label>
         <div class="inline-actions">
             <button class="btn btn-primary" type="submit">@Localizer["BingoSearch"]</button>
         </div>
+        <p class="muted bingo-check-scan-hint">@Localizer["BingoScannerHint"]</p>
     </form>
 </div>
 
