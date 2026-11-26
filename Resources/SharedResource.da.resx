@@ -170,7 +170,7 @@
   <data name="BingoPlateScheme" xml:space="preserve"><value>Pladefarveskema</value></data>
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Vælg et af de prædefinerede kontrastkoemaer (to farver). Serienummeret følger skemaets accentfarve.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-baggrundsfarve</value></data>
-  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papirfarve bag pladerne og header-ikonerne.</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papir-/pergamentfarve under den dekorative sidebaggrund (standard creme).</value></data>
   <data name="BingoFrameColor" xml:space="preserve"><value>Ramme-farve</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Farve på pladens ramme/kant.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner-tekstfarve</value></data>
@@ -190,8 +190,16 @@
   <data name="BingoHeaderIconRestore" xml:space="preserve"><value>Gendan standard</value></data>
   <data name="BingoHeaderIconUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-baggrundsbillede (ældre)</value></data>
-  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Fuldside-baggrundsbilleder tegnes ikke længere. Brug header-ikoner og baggrundsfarve i stedet. Du kan slette en tidligere upload her.</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Denne ældre fuldside-upload bruges ikke. Brug sidebaggrunde pr. sprog nedenfor, eller slet den resterende fil her.</value></data>
   <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Gendan det medfølgende standard-juleikon for denne side?</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Sidebaggrunde (pr. sprog)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Dekorativ creme/guld-ramme og sidefod for hvert sprog. Brandtekst tegnes ovenpå fra Opsætning — bag ikke titlen ind i billedet. Upload erstatter standard; gendan henter den tilbage.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Dansk (da)</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svensk (sv)</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelsk (en)</value></data>
+  <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Gendan standard</value></data>
+  <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
+  <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Gendan den medfølgende standard-sidebaggrund for dette sprog?</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ugyldig hex-farve. Brug 3 eller 6 hex-cifre (uden krav om #).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererede batches</value></data>
   <data name="BingoNoBatches" xml:space="preserve"><value>Ingen batches endnu.</value></data>

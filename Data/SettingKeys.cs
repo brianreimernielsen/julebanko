@@ -47,7 +47,7 @@ public static class SettingKeys
     /// <summary>Id from <see cref="Services.BingoPlateSchemes"/> (two contrasting plate colors; series follows).</summary>
     public const string BingoPlateScheme = "BingoPlateScheme";
 
-    /// <summary>PDF page paper color (header icons sit on this; full-page bg image no longer drawn).</summary>
+    /// <summary>PDF page paper color under decorative page backgrounds (default parchment).</summary>
     public const string BingoPdfBackgroundColor = "BingoPdfBackgroundColor";
 
     /// <summary>Plate frame / border color.</summary>

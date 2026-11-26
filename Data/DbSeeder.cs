@@ -106,7 +106,7 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.BingoAccentColor, "");
         await EnsureSettingAsync(db, SettingKeys.BingoFestiveLook, "true");
         await EnsureSettingAsync(db, SettingKeys.BingoPlateScheme, BingoPlateSchemes.DefaultId);
-        await EnsureSettingAsync(db, SettingKeys.BingoPdfBackgroundColor, "#FFFFFF");
+        await EnsureSettingAsync(db, SettingKeys.BingoPdfBackgroundColor, BingoPdfService.DefaultParchmentHex);
         await EnsureSettingAsync(db, SettingKeys.BingoFrameColor, "#8B1E1E");
         await EnsureSettingAsync(db, SettingKeys.BingoBannerColor, "#8B1E1E");
         await EnsureSettingAsync(db, SettingKeys.BingoShowBarcode, "true");

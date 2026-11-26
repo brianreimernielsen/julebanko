@@ -30,7 +30,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     [BindProperty] public bool BingoPrizeOncePerType { get; set; } = true;
     [BindProperty] public string BingoBannerText { get; set; } = "";
     [BindProperty] public string BingoPlateScheme { get; set; } = BingoPlateSchemes.DefaultId;
-    [BindProperty] public string BingoPdfBackgroundColor { get; set; } = "#FFFFFF";
+    [BindProperty] public string BingoPdfBackgroundColor { get; set; } = BingoPdfService.DefaultParchmentHex;
     [BindProperty] public string BingoFrameColor { get; set; } = "#8B1E1E";
     [BindProperty] public string BingoBannerColor { get; set; } = "#8B1E1E";
     [BindProperty] public string BingoPdfTitleFont { get; set; } = BingoPdfTitleFonts.DefaultFontId;
@@ -41,8 +41,14 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     public MediaAsset? PdfBackgroundAsset { get; private set; }
     public MediaAsset? HeaderIconLeftAsset { get; private set; }
     public MediaAsset? HeaderIconRightAsset { get; private set; }
+    public MediaAsset? PageBgDaAsset { get; private set; }
+    public MediaAsset? PageBgSvAsset { get; private set; }
+    public MediaAsset? PageBgEnAsset { get; private set; }
     public string HeaderIconLeftDefaultUrl => "/sample-media/bankoplade-header-icon-left.png";
     public string HeaderIconRightDefaultUrl => "/sample-media/bankoplade-header-icon-right.png";
+    public string PageBgDaDefaultUrl => "/sample-media/bankoplade-page-bg-da.png";
+    public string PageBgSvDefaultUrl => "/sample-media/bankoplade-page-bg-sv.png";
+    public string PageBgEnDefaultUrl => "/sample-media/bankoplade-page-bg-en.png";
     public bool SettingsSaved { get; private set; }
     public string? MediaMessage { get; private set; }
     public bool MediaError { get; private set; }
@@ -62,7 +68,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         try
         {
             var adminId = AdminAuthService.GetUserId(User) ?? 0;
-            var platesPerPage = PlatesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? PlatesPerPage : 6;
+            var platesPerPage = PlatesPerPage is 1 or 2 or 3 or 4 or 6 ? PlatesPerPage : 6;
             var pageCount = PageCount < 1 ? 1 : PageCount;
             var plateCount = checked(pageCount * platesPerPage);
             if (plateCount > 500)
@@ -114,7 +120,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         bool? showPageNumbers = null,
         bool download = false)
     {
-        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
+        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 ? platesPerPage : 6;
 
         var style = new BingoPdfStyleOverrides
         {
@@ -157,7 +163,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         }
 
         var scheme = BingoPlateSchemes.GetOrDefault(BingoPlateScheme);
-        var bg = ColorHex.OrDefault(BingoPdfBackgroundColor, "#FFFFFF");
+        var bg = ColorHex.OrDefault(BingoPdfBackgroundColor, BingoPdfService.DefaultParchmentHex);
         var frame = ColorHex.OrDefault(BingoFrameColor, scheme.ColorA);
         var banner = ColorHex.OrDefault(BingoBannerColor, frame);
         var titleFont = BingoPdfTitleFonts.Resolve(BingoPdfTitleFont).Id;
@@ -260,6 +266,70 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         return Page();
     }
 
+    public async Task<IActionResult> OnPostUploadPageBackgroundAsync(MediaSlot slot, IFormFile? file)
+    {
+        if (!IsSetup)
+        {
+            return Forbid();
+        }
+
+        if (slot is not (MediaSlot.BingoPageBackgroundDa or MediaSlot.BingoPageBackgroundSv or MediaSlot.BingoPageBackgroundEn))
+        {
+            MediaMessage = "InvalidSlot";
+            MediaError = true;
+            await LoadAsync();
+            return Page();
+        }
+
+        if (file is null)
+        {
+            MediaMessage = "No file";
+            MediaError = true;
+            await LoadAsync();
+            return Page();
+        }
+
+        var adminId = AdminAuthService.GetUserId(User);
+        var result = await media.UploadAsync(slot, file, adminId);
+        MediaMessage = result.Ok ? "ok" : result.Error;
+        MediaError = !result.Ok;
+        if (result.Ok)
+        {
+            SettingsSaved = true;
+        }
+
+        await LoadAsync();
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostResetPageBackgroundAsync(MediaSlot slot)
+    {
+        if (!IsSetup)
+        {
+            return Forbid();
+        }
+
+        if (slot is not (MediaSlot.BingoPageBackgroundDa or MediaSlot.BingoPageBackgroundSv or MediaSlot.BingoPageBackgroundEn))
+        {
+            MediaMessage = "InvalidSlot";
+            MediaError = true;
+            await LoadAsync();
+            return Page();
+        }
+
+        var adminId = AdminAuthService.GetUserId(User);
+        var result = await media.ResetBingoPageBackgroundAsync(slot, adminId);
+        MediaMessage = result.Ok ? "ok" : result.Error;
+        MediaError = !result.Ok;
+        if (result.Ok)
+        {
+            SettingsSaved = true;
+        }
+
+        await LoadAsync();
+        return Page();
+    }
+
     private async Task LoadAsync()
     {
         Batches = await bingo.ListBatchesAsync();
@@ -283,8 +353,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         var scheme = BingoPlateSchemes.GetOrDefault(BingoPlateScheme);
 
         BingoPdfBackgroundColor = ColorHex.OrDefault(
-            await settings.GetAsync(Data.SettingKeys.BingoPdfBackgroundColor, "#FFFFFF"),
-            "#FFFFFF");
+            await settings.GetAsync(Data.SettingKeys.BingoPdfBackgroundColor, BingoPdfService.DefaultParchmentHex),
+            BingoPdfService.DefaultParchmentHex);
 
         var frameRaw = await settings.GetAsync(Data.SettingKeys.BingoFrameColor, "");
         if (string.IsNullOrWhiteSpace(frameRaw))
@@ -323,5 +393,11 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         HeaderIconLeftAsset = leftAsset;
         assets.TryGetValue(MediaSlot.BingoHeaderIconRight, out var rightAsset);
         HeaderIconRightAsset = rightAsset;
+        assets.TryGetValue(MediaSlot.BingoPageBackgroundDa, out var pageDa);
+        PageBgDaAsset = pageDa;
+        assets.TryGetValue(MediaSlot.BingoPageBackgroundSv, out var pageSv);
+        PageBgSvAsset = pageSv;
+        assets.TryGetValue(MediaSlot.BingoPageBackgroundEn, out var pageEn);
+        PageBgEnAsset = pageEn;
     }
 }

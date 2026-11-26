@@ -1699,7 +1699,7 @@
     const buildUrl = (download) => {
       const params = new URLSearchParams();
       const plates = Number(platesSelect?.value || "6");
-      params.set("platesPerPage", String([1, 2, 3, 4, 6, 8, 9].includes(plates) ? plates : 6));
+      params.set("platesPerPage", String([1, 2, 3, 4, 6].includes(plates) ? plates : 6));
 
       const override = (bannerOverride?.value || "").trim();
       if (override) params.set("banner", override);

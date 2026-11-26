@@ -34,6 +34,17 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
         (MediaSlot.BingoHeaderIconRight, "bankoplade-header-icon-right.png", "image/png")
     ];
 
+    /// <summary>
+    /// Per-culture festive page backgrounds (cream + gold frame + footer spruce).
+    /// No baked brand text — PDF draws brand from Setup settings on top.
+    /// </summary>
+    public static readonly (MediaSlot Slot, string Culture, string FileName, string ContentType)[] BingoPageBackgroundSamples =
+    [
+        (MediaSlot.BingoPageBackgroundDa, "da", "bankoplade-page-bg-da.png", "image/png"),
+        (MediaSlot.BingoPageBackgroundSv, "sv", "bankoplade-page-bg-sv.png", "image/png"),
+        (MediaSlot.BingoPageBackgroundEn, "en", "bankoplade-page-bg-en.png", "image/png")
+    ];
+
     public const long MaxBytes = 2 * 1024 * 1024;
 
     public async Task<IReadOnlyDictionary<MediaSlot, MediaAsset>> GetAllAsync()
@@ -50,7 +61,10 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
         MediaSlot.PlayerDecoration,
         MediaSlot.BingoPdfBackground,
         MediaSlot.BingoHeaderIconLeft,
-        MediaSlot.BingoHeaderIconRight
+        MediaSlot.BingoHeaderIconRight,
+        MediaSlot.BingoPageBackgroundDa,
+        MediaSlot.BingoPageBackgroundSv,
+        MediaSlot.BingoPageBackgroundEn
     ];
 
     /// <summary>Read uploaded file bytes for a media slot, or null if missing.</summary>
@@ -114,6 +128,59 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
     public async Task<(bool Ok, string? Error)> ResetBingoHeaderIconAsync(MediaSlot slot, int? adminId = null)
     {
         var sample = BingoHeaderIconSamples.FirstOrDefault(s => s.Slot == slot);
+        if (sample.FileName is null)
+        {
+            return (false, "InvalidSlot");
+        }
+
+        return await CopySampleToSlotAsync(slot, sample.FileName, sample.ContentType, adminId);
+    }
+
+    public static MediaSlot? BingoPageBackgroundSlotForCulture(string? culture)
+    {
+        var c = (culture ?? "da").Trim().ToLowerInvariant();
+        return c switch
+        {
+            "sv" => MediaSlot.BingoPageBackgroundSv,
+            "en" => MediaSlot.BingoPageBackgroundEn,
+            _ => MediaSlot.BingoPageBackgroundDa
+        };
+    }
+
+    /// <summary>Uploaded page background for culture, or bundled sample-media default.</summary>
+    public async Task<(byte[] Bytes, string ContentType)?> TryReadBingoPageBackgroundAsync(string? culture)
+    {
+        var slot = BingoPageBackgroundSlotForCulture(culture);
+        if (slot is null)
+        {
+            return null;
+        }
+
+        var uploaded = await TryReadBytesAsync(slot.Value);
+        if (uploaded is not null)
+        {
+            return uploaded;
+        }
+
+        var sample = BingoPageBackgroundSamples.FirstOrDefault(s => s.Slot == slot.Value);
+        if (sample.FileName is null)
+        {
+            return null;
+        }
+
+        var path = Path.Combine(env.WebRootPath, "sample-media", sample.FileName);
+        if (!File.Exists(path))
+        {
+            return null;
+        }
+
+        return (await File.ReadAllBytesAsync(path), sample.ContentType);
+    }
+
+    /// <summary>Restore one per-culture page background from wwwroot/sample-media.</summary>
+    public async Task<(bool Ok, string? Error)> ResetBingoPageBackgroundAsync(MediaSlot slot, int? adminId = null)
+    {
+        var sample = BingoPageBackgroundSamples.FirstOrDefault(s => s.Slot == slot);
         if (sample.FileName is null)
         {
             return (false, "InvalidSlot");

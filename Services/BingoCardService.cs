@@ -32,7 +32,7 @@ public class BingoCardService(
         string? bannerText,
         BingoPdfStyleOverrides? styleOverrides = null)
     {
-        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
+        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 ? platesPerPage : 6;
 
         // Deterministic sample plates so preview is stable across refreshes with the same settings.
         var rng = new Random(20261125);
@@ -66,7 +66,7 @@ public class BingoCardService(
             throw new ArgumentOutOfRangeException(nameof(plateCount), "Plate count must be 1–500.");
         }
 
-        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
+        platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 ? platesPerPage : 6;
 
         var season = await seasons.GetActiveSeasonTrackedAsync();
         var nextSeries = await NextSeriesNumberAsync(season.Id);

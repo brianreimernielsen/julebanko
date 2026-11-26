@@ -31,7 +31,13 @@ public enum MediaSlot
     /// <summary>Christmas garland left of the PDF document title.</summary>
     BingoHeaderIconLeft = 6,
     /// <summary>Christmas garland right of the PDF document title.</summary>
-    BingoHeaderIconRight = 7
+    BingoHeaderIconRight = 7,
+    /// <summary>Festive PDF page background (Danish). Brand text is drawn on top — not baked in.</summary>
+    BingoPageBackgroundDa = 8,
+    /// <summary>Festive PDF page background (Swedish).</summary>
+    BingoPageBackgroundSv = 9,
+    /// <summary>Festive PDF page background (English).</summary>
+    BingoPageBackgroundEn = 10
 }
 
 /// <summary>
