@@ -93,8 +93,10 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         var bannerColor = ParseColor(bannerHex, frameColor);
         var paper = ParseColor(bgHex, Colors.White);
         var ink = Color.FromHex("#1A1A1A");
-        var plateFill = BlendTowardWhite(scheme.ColorA, 0.88f);
-        var emptyCell = BlendTowardWhite(scheme.ColorA, 0.75f);
+        // Festive soft fills: mix scheme ColorA toward warm cream (not pure white) so crimson
+        // stays jul-agtig rather than washed candy-pink (Brian). Amounts keep banner/ink readable.
+        var plateFill = BlendTowardCream(scheme.ColorA, 0.32f);   // ~#B06461 on default crimson #8B1E1E
+        var emptyCell = BlendTowardCream(scheme.ColorA, 0.20f);   // ~#A24A48 on default crimson
 
         // Header garlands: uploaded override, else bundled sample-media defaults.
         // Full-page BingoPdfBackground image is intentionally not drawn (Brian: prefer header icons).
@@ -111,9 +113,10 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .ToList();
 
         var plateScale = PlateScaleFor(platesPerPage, fillPage);
-        // Document header: garlands + title. Icon height tracks title size.
-        var headerIconHeight = Math.Max(22f, titleSize + 4f);
-        var headerIconWidth = headerIconHeight * 3f; // assets are ~3:1
+        // Document header: one centered group [icon | title | icon] — icons track title size/width.
+        var headerIconHeight = Math.Max(20f, titleSize + 2f);
+        var headerIconWidth = headerIconHeight * 2.8f; // trimmed assets ~2.8–3:1
+        const float headerIconGap = 3f; // small fixed gap between garland art and title
         var docHeaderHeight = Math.Max(titleSize + 12f, headerIconHeight + 4f);
 
         var document = Document.Create(container =>
@@ -127,9 +130,14 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                     page.PageColor(paper);
                     page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
 
-                    page.Header().Height(docHeaderHeight).Row(header =>
+                    // One centered group [icon | title | icon]: equal RelativeItem spacers on both
+                    // sides keep the cluster glued to the title as font/size/text change (Brian).
+                    page.Header().Height(docHeaderHeight).AlignMiddle().Row(header =>
                     {
-                        header.ConstantItem(headerIconWidth).AlignMiddle().AlignLeft().Element(e =>
+                        header.RelativeItem();
+
+                        // Align toward title so any spare box space does not open a visual gap.
+                        header.ConstantItem(headerIconWidth).AlignMiddle().AlignRight().Element(e =>
                         {
                             if (leftIconBytes is { Length: > 0 })
                             {
@@ -137,19 +145,22 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                             }
                         });
 
-                        header.RelativeItem().AlignCenter().AlignMiddle().Text(banner)
+                        header.AutoItem().PaddingHorizontal(headerIconGap).AlignMiddle()
+                            .Text(banner)
                             .FontFamily(titleFontId)
                             .FontSize(titleSize)
                             .SemiBold()
                             .FontColor(bannerColor);
 
-                        header.ConstantItem(headerIconWidth).AlignMiddle().AlignRight().Element(e =>
+                        header.ConstantItem(headerIconWidth).AlignMiddle().AlignLeft().Element(e =>
                         {
                             if (rightIconBytes is { Length: > 0 })
                             {
                                 e.Height(headerIconHeight).Image(rightIconBytes).FitArea();
                             }
                         });
+
+                        header.RelativeItem();
                     });
 
                     if (fillPage)
@@ -349,19 +360,23 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         });
     }
 
-    /// <summary>Mix hex color toward white by amount (0–1) for readable plate fills.</summary>
-    private static Color BlendTowardWhite(string hex, float amount)
+    /// <summary>Warm parchment used when softening plate chrome (avoids candy-pink from pure white).</summary>
+    private const string PlateCreamHex = "#FFF8F0";
+
+    /// <summary>Mix scheme ColorA toward warm cream by amount (0–1) for festive plate fills.</summary>
+    private static Color BlendTowardCream(string hex, float amount)
     {
         amount = Math.Clamp(amount, 0f, 1f);
-        if (!ColorHex.TryNormalize(hex, out var n))
+        if (!ColorHex.TryNormalize(hex, out var n) || !ColorHex.TryNormalize(PlateCreamHex, out var cream))
         {
             return Colors.White;
         }
 
-        var rgb = ColorHex.ToRgb(n)!.Value;
-        var r = (byte)(rgb.R + (255 - rgb.R) * amount);
-        var g = (byte)(rgb.G + (255 - rgb.G) * amount);
-        var b = (byte)(rgb.B + (255 - rgb.B) * amount);
+        var from = ColorHex.ToRgb(n)!.Value;
+        var to = ColorHex.ToRgb(cream)!.Value;
+        var r = (byte)(from.R + (to.R - from.R) * amount);
+        var g = (byte)(from.G + (to.G - from.G) * amount);
+        var b = (byte)(from.B + (to.B - from.B) * amount);
         return Color.FromRGB(r, g, b);
     }
 
