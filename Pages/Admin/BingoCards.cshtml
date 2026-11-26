@@ -196,6 +196,13 @@
             }' />
 
             <partial name="_ColorPicker" model='new ColorPickerModel {
+                Name = "BingoEmptyCellColor",
+                Value = Model.BingoEmptyCellColor,
+                Label = Localizer["BingoEmptyCellColor"].Value,
+                Hint = Localizer["BingoEmptyCellColorHint"].Value
+            }' />
+
+            <partial name="_ColorPicker" model='new ColorPickerModel {
                 Name = "BingoBannerColor",
                 Value = Model.BingoBannerColor,
                 Label = Localizer["BingoBannerColor"].Value,

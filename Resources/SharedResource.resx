@@ -171,8 +171,10 @@
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Pick a predefined high-contrast scheme (two colors). The series number uses the scheme accent.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF background color</value></data>
   <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Paper/parchment under Option 2 (and when no Option 1 image). Default matches Option 1 cream (~#FCF3E4).</value></data>
-  <data name="BingoFrameColor" xml:space="preserve"><value>Frame color</value></data>
-  <data name="BingoFrameColorHint" xml:space="preserve"><value>Color of the plate border/frame.</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Plate header / frame</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Deep festive color for the plate header bar and outer border (default ~#AA1F0D).</value></data>
+  <data name="BingoEmptyCellColor" xml:space="preserve"><value>Empty cell color</value></data>
+  <data name="BingoEmptyCellColorHint" xml:space="preserve"><value>Fill for blank grid cells — keep festive but a different shade than the header (default cream-tinted red ~#C46852).</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner text color</value></data>
   <data name="BingoBannerColorHint" xml:space="preserve"><value>Color of plate banner text and the document title in the page header.</value></data>
   <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF title font</value></data>

@@ -171,8 +171,10 @@
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Välj ett fördefinierat högkontrastschema (två färger). Serienumret följer schemats accentfärg.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-bakgrundsfärg</value></data>
   <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Pappers-/pergament under Option 2 (och utan Option 1-bild). Standard matchar Option 1-cream (~#FCF3E4).</value></data>
-  <data name="BingoFrameColor" xml:space="preserve"><value>Ramfärg</value></data>
-  <data name="BingoFrameColorHint" xml:space="preserve"><value>Färg på brickans ram/kant.</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Brickrubrik / ram</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Djup festlig färg för brickans rubrikrad och ytterkant (standard ~#AA1F0D).</value></data>
+  <data name="BingoEmptyCellColor" xml:space="preserve"><value>Tomma rutor</value></data>
+  <data name="BingoEmptyCellColorHint" xml:space="preserve"><value>Fyllning för tomma rutnätsceller — festlig men en annan nyans än rubriken (standard krämtontad röd ~#C46852).</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Bannertextfärg</value></data>
   <data name="BingoBannerColorHint" xml:space="preserve"><value>Färg på brickbannertext och dokumenttiteln i sidhuvudet.</value></data>
   <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF-titelsnitt</value></data>

@@ -1,8 +1,8 @@
 namespace Julebanko.Services;
 
 /// <summary>
-/// Predefined high-contrast plate color pairs. ColorA = plate chrome / fill tint;
-/// ColorB = series number (follows the scheme). Frame and banner text are separate settings.
+/// Predefined high-contrast plate color pairs. ColorA = default plate header/frame;
+/// ColorB = series accent (follows the scheme). Empty-cell fill is a separate Design color.
 /// </summary>
 public sealed record BingoPlateScheme(
     string Id,

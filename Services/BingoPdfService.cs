@@ -20,8 +20,14 @@ public class BingoPdfService(SettingsService settings, MediaService media)
     /// <summary>Gold accent (scheme ColorB / flourish).</summary>
     public const string GoldAccentHex = "#C9A227";
 
-    /// <summary>Deep festive red sampled from Option 1 frame (~#AA1F0D).</summary>
+    /// <summary>Deep festive red sampled from Option 1 frame (~#AA1F0D) — plate header + border.</summary>
     public const string FestiveRedHex = "#AA1F0D";
+
+    /// <summary>
+    /// Cream-tinted festive red for blank grid cells (distinct from header banner).
+    /// Mix of <see cref="FestiveRedHex"/> toward parchment (~35%).
+    /// </summary>
+    public const string DefaultEmptyCellHex = "#C46852";
 
     public const string LayoutOption1 = "1";
     public const string LayoutOption2 = "2";
@@ -121,11 +127,22 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                 ? styleOverrides!.LayoutOption
                 : await settings.GetAsync(SettingKeys.BingoPdfLayoutOption, LayoutOption1));
 
-        var festiveRed = ParseColor(scheme.ColorA, ParseColor(FestiveRedHex, Colors.Red.Darken3));
+        // Header bar + plate border: Design frame color (falls back to scheme ColorA).
+        var festiveRed = ParseColor(frameHex, ParseColor(scheme.ColorA, ParseColor(FestiveRedHex, Colors.Red.Darken3)));
         var titleColor = ParseColor(bannerHex, festiveRed);
         var paper = ParseColor(bgHex, ParseColor(DefaultParchmentHex, Colors.White));
         var gold = ParseColor(GoldAccentHex, Colors.Amber.Darken2);
-        var emptyCell = festiveRed;
+
+        var emptyHex = !string.IsNullOrWhiteSpace(styleOverrides?.EmptyCellColor)
+            ? styleOverrides!.EmptyCellColor!
+            : await settings.GetAsync(SettingKeys.BingoEmptyCellColor, DefaultEmptyCellHex);
+        if (string.IsNullOrWhiteSpace(emptyHex))
+        {
+            emptyHex = DefaultEmptyCellHex;
+        }
+
+        // Blank cells: separate shade from header (cream-tinted festive red by default).
+        var emptyCell = ParseColor(emptyHex, ParseColor(DefaultEmptyCellHex, festiveRed));
         var ink = Color.FromHex("#1A1A1A");
 
         var leftIcon = await media.TryReadBingoHeaderIconAsync(MediaSlot.BingoHeaderIconLeft);
@@ -580,6 +597,7 @@ public sealed class BingoPdfStyleOverrides
     public string? PlateScheme { get; init; }
     public string? FrameColor { get; init; }
     public string? BannerColor { get; init; }
+    public string? EmptyCellColor { get; init; }
     public string? BackgroundColor { get; init; }
     public string? TitleFont { get; init; }
     public int? TitleSize { get; init; }

@@ -171,8 +171,10 @@
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Vælg et af de prædefinerede kontrastkoemaer (to farver). Serienummeret følger skemaets accentfarve.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-baggrundsfarve</value></data>
   <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papir-/pergament under Option 2 (og uden Option 1-billede). Standard matcher Option 1-creme (~#FCF3E4).</value></data>
-  <data name="BingoFrameColor" xml:space="preserve"><value>Ramme-farve</value></data>
-  <data name="BingoFrameColorHint" xml:space="preserve"><value>Farve på pladens ramme/kant.</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Pladehoved / ramme</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Dyb festlig farve til pladens hovedbjælke og ydre kant (standard ~#AA1F0D).</value></data>
+  <data name="BingoEmptyCellColor" xml:space="preserve"><value>Tomme celler</value></data>
+  <data name="BingoEmptyCellColorHint" xml:space="preserve"><value>Fyldfarve til tomme gitterceller — festlig, men en anden nuance end hovedbjælken (standard cremet rød ~#C46852).</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner-tekstfarve</value></data>
   <data name="BingoBannerColorHint" xml:space="preserve"><value>Farve på plade-bannertekst og dokumenttitlen i sidehovedet.</value></data>
   <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF-titelskrift</value></data>

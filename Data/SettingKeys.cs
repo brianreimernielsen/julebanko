@@ -50,8 +50,11 @@ public static class SettingKeys
     /// <summary>PDF page paper color under decorative page backgrounds (default parchment).</summary>
     public const string BingoPdfBackgroundColor = "BingoPdfBackgroundColor";
 
-    /// <summary>Plate frame / border color.</summary>
+    /// <summary>Plate header bar + border color.</summary>
     public const string BingoFrameColor = "BingoFrameColor";
+
+    /// <summary>Blank/empty grid cell fill (should differ from header banner).</summary>
+    public const string BingoEmptyCellColor = "BingoEmptyCellColor";
 
     /// <summary>Banner text color on plates and page header.</summary>
     public const string BingoBannerColor = "BingoBannerColor";

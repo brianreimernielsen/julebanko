@@ -32,6 +32,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     [BindProperty] public string BingoPlateScheme { get; set; } = BingoPlateSchemes.DefaultId;
     [BindProperty] public string BingoPdfBackgroundColor { get; set; } = BingoPdfService.DefaultParchmentHex;
     [BindProperty] public string BingoFrameColor { get; set; } = BingoPdfService.FestiveRedHex;
+    [BindProperty] public string BingoEmptyCellColor { get; set; } = BingoPdfService.DefaultEmptyCellHex;
     [BindProperty] public string BingoBannerColor { get; set; } = BingoPdfService.FestiveRedHex;
     [BindProperty] public string BingoPdfTitleFont { get; set; } = BingoPdfTitleFonts.DefaultFontId;
     [BindProperty] public int BingoPdfTitleSize { get; set; } = BingoPdfTitleFonts.DefaultSize;
@@ -119,6 +120,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         string? scheme = null,
         string? frame = null,
         string? bannerColor = null,
+        string? emptyCell = null,
         string? bg = null,
         string? titleFont = null,
         int? titleSize = null,
@@ -136,6 +138,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             PlateScheme = string.IsNullOrWhiteSpace(scheme) ? null : scheme.Trim(),
             FrameColor = NormalizeOptionalHex(frame),
             BannerColor = NormalizeOptionalHex(bannerColor),
+            EmptyCellColor = NormalizeOptionalHex(emptyCell),
             BackgroundColor = NormalizeOptionalHex(bg),
             TitleFont = string.IsNullOrWhiteSpace(titleFont) ? null : BingoPdfTitleFonts.Resolve(titleFont).Id,
             TitleSize = titleSize is null ? null : BingoPdfTitleFonts.ResolveSize(titleSize.Value),
@@ -177,6 +180,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         var scheme = BingoPlateSchemes.GetOrDefault(BingoPlateScheme);
         var bg = ColorHex.OrDefault(BingoPdfBackgroundColor, BingoPdfService.DefaultParchmentHex);
         var frame = ColorHex.OrDefault(BingoFrameColor, scheme.ColorA);
+        var emptyCell = ColorHex.OrDefault(BingoEmptyCellColor, BingoPdfService.DefaultEmptyCellHex);
         var banner = ColorHex.OrDefault(BingoBannerColor, frame);
         var titleFont = BingoPdfTitleFonts.Resolve(BingoPdfTitleFont).Id;
         var titleSize = BingoPdfTitleFonts.ResolveSize(BingoPdfTitleSize);
@@ -191,6 +195,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             [Data.SettingKeys.BingoPlateScheme] = scheme.Id,
             [Data.SettingKeys.BingoPdfBackgroundColor] = bg,
             [Data.SettingKeys.BingoFrameColor] = frame,
+            [Data.SettingKeys.BingoEmptyCellColor] = emptyCell,
             [Data.SettingKeys.BingoBannerColor] = banner,
             [Data.SettingKeys.BingoPdfTitleFont] = titleFont,
             [Data.SettingKeys.BingoPdfTitleSize] = titleSize.ToString(),
@@ -380,6 +385,10 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         }
 
         BingoFrameColor = ColorHex.OrDefault(frameRaw, scheme.ColorA);
+
+        BingoEmptyCellColor = ColorHex.OrDefault(
+            await settings.GetAsync(Data.SettingKeys.BingoEmptyCellColor, BingoPdfService.DefaultEmptyCellHex),
+            BingoPdfService.DefaultEmptyCellHex);
 
         var bannerRaw = await settings.GetAsync(Data.SettingKeys.BingoBannerColor, "");
         if (string.IsNullOrWhiteSpace(bannerRaw))

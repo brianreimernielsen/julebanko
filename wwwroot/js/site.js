@@ -1684,6 +1684,7 @@
     const bannerOverride = document.querySelector('input[name="BannerText"]');
     const defaultBanner = document.querySelector('input[name="BingoBannerText"]');
     const frameHex = document.querySelector('input[name="BingoFrameColor"]');
+    const emptyCellHex = document.querySelector('input[name="BingoEmptyCellColor"]');
     const bannerColorHex = document.querySelector('input[name="BingoBannerColor"]');
     const bgHex = document.querySelector('input[name="BingoPdfBackgroundColor"]');
     const titleFontSelect = document.querySelector('select[name="BingoPdfTitleFont"]');
@@ -1715,6 +1716,7 @@
       const scheme = readScheme();
       if (scheme) params.set("scheme", scheme);
       if (frameHex?.value) params.set("frame", frameHex.value);
+      if (emptyCellHex?.value) params.set("emptyCell", emptyCellHex.value);
       if (bannerColorHex?.value) params.set("bannerColor", bannerColorHex.value);
       if (bgHex?.value) params.set("bg", bgHex.value);
       if (titleFontSelect?.value) params.set("titleFont", titleFontSelect.value);
@@ -1758,6 +1760,7 @@
     bannerOverride?.addEventListener("input", schedule);
     defaultBanner?.addEventListener("input", schedule);
     frameHex?.addEventListener("input", schedule);
+    emptyCellHex?.addEventListener("input", schedule);
     bannerColorHex?.addEventListener("input", schedule);
     bgHex?.addEventListener("input", schedule);
     titleFontSelect?.addEventListener("change", schedule);
