@@ -81,6 +81,9 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             bgHex = "#FFFFFF";
         }
 
+        var showBarcode = styleOverrides?.ShowBarcode
+            ?? IsTruthy(await settings.GetAsync(SettingKeys.BingoShowBarcode, "true"));
+
         var frameColor = ParseColor(frameHex, ParseColor(scheme.ColorA, Colors.Red.Darken3));
         var bannerColor = ParseColor(bannerHex, frameColor);
         var paper = ParseColor(bgHex, Colors.White);
@@ -139,8 +142,10 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         var available = PageSizes.A4.Height - (2 * margin) - docHeaderHeight - footerEstimate - contentTopPad;
                         var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
                         var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
-                        // Compact header: brand + stacked Code128/HRI (barcode height unchanged).
-                        var headerRow = Math.Max(plateScale.BannerFont + 8f, BarcodeBlockHeight(plateScale));
+                        // Compact header: brand + optional Code128 / series digits (grid stays primary).
+                        var headerRow = Math.Max(
+                            plateScale.BannerFont + 8f,
+                            SeriesMarkerHeight(plateScale, showBarcode));
                         var chrome = (plateScale.Padding * 2) + headerRow
                             + (plateScale.LinePad * 2) + 2f + plateScale.TablePad + 4f; // +4 safety vs overflow
                         var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
@@ -161,7 +166,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                                     seriesColor,
                                     ink,
                                     fillScale,
-                                    fillHeight: true));
+                                    fillHeight: true,
+                                    showBarcode));
 
                                 if (i < pageCards.Count - 1)
                                 {
@@ -196,7 +202,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                                                     seriesColor,
                                                     ink,
                                                     plateScale,
-                                                    fillHeight: false);
+                                                    fillHeight: false,
+                                                    showBarcode);
                                             }
                                             else
                                             {
@@ -235,18 +242,23 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         Color series,
         Color ink,
         PlateScale scale,
-        bool fillHeight)
+        bool fillHeight,
+        bool showBarcode)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
-        // Short Code128 — same zero-padded digits USB wedge → Tjek; HRI drawn under bars in black.
-        var barcodePng = BingoSeriesBarcode.CreateCode128Png(
-            seriesText,
-            widthPx: (int)(scale.BarcodeWidth * 3f),
-            heightPx: (int)(scale.BarcodeHeight * 3f));
         var hriFont = HriFontSize(scale);
         var hriLine = HriLineHeight(scale);
-        var barcodeBlock = BarcodeBlockHeight(scale);
+        var markerHeight = SeriesMarkerHeight(scale, showBarcode);
+        byte[]? barcodePng = null;
+        if (showBarcode)
+        {
+            // Short Code128 — same zero-padded digits USB wedge → Tjek; HRI drawn under bars in black.
+            barcodePng = BingoSeriesBarcode.CreateCode128Png(
+                seriesText,
+                widthPx: (int)(scale.BarcodeWidth * 3f),
+                heightPx: (int)(scale.BarcodeHeight * 3f));
+        }
 
         // fillHeight: parent already set equal Height(plateHeight); keep content ≤ that (no ExtendVertical).
         _ = fillHeight;
@@ -258,14 +270,20 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .Padding(scale.Padding)
             .Column(col =>
         {
-            col.Item().Height(Math.Max(scale.BannerFont + 4f, barcodeBlock)).Row(r =>
+            col.Item().Height(Math.Max(scale.BannerFont + 4f, markerHeight)).Row(r =>
             {
                 r.RelativeItem().AlignMiddle()
                     .Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
-                // One field: Code128 on top, series digits directly under (black like the bars).
+                // Right field: optional Code128 + centered black series digits (or number-only).
                 r.ConstantItem(scale.BarcodeWidth + 4f).PaddingLeft(4f).Column(bc =>
                 {
-                    bc.Item().Height(scale.BarcodeHeight).Image(barcodePng).FitArea();
+                    if (showBarcode && barcodePng is not null)
+                    {
+                        // FitHeight + AlignCenter: no wide white slab; HRI sits under the bars.
+                        bc.Item().Height(scale.BarcodeHeight).AlignCenter()
+                            .Image(barcodePng).FitHeight();
+                    }
+
                     bc.Item().Height(hriLine).AlignCenter().AlignMiddle()
                         .Text(seriesText)
                         .FontSize(hriFont)
@@ -335,34 +353,37 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         float BarcodeWidth,
         float BarcodeHeight);
 
-    /// <summary>HRI under Code128 — compact so header only grows by one number line.</summary>
+    /// <summary>HRI / number-only — compact so header only grows by one number line.</summary>
     private static float HriFontSize(PlateScale scale) => Math.Max(7f, scale.BannerFont - 4f);
 
-    /// <summary>Line box for HRI (font + small pad so QuestPDF does not clip/overflow).</summary>
+    /// <summary>Line box for series digits (font + small pad so QuestPDF does not clip/overflow).</summary>
     private static float HriLineHeight(PlateScale scale) => HriFontSize(scale) + 3f;
 
-    /// <summary>Barcode (fixed ~24pt) + HRI line — no extra header chrome.</summary>
-    private static float BarcodeBlockHeight(PlateScale scale) =>
-        scale.BarcodeHeight + HriLineHeight(scale);
+    /// <summary>Optional Code128 (~16pt / ~5.6mm at 6/page) + series digits — grid stays primary.</summary>
+    private static float SeriesMarkerHeight(PlateScale scale, bool showBarcode) =>
+        showBarcode ? scale.BarcodeHeight + HriLineHeight(scale) : HriLineHeight(scale);
+
+    private static bool IsTruthy(string? raw) =>
+        !string.Equals(raw, "false", StringComparison.OrdinalIgnoreCase) && raw != "0";
 
     private static PlateScale PlateScaleFor(int platesPerPage, bool fillPage)
     {
         if (!fillPage)
         {
-            // Compact (>6): short Code128; header grows only for HRI under bars.
-            return new PlateScale(5, 10, 11, 22, 3, 2, 88, 18);
+            // Compact (>6): low Code128; header grows only for HRI under bars.
+            return new PlateScale(5, 10, 11, 22, 3, 2, 72, 12);
         }
 
         // ≤6 single-column fillHeight; CellMinHeight set per page.
-        // 6/page Code128 height 24pt ≈ 8.5mm; HRI sits under bars (black).
+        // 6/page Code128 height 16pt ≈ 5.6mm (scannable; not header-dominant).
         // CellFont stays locked at these sizes (not Setup-configurable).
         return platesPerPage switch
         {
-            1 => new PlateScale(10, 18, 22, 0, 8, 5, 160, 32),
-            2 => new PlateScale(8, 16, 18, 0, 6, 4, 140, 28),
-            3 => new PlateScale(6, 14, 15, 0, 4, 3, 130, 26),
-            4 => new PlateScale(5, 13, 13, 0, 3, 2, 120, 24),
-            _ => new PlateScale(3, 12, 11, 0, 1, 1, 110, 24) // 6 — short Code128 + HRI
+            1 => new PlateScale(10, 18, 22, 0, 8, 5, 120, 22),
+            2 => new PlateScale(8, 16, 18, 0, 6, 4, 110, 20),
+            3 => new PlateScale(6, 14, 15, 0, 4, 3, 100, 18),
+            4 => new PlateScale(5, 13, 13, 0, 3, 2, 95, 16),
+            _ => new PlateScale(3, 12, 11, 0, 1, 1, 90, 16) // 6 — ~5.6mm Code128 + centered HRI
         };
     }
 
@@ -406,4 +427,6 @@ public sealed class BingoPdfStyleOverrides
     public string? BackgroundColor { get; init; }
     public string? TitleFont { get; init; }
     public int? TitleSize { get; init; }
+    /// <summary>When set, overrides <see cref="SettingKeys.BingoShowBarcode"/> for preview.</summary>
+    public bool? ShowBarcode { get; init; }
 }

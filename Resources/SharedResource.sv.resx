@@ -179,6 +179,8 @@
   <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Typsnitt för dokumenttiteln i sidhuvudet. Brickans siffror behåller det tydliga standardtypsnittet.</value></data>
   <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF-titelstorlek</value></data>
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begränsade storlekar så titeln förblir utskrivbar ovanför 6 brickor per A4-sida.</value></data>
+  <data name="BingoShowBarcode" xml:space="preserve"><value>Visa streckkod</value></data>
+  <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 ovanför serienumret på brickan (USB-scanner). Stäng av för endast nummer.</value></data>
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-bakgrundsbild</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Valfri helsidesbild bakom brickorna (jpg/png/webp/gif, max 2 MB). Använd t.ex. ett julmotiv som bakgrund.</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ogiltig hex-färg. Använd 3 eller 6 hex-siffror (# valfritt).</value></data>

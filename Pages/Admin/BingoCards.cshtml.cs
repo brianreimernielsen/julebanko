@@ -35,6 +35,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     [BindProperty] public string BingoBannerColor { get; set; } = "#8B1E1E";
     [BindProperty] public string BingoPdfTitleFont { get; set; } = BingoPdfTitleFonts.DefaultFontId;
     [BindProperty] public int BingoPdfTitleSize { get; set; } = BingoPdfTitleFonts.DefaultSize;
+    [BindProperty] public bool BingoShowBarcode { get; set; } = true;
     public MediaAsset? PdfBackgroundAsset { get; private set; }
     public bool SettingsSaved { get; private set; }
     public string? MediaMessage { get; private set; }
@@ -103,6 +104,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         string? bg = null,
         string? titleFont = null,
         int? titleSize = null,
+        bool? showBarcode = null,
         bool download = false)
     {
         platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 or 8 or 9 ? platesPerPage : 6;
@@ -114,7 +116,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             BannerColor = NormalizeOptionalHex(bannerColor),
             BackgroundColor = NormalizeOptionalHex(bg),
             TitleFont = string.IsNullOrWhiteSpace(titleFont) ? null : BingoPdfTitleFonts.Resolve(titleFont).Id,
-            TitleSize = titleSize is null ? null : BingoPdfTitleFonts.ResolveSize(titleSize.Value)
+            TitleSize = titleSize is null ? null : BingoPdfTitleFonts.ResolveSize(titleSize.Value),
+            ShowBarcode = showBarcode
         };
 
         var pdfBytes = await bingo.BuildPreviewPdfAsync(platesPerPage, banner, style);
@@ -162,7 +165,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             [Data.SettingKeys.BingoFrameColor] = frame,
             [Data.SettingKeys.BingoBannerColor] = banner,
             [Data.SettingKeys.BingoPdfTitleFont] = titleFont,
-            [Data.SettingKeys.BingoPdfTitleSize] = titleSize.ToString()
+            [Data.SettingKeys.BingoPdfTitleSize] = titleSize.ToString(),
+            [Data.SettingKeys.BingoShowBarcode] = BingoShowBarcode ? "true" : "false"
         });
         SettingsSaved = true;
         await LoadAsync();
@@ -257,6 +261,10 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             await settings.GetAsync(Data.SettingKeys.BingoPdfTitleFont, BingoPdfTitleFonts.DefaultFontId)).Id;
         BingoPdfTitleSize = BingoPdfTitleFonts.ResolveSize(
             await settings.GetAsync(Data.SettingKeys.BingoPdfTitleSize, BingoPdfTitleFonts.DefaultSize.ToString()));
+
+        var showBarcodeRaw = await settings.GetAsync(Data.SettingKeys.BingoShowBarcode, "true");
+        BingoShowBarcode = !string.Equals(showBarcodeRaw, "false", StringComparison.OrdinalIgnoreCase)
+            && showBarcodeRaw != "0";
 
         var assets = await media.GetAllAsync();
         assets.TryGetValue(MediaSlot.BingoPdfBackground, out var bgAsset);

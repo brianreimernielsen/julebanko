@@ -1688,6 +1688,7 @@
     const bgHex = document.querySelector('input[name="BingoPdfBackgroundColor"]');
     const titleFontSelect = document.querySelector('select[name="BingoPdfTitleFont"]');
     const titleSizeSelect = document.querySelector('select[name="BingoPdfTitleSize"]');
+    const showBarcodeInput = document.querySelector('input[name="BingoShowBarcode"]');
 
     const readScheme = () => {
       const checked = document.querySelector('input[name="BingoPlateScheme"]:checked');
@@ -1710,6 +1711,8 @@
       if (bgHex?.value) params.set("bg", bgHex.value);
       if (titleFontSelect?.value) params.set("titleFont", titleFontSelect.value);
       if (titleSizeSelect?.value) params.set("titleSize", titleSizeSelect.value);
+      // Default ON when the checkbox is absent (non-setup viewers).
+      params.set("showBarcode", showBarcodeInput && !showBarcodeInput.checked ? "false" : "true");
       if (download) params.set("download", "true");
       // Cache-bust so object reloads when settings change.
       params.set("t", String(Date.now()));
@@ -1746,6 +1749,7 @@
     bgHex?.addEventListener("input", schedule);
     titleFontSelect?.addEventListener("change", schedule);
     titleSizeSelect?.addEventListener("change", schedule);
+    showBarcodeInput?.addEventListener("change", schedule);
     document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {
       el.addEventListener("change", schedule);
     });

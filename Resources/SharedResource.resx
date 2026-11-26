@@ -179,6 +179,8 @@
   <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Font for the document title in the page header only. Plate grid numbers stay on the clear default face.</value></data>
   <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF title size</value></data>
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Limited presets so the title stays printable above 6 plates per A4 page.</value></data>
+  <data name="BingoShowBarcode" xml:space="preserve"><value>Show barcode</value></data>
+  <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 above the series number on each plate (USB scanner). Turn off for number-only.</value></data>
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF background image</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Optional full-page image behind the plates (jpg/png/webp/gif, max 2 MB). Use e.g. a Christmas motif as background.</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>

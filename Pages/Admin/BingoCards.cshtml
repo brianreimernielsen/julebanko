@@ -95,6 +95,12 @@
             </label>
             <p class="muted" style="margin-top:0;">@Localizer["BingoBannerTextHelp"]</p>
 
+            <label class="checkbox-row">
+                <input asp-for="BingoShowBarcode" type="checkbox" />
+                @Localizer["BingoShowBarcode"]
+            </label>
+            <p class="muted" style="margin-top:0;">@Localizer["BingoShowBarcodeHint"]</p>
+
             <label>
                 @Localizer["BingoPdfTitleFont"]
                 <select asp-for="BingoPdfTitleFont">

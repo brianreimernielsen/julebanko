@@ -179,6 +179,8 @@
   <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Skrift til dokumenttitlen i sidehovedet. Pladens tal bruger den faste, tydelige standardskrift.</value></data>
   <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF-titelstørrelse</value></data>
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begrænsede størrelser, så titlen forbliver printbar over 6 plader pr. A4-side.</value></data>
+  <data name="BingoShowBarcode" xml:space="preserve"><value>Vis stregkode</value></data>
+  <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 over serienummeret på pladen (USB-scanner). Slå fra for kun tal.</value></data>
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-baggrundsbillede</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Valgfrit fuldside-billede bag pladerne (jpg/png/webp/gif, max 2 MB). Brug fx et julemotiv som baggrund.</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ugyldig hex-farve. Brug 3 eller 6 hex-cifre (uden krav om #).</value></data>
