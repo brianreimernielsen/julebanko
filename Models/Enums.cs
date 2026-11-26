@@ -36,7 +36,7 @@ public enum MediaSlot
     BingoPageBackgroundDa = 8,
     /// <summary>Option 1 full-page PDF background (Swedish). Default art has Julbingo baked in.</summary>
     BingoPageBackgroundSv = 9,
-    /// <summary>Option 1 full-page PDF background (English). No bundled default yet — upload required.</summary>
+    /// <summary>Option 1 full-page PDF background (English). Default art has Christmas Bingo baked in.</summary>
     BingoPageBackgroundEn = 10
 }
 

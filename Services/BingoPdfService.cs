@@ -153,7 +153,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         var pageBg = await media.TryReadBingoPageBackgroundAsync(culture);
         byte[]? pageBgBytes = pageBg?.Bytes;
 
-        // Option 1 needs a page bg. EN has no bundled default — fall back to Option 2 until asset arrives.
+        // Option 1 needs a page bg (DA/SV/EN bundled samples, or upload). Without one → Option 2.
         var useOption1 = layoutOption == LayoutOption1 && pageBgBytes is { Length: > 0 };
 
         var pages = cards

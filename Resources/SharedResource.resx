@@ -209,7 +209,7 @@
   <data name="BingoPageBackgroundEn" xml:space="preserve"><value>English (en) — Christmas Bingo</value></data>
   <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Restore default</value></data>
   <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Using bundled default</value></data>
-  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>No bundled English background yet (Christmas Bingo). Upload one, or use Option 2 until it arrives. Without an upload, Option 1 falls back to Option 2 for English.</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Bundled Christmas Bingo background is available; restore default or upload a custom image.</value></data>
   <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Restore the bundled default page background for this language?</value></data>
     <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Generated batches</value></data>

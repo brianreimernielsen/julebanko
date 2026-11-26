@@ -209,7 +209,7 @@
   <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelsk (en) — Christmas Bingo</value></data>
   <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Gendan standard</value></data>
   <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
-  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Ingen medfølgende engelsk baggrund endnu (Christmas Bingo). Upload én, eller brug Option 2 indtil den kommer. Uden upload falder Option 1 tilbage til Option 2 for engelsk.</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Medfølgende Christmas Bingo-baggrund er tilgængelig; gendan standard eller upload et eget billede.</value></data>
   <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Gendan den medfølgende standard-sidebaggrund for dette sprog?</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ugyldig hex-farve. Brug 3 eller 6 hex-cifre (uden krav om #).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererede batches</value></data>

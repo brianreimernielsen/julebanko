@@ -53,9 +53,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     public string HeaderIconRightDefaultUrl => "/sample-media/bankoplade-header-icon-right.png";
     public string PageBgDaDefaultUrl => "/sample-media/bankoplade-page-bg-da.png";
     public string PageBgSvDefaultUrl => "/sample-media/bankoplade-page-bg-sv.png";
-    /// <summary>EN has no bundled Option 1 default yet.</summary>
-    public string? PageBgEnDefaultUrl => null;
-    public bool HasPageBgEnDefault => false;
+    public string PageBgEnDefaultUrl => "/sample-media/bankoplade-page-bg-en.png";
     public bool SettingsSaved { get; private set; }
     public string? MediaMessage { get; private set; }
     public bool MediaError { get; private set; }
