@@ -13,30 +13,37 @@ public class SeasonModel(
 {
     public string SeasonTitle { get; private set; } = "";
     public IReadOnlyList<Models.SeasonBackup> Backups { get; private set; } = Array.Empty<Models.SeasonBackup>();
-    [BindProperty] public string Note { get; set; } = "";
-    [BindProperty] public bool Confirm { get; set; }
+    [BindProperty] public string? Note { get; set; }
+    [BindProperty] public string? PlatesNote { get; set; }
+    /// <summary>Default true: season reset also deletes BingoCardBatches + BingoCards.</summary>
+    [BindProperty] public bool IncludePlates { get; set; } = true;
     public string? Message { get; private set; }
     public bool IsError { get; private set; }
 
     public async Task OnGetAsync()
     {
         await LoadAsync();
+        IncludePlates = true;
         RestoreTempMessage();
     }
 
     public async Task<IActionResult> OnPostResetAsync()
     {
-        if (!Confirm)
-        {
-            TempData["SeasonMessage"] = localizer["ConfirmRequired"].Value;
-            TempData["SeasonMessageError"] = "1";
-            return RedirectToPage();
-        }
-
         var adminId = AdminAuthService.GetUserId(User) ?? 0;
-        var result = await reset.ResetSeasonAsync(adminId, Note);
+        var result = await reset.ResetSeasonAsync(adminId, Note ?? "", IncludePlates);
         TempData["SeasonMessage"] = result.Ok
-            ? localizer["SeasonResetOk"].Value
+            ? (IncludePlates ? localizer["SeasonResetOkWithPlates"].Value : localizer["SeasonResetOk"].Value)
+            : LocalizedError(result.Error);
+        TempData["SeasonMessageError"] = result.Ok ? null : "1";
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostResetPlatesAsync()
+    {
+        var adminId = AdminAuthService.GetUserId(User) ?? 0;
+        var result = await reset.ResetPlatesOnlyAsync(adminId, PlatesNote ?? "");
+        TempData["SeasonMessage"] = result.Ok
+            ? localizer["PlatesResetOk"].Value
             : LocalizedError(result.Error);
         TempData["SeasonMessageError"] = result.Ok ? null : "1";
         return RedirectToPage();

@@ -1,0 +1,147 @@
+@page
+@model Julebanko.Pages.Admin.BingoCheckModel
+@{
+    ViewData["Title"] = Localizer["BingoCheck"].Value;
+}
+<div class="admin-card">
+    <h2>@Localizer["BingoCheck"]</h2>
+    <p class="muted">@Localizer["BingoCheckHint"]</p>
+    <p class="bingo-check-live-meta">
+        <span class="bingo-check-drawn-pill" title="@Localizer["BingoCheckLiveHint"]">
+            @Localizer["BingoDrawnCount"]: <strong>@Model.DrawnCount</strong>
+        </span>
+        <a class="btn btn-ghost btn-small" href="/Admin/Draw">@Localizer["DrawNumbers"]</a>
+        <a class="btn btn-ghost btn-small" href="/Admin/Claims">@Localizer["PendingClaims"]</a>
+    </p>
+    <form method="get" class="form-stack bingo-check-scan-form" style="margin-bottom:1rem;" data-bingo-scanner-form>
+        <label>
+            @Localizer["BingoSeriesNumber"]
+            <input id="bingo-series-query"
+                   name="SeriesQuery"
+                   value="@Model.SeriesQuery"
+                   maxlength="32"
+                   autofocus
+                   autocomplete="off"
+                   autocorrect="off"
+                   spellcheck="false"
+                   inputmode="numeric"
+                   enterkeyhint="search"
+                   data-bingo-scanner-input
+                   placeholder="@Localizer["BingoSeriesLookupPlaceholder"]" />
+        </label>
+        <div class="inline-actions">
+            <button class="btn btn-primary" type="submit">@Localizer["BingoSearch"]</button>
+        </div>
+        <p class="muted bingo-check-scan-hint">@Localizer["BingoScannerHint"]</p>
+    </form>
+</div>
+
+@if (Model.HasExactSeriesQuery && Model.RelatedClaims.Count > 0)
+{
+    <div class="admin-card">
+        <h2>@Localizer["BingoRelatedClaims"]</h2>
+        <ul class="winner-list winner-bubbles bingo-check-claim-bubbles">
+            @foreach (var c in Model.RelatedClaims)
+            {
+                var confirmed = c.Status == ClaimStatus.Approved;
+                <li class="winner-bubble@(confirmed ? " is-confirmed" : " is-pending")"
+                    title="@(confirmed ? Localizer["ConfirmedWinner"].Value : Model.ClaimStatusLabel(c.Status))">
+                    @if (confirmed)
+                    {
+                        <partial name="_WinnerBadge" />
+                    }
+                    <span class="winner-bubble-name">@c.PlayerName</span>
+                    <span class="winner-bubble-type">@Model.WinLabel(c.WinType)</span>
+                    <span class="winner-bubble-type">@Model.ClaimStatusLabel(c.Status)</span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="admin-card">
+    <h2>@(Model.HasExactSeriesQuery ? Localizer["BingoLookupResult"].Value : Localizer["BingoBrowse"].Value)</h2>
+    <p class="muted">@Localizer["BingoShowing"]: @Model.Cards.Count / @Model.TotalCards · @Localizer["BingoCheckLiveHint"]</p>
+    @if (Model.Cards.Count == 0)
+    {
+        <p class="empty-note">@Localizer["BingoNoCards"]</p>
+    }
+    else
+    {
+        <table class="table bingo-check-table">
+            <thead>
+                <tr>
+                    <th>@Localizer["BingoSeriesNumber"]</th>
+                    <th>@Localizer["BingoHitRows"]</th>
+                    <th>@Localizer["BingoWinStatus"]</th>
+                    <th>@Localizer["BingoPreview"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model.Cards)
+            {
+                <tr>
+                    <td>
+                        <strong>@c.SeriesDisplay</strong>
+                        <span class="muted">(@Localizer["BingoBatch"] @c.BatchId)</span>
+                    </td>
+                    <td>
+                        @if (c.HitRows.Count == 0)
+                        {
+                            <span class="muted">—</span>
+                        }
+                        else
+                        {
+                            <span class="bingo-hit-row-chips">
+                                @foreach (var row in c.HitRows)
+                                {
+                                    <span class="bingo-hit-row-chip">@Localizer["BingoRowLabel", row]</span>
+                                }
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @if (c.HasApprovedWin)
+                        {
+                            <ul class="winner-list winner-bubbles bingo-check-win-bubbles">
+                                @foreach (var wt in c.ApprovedWinTypes)
+                                {
+                                    <li class="winner-bubble is-confirmed" title="@Localizer["BingoApprovedClaim"]">
+                                        <partial name="_WinnerBadge" />
+                                        <span class="winner-bubble-type">@Model.WinLabel(wt)</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="muted">@Localizer["BingoNoWin"]</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="bingo-mini-grid" aria-hidden="true">
+                            @for (var r = 0; r < 3; r++)
+                            {
+                                var rowComplete = c.HitRows.Contains(r + 1);
+                                <div class="bingo-mini-row@(rowComplete ? " is-complete" : "")">
+                                    @for (var col = 0; col < 9; col++)
+                                    {
+                                        var n = c.Grid[r, col];
+                                        var hit = n is not null && Model.DrawnSet.Contains(n.Value);
+                                        <span class="bingo-mini-cell@(n is null ? " empty" : "")@(hit ? " hit" : "")">@(n?.ToString() ?? "")</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>
+
+<p class="muted">
+    <a href="/Admin/BingoCards">@Localizer["BingoDesign"]</a>
+    — @Localizer["BingoDesignHint"]
+</p>

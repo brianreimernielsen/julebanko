@@ -59,14 +59,26 @@
   <data name="Drawn" xml:space="preserve"><value>Draget</value></data>
   <data name="NonePending" xml:space="preserve"><value>Inga väntande anmälningar.</value></data>
   <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denna tavla uppdateras automatiskt ungefär var 15:e sekund medan fliken syns.</value></data>
-  <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar alla dragna nummer och claims för den aktiva säsongen efter backup. Fortsätt?</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Detta rensar dragna nummer och claims för den aktiva säsongen efter backup. Med «Inkludera bingoplattor» raderas även batcher och plattor. Fortsätt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Återställ säsong</value></data>
+  <data name="SeasonResetNote" xml:space="preserve"><value>Anteckning</value></data>
+  <data name="IncludePlatesInReset" xml:space="preserve"><value>Inkludera bingoplattor</value></data>
+  <data name="IncludePlatesInResetHint" xml:space="preserve"><value>Standard: på. Raderar BingoCardBatches och BingoCards tillsammans med säsongen. Backupen innehåller plattorna så Återställ kan skapa dem igen.</value></data>
+  <data name="ResetPlatesOnly" xml:space="preserve"><value>Återställ endast plattor</value></data>
+  <data name="ConfirmResetPlatesOnly" xml:space="preserve"><value>Raderar alla bingoplattor och batcher för den aktiva säsongen efter backup. Dragna nummer och claims behålls (plattlänkar tas bort). Fortsätt?</value></data>
+  <data name="PlatesResetOk" xml:space="preserve"><value>Bingoplattor återställda och backup skapad.</value></data>
+  <data name="SeasonResetOkWithPlates" xml:space="preserve"><value>Säsong och bingoplattor återställda; backup skapad.</value></data>
+  <data name="Backups" xml:space="preserve"><value>Backups</value></data>
+  <data name="NoBackupsYet" xml:space="preserve"><value>Inga backups ännu.</value></data>
+  <data name="BackupWhenUtc" xml:space="preserve"><value>Tidpunkt (UTC)</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>återställd</value></data>
+  <data name="BackupPlatesHint" xml:space="preserve"><value>När en backup innehåller plattor (säsongsåterställning med plattor, eller «Återställ endast plattor») återställer Ångra även batcher och plattor.</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Återställ backup</value></data>
-  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Återställ den här backupen? Aktuell säsongs dragna nummer och claims ersätts.</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Återställ den här backupen? Aktuell säsongsdata (och plattor om de finns i backupen) ersätts.</value></data>
   <data name="Undo" xml:space="preserve"><value>Ångra</value></data>
   <data name="OK" xml:space="preserve"><value>OK</value></data>
   <data name="BackupRestoredOk" xml:space="preserve"><value>Backup återställd.</value></data>
-  <data name="SeasonResetOk" xml:space="preserve"><value>Säsong återställd och backup skapad.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Säsong återställd och backup skapad (plattor behållna).</value></data>
   <data name="ConfirmRequired" xml:space="preserve"><value>Bekräftelse krävs.</value></data>
   <data name="BackupNotFound" xml:space="preserve"><value>Backup hittades inte.</value></data>
   <data name="BackupAlreadyRestored" xml:space="preserve"><value>Den här backupen har redan återställts.</value></data>
@@ -114,4 +126,110 @@
   <data name="FontsPreviewHint" xml:space="preserve"><value>Varje alternativ nedan visas i det typsnittet så du kan jämföra innan du sparar.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Varumärkes- / hero-typsnitt</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Spel-brödtexttypsnitt</value></data>
+  <data name="BingoCards" xml:space="preserve"><value>Bingobrickor</value></data>
+  <data name="BingoDesign" xml:space="preserve"><value>Designera/generera brickor</value></data>
+  <data name="BingoDesignHint" xml:space="preserve"><value>PDF-inställningar, generering och nedladdning av batcher.</value></data>
+  <data name="BingoCheck" xml:space="preserve"><value>Kontrollera brickor</value></data>
+  <data name="BingoCheckHint" xml:space="preserve"><value>Daglig adminväg: sök serienummer (eller skanna), se celler/rader träffade av dragna nummer, och godkända claims med stjärna.</value></data>
+  <data name="BingoCheckLiveHint" xml:space="preserve"><value>Markering följer säsongens dragna nummer live.</value></data>
+  <data name="BingoDrawnCount" xml:space="preserve"><value>Dragna nummer</value></data>
+  <data name="BingoRowLabel" xml:space="preserve"><value>Rad {0}</value></data>
+  <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>T.ex. 000123 eller skanna streckkod</value></data>
+  <data name="BingoScannerHint" xml:space="preserve"><value>USB-scanner: håll fältet i fokus — Enter (keyboard wedge) skickar sökningen.</value></data>
+  <data name="BingoLookupResult" xml:space="preserve"><value>Sökresultat</value></data>
+  <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims för denna bricka</value></data>
+  <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="BingoApprovedClaim" xml:space="preserve"><value>Godkänd claim</value></data>
+  <data name="BingoCardsGenerate" xml:space="preserve"><value>Generera brickor</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Ange antal sidor; skapar sidor × brickor per sida unika danska bankoplattor (1–90), sparar dem och laddar ner en PDF (standard 6 per A4-sida).</value></data>
+  <data name="BingoPageCount" xml:space="preserve"><value>Antal sidor</value></data>
+  <data name="BingoPageCountHint" xml:space="preserve"><value>Antal brickor = antal sidor × brickor per sida.</value></data>
+  <data name="BingoPlateCount" xml:space="preserve"><value>Antal brickor</value></data>
+  <data name="BingoPlatesPerPage" xml:space="preserve"><value>Brickor per sida</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Batch-banner (åsidosätter standard)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Tomt = använd standardbanner</value></data>
+  <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Valfri åsidosättning för denna batch. Tomt: använder Setup-standardbanner; är den också tom används varumärkesnamnet.</value></data>
+  <data name="BingoBatchNote" xml:space="preserve"><value>Anteckning (valfritt)</value></data>
+  <data name="BingoGenerateDownload" xml:space="preserve"><value>Generera och ladda ner PDF</value></data>
+  <data name="BingoLayoutPreview" xml:space="preserve"><value>Förhandsvisning</value></data>
+  <data name="BingoLayoutPreviewHint" xml:space="preserve"><value>En exempel-sida med dummy-serienummer (990001…). Skapar inte brickor i databasen och förbrukar inte riktiga serienummer. Uppdateras när du ändrar brickor/sida, banner, schema eller färger.</value></data>
+  <data name="BingoRefreshPreview" xml:space="preserve"><value>Uppdatera förhandsvisning</value></data>
+  <data name="BingoDownloadPreviewPdf" xml:space="preserve"><value>Ladda ner förhandsvisnings-PDF</value></data>
+  <data name="BingoPreviewFallback" xml:space="preserve"><value>Webbläsaren kan inte visa PDF här. Ladda ner i stället:</value></data>
+  <data name="BingoSettings" xml:space="preserve"><value>Brickinställningar</value></data>
+  <data name="BingoAutoValidate" xml:space="preserve"><value>Autovalidera claims mot brickor</value></data>
+  <data name="BingoAutoValidateHint" xml:space="preserve"><value>Varnar spelaren vid mismatch men tillåter fortfarande manuell inlämning. E-post markerar claims som inte autovaliderades.</value></data>
+  <data name="BingoPrizeOncePerType" xml:space="preserve"><value>Högst ett pris per vinsttyp per spelare</value></data>
+  <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Standard: varje spelare får högst en 1-rad, en 2-rader och en full bricka per säsong. Stäng av för att tillåta upprepningar.</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Standardbanner (Setup)</value></data>
+  <data name="BingoBannerTextHint" xml:space="preserve"><value>Tomt = varumärkesnamn</value></data>
+  <data name="BingoBannerTextHelp" xml:space="preserve"><value>Standardtext på alla PDF-brickor. Tomt: varumärkesnamnet. Batch-banner kan åsidosätta per generering.</value></data>
+  <data name="BingoPrimaryColor" xml:space="preserve"><value>Brickans primärfärg (hex, valfritt)</value></data>
+  <data name="BingoAccentColor" xml:space="preserve"><value>Brickans accentfärg (hex, valfritt)</value></data>
+  <data name="BingoFestiveLook" xml:space="preserve"><value>Festlig PDF-stil</value></data>
+  <data name="BingoPlateScheme" xml:space="preserve"><value>Brickans färgschema</value></data>
+  <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Välj ett fördefinierat högkontrastschema (två färger). Serienumret följer schemats accentfärg.</value></data>
+  <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-bakgrundsfärg</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Pappers-/pergament under Option 2 (och utan Option 1-bild). Standard matchar Option 1-cream (~#FCF3E4).</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Brickrubrik / ram</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Djup festlig färg för brickans rubrikrad och ytterkant (standard ~#AA1F0D).</value></data>
+  <data name="BingoEmptyCellColor" xml:space="preserve"><value>Tomma rutor</value></data>
+  <data name="BingoEmptyCellColorHint" xml:space="preserve"><value>Fyllning för tomma rutnätsceller — festlig men en annan nyans än rubriken (standard krämtontad röd ~#C46852).</value></data>
+  <data name="BingoBannerColor" xml:space="preserve"><value>Bannertextfärg</value></data>
+  <data name="BingoBannerColorHint" xml:space="preserve"><value>Färg på brickbannertext och dokumenttiteln i sidhuvudet.</value></data>
+  <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF-titelsnitt</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Typsnitt för Option 2-dokumenttiteln i sidhuvudet (Option 1 använder varumärket inbakat i bakgrundsgrafiken).</value></data>
+  <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF-titelstorlek</value></data>
+  <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begränsade storlekar så titeln förblir utskrivbar ovanför 6 brickor per A4-sida.</value></data>
+  <data name="BingoPlateHeaderFont" xml:space="preserve"><value>Brickrubrikens typsnitt</value></data>
+  <data name="BingoPlateHeaderFontHint" xml:space="preserve"><value>Typsnitt för varumärkestexten på varje brickas röda rubrikrad. Samma utskrivbara typsnittslista som PDF-titeln.</value></data>
+  <data name="BingoPlateNumberFont" xml:space="preserve"><value>Bricknummer-typsnitt</value></data>
+  <data name="BingoPlateNumberFontHint" xml:space="preserve"><value>Typsnitt för rutnätets siffror (och seriesiffror under streckkoden). Samma utskrivbara typsnittslista som PDF-titeln.</value></data>
+  <data name="BingoShowBarcode" xml:space="preserve"><value>Visa streckkod</value></data>
+  <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 ovanför serienumret på brickan (USB-scanner). Stäng av för endast nummer.</value></data>
+  <data name="BingoShowPageNumbers" xml:space="preserve"><value>Visa sidnummer</value></data>
+  <data name="BingoShowPageNumbersHint" xml:space="preserve"><value>Sidfot «Brand sida/antal». Av som standard — slå på om du vill ha tryckta sidnummer.</value></data>
+  <data name="BingoHeaderIcons" xml:space="preserve"><value>Sidhuvud-julikoner</value></data>
+  <data name="BingoHeaderIconsHint" xml:space="preserve"><value>Girlanger till vänster och höger om bricktiteln i PDF-sidhuvudet. Standard följer med appen; ladda upp egna eller återställ. Svart bakgrund behandlas som genomskinlig.</value></data>
+  <data name="BingoHeaderIconLeft" xml:space="preserve"><value>Vänster ikon</value></data>
+  <data name="BingoHeaderIconRight" xml:space="preserve"><value>Höger ikon</value></data>
+  <data name="BingoHeaderIconRestore" xml:space="preserve"><value>Återställ standard</value></data>
+  <data name="BingoHeaderIconUsingDefault" xml:space="preserve"><value>Använder medföljande standard</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-bakgrundsbild (äldre)</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Denna äldre helsidesuppladdning används inte. Använd sidbakgrunder per språk nedan, eller radera den kvarvarande filen här.</value></data>
+  <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Återställ den medföljande standardjulikonen för denna sida?</value></data>
+  <data name="BingoPdfLayoutOption" xml:space="preserve"><value>PDF-layout</value></data>
+  <data name="BingoPdfLayoutOptionHint" xml:space="preserve"><value>Option 1 använder helsidesbakgrund per språk (varumärke inbakat i standardgrafiken). Option 2 ritar live redigerbart varumärke med sidoikoner. Standard är Option 1.</value></data>
+  <data name="BingoPdfLayoutOption1" xml:space="preserve"><value>Option 1 — Helsidesbakgrund (standard)</value></data>
+  <data name="BingoPdfLayoutOption2" xml:space="preserve"><value>Option 2 — Live varumärke + ikoner (rak titel)</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Option 1-sidbakgrunder (per språk)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Helsidesgrafik för Option 1. Standard: danska = Julebanko, svenska = Julbingo (varumärke inbakat). Eget varumärke → ladda upp matchande bild eller använd Option 2. Engelska har ännu ingen medföljande standard — uppladdning krävs.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Danska (da) — Julebanko</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svenska (sv) — Julbingo</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelska (en) — Christmas Bingo</value></data>
+  <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Återställ standard</value></data>
+  <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Använder medföljande standard</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Medföljande Christmas Bingo-bakgrund finns; återställ standard eller ladda upp en egen bild.</value></data>
+  <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Återställ den medföljande standardsidbakgrunden för detta språk?</value></data>
+  <data name="ColorHexInvalid" xml:space="preserve"><value>Ogiltig hex-färg. Använd 3 eller 6 hex-siffror (# valfritt).</value></data>
+  <data name="BingoBatches" xml:space="preserve"><value>Genererade batcher</value></data>
+  <data name="BingoNoBatches" xml:space="preserve"><value>Inga batcher ännu.</value></data>
+  <data name="BingoDownloadPdf" xml:space="preserve"><value>Ladda ner PDF</value></data>
+  <data name="BingoBrowse" xml:space="preserve"><value>Bläddra bland säsongens brickor</value></data>
+  <data name="BingoSeriesNumber" xml:space="preserve"><value>Serienummer</value></data>
+  <data name="BingoSearch" xml:space="preserve"><value>Sök</value></data>
+  <data name="BingoShowing" xml:space="preserve"><value>Visar</value></data>
+  <data name="BingoNoCards" xml:space="preserve"><value>Inga brickor hittades.</value></data>
+  <data name="BingoHitRows" xml:space="preserve"><value>Rader träffade</value></data>
+  <data name="BingoWinStatus" xml:space="preserve"><value>Vinststatus</value></data>
+  <data name="BingoPreview" xml:space="preserve"><value>Bricka</value></data>
+  <data name="BingoBatch" xml:space="preserve"><value>Batch</value></data>
+  <data name="BingoNoWin" xml:space="preserve"><value>Ingen godkänd vinst</value></data>
+  <data name="BingoValidation" xml:space="preserve"><value>Validering</value></data>
+  <data name="SeriesRequired" xml:space="preserve"><value>Ange brickans serienummer.</value></data>
+  <data name="SeriesNotFound" xml:space="preserve"><value>Ingen bricka med det serienumret hittades. Du kan fortfarande skicka in för manuell granskning.</value></data>
+  <data name="ValidationMismatch" xml:space="preserve"><value>De dragna siffrorna matchar inte denna bricka för den valda vinsttypen. Du kan fortfarande skicka in för manuell granskning.</value></data>
+  <data name="PrizeOnceUsed" xml:space="preserve"><value>Du har redan en anmälan för denna vinsttyp den här säsongen.</value></data>
+  <data name="ForceSubmitClaim" xml:space="preserve"><value>Skicka ändå för manuell granskning</value></data>
+  <data name="ForceSubmitHint" xml:space="preserve"><value>Din anmälan markeras som ej autovaliderad så en admin kan kontrollera den.</value></data>
 </root>

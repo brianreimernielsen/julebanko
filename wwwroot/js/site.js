@@ -21,10 +21,10 @@
     }, ms);
   });
 
-  // Season backup restore: require Undo / OK before POSTing restore.
-  document.querySelectorAll("[data-backup-restore]").forEach((root) => {
-    const openBtn = root.querySelector("[data-restore-open]");
-    const cancelBtn = root.querySelector("[data-restore-cancel]");
+  // Season reset / plates reset / backup restore: require Undo / OK before POST.
+  document.querySelectorAll("[data-confirm-panel]").forEach((root) => {
+    const openBtn = root.querySelector("[data-confirm-open], [data-restore-open]");
+    const cancelBtn = root.querySelector("[data-confirm-cancel], [data-restore-cancel]");
     const panel = root.querySelector(".backup-restore-confirm");
     if (!openBtn || !panel) return;
 
@@ -1587,4 +1587,248 @@
     });
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+
+/* Shared admin color picker: hex without required #, RGB readout, native swatch */
+(() => {
+  const HEX_RE = /^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+
+  const normalize = (raw) => {
+    const m = String(raw || "").trim().match(HEX_RE);
+    if (!m) return null;
+    let d = m[1];
+    if (d.length === 3) d = d.split("").map((c) => c + c).join("");
+    return "#" + d.toUpperCase();
+  };
+
+  const toRgbText = (hex) => {
+    const n = normalize(hex);
+    if (!n) return "";
+    const r = parseInt(n.slice(1, 3), 16);
+    const g = parseInt(n.slice(3, 5), 16);
+    const b = parseInt(n.slice(5, 7), 16);
+    return `RGB ${r}, ${g}, ${b}`;
+  };
+
+  const bindPicker = (root) => {
+    const hexInput = root.querySelector("[data-color-hex]");
+    const swatch = root.querySelector("[data-color-swatch]");
+    const rgbEl = root.querySelector("[data-color-rgb]");
+    const errEl = root.querySelector("[data-color-error]");
+    if (!hexInput || !swatch) return;
+
+    const showRgb = root.getAttribute("data-show-rgb") !== "0";
+
+    const apply = (raw, { fromSwatch } = {}) => {
+      const n = normalize(raw);
+      if (!n) {
+        root.classList.add("is-invalid");
+        if (errEl) errEl.hidden = false;
+        return false;
+      }
+      root.classList.remove("is-invalid");
+      if (errEl) errEl.hidden = true;
+      hexInput.value = n.slice(1);
+      if (!fromSwatch) swatch.value = n;
+      if (showRgb && rgbEl) rgbEl.textContent = toRgbText(n);
+      return true;
+    };
+
+    hexInput.addEventListener("input", () => {
+      const digits = hexInput.value.replace(/[^0-9A-Fa-f]/g, "").slice(0, 6);
+      if (digits !== hexInput.value) hexInput.value = digits;
+      if (digits.length === 3 || digits.length === 6) apply(digits);
+      else {
+        root.classList.add("is-invalid");
+        if (errEl) errEl.hidden = false;
+        if (showRgb && rgbEl) rgbEl.textContent = "";
+      }
+    });
+
+    hexInput.addEventListener("blur", () => {
+      apply(hexInput.value);
+    });
+
+    swatch.addEventListener("input", () => {
+      apply(swatch.value, { fromSwatch: true });
+    });
+
+    const form = root.closest("form");
+    form?.addEventListener("submit", (e) => {
+      if (!apply(hexInput.value)) {
+        e.preventDefault();
+        hexInput.focus();
+      }
+    });
+  };
+
+  const bootPickers = () => {
+    document.querySelectorAll("[data-color-picker]").forEach(bindPicker);
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootPickers, { once: true });
+  } else {
+    bootPickers();
+  }
+
+  // Design page: in-browser PDF layout preview (dummy series; no DB writes).
+  const bootBingoPreview = () => {
+    const root = document.querySelector("[data-bingo-layout-preview]");
+    if (!root) return;
+
+    const base = root.getAttribute("data-preview-base");
+    const objectEl = root.querySelector(".bingo-preview-object");
+    if (!base || !objectEl) return;
+
+    const platesSelect = document.querySelector('select[name="PlatesPerPage"]');
+    const bannerOverride = document.querySelector('input[name="BannerText"]');
+    const defaultBanner = document.querySelector('input[name="BingoBannerText"]');
+    const frameHex = document.querySelector('input[name="BingoFrameColor"]');
+    const emptyCellHex = document.querySelector('input[name="BingoEmptyCellColor"]');
+    const bannerColorHex = document.querySelector('input[name="BingoBannerColor"]');
+    const bgHex = document.querySelector('input[name="BingoPdfBackgroundColor"]');
+    const titleFontSelect = document.querySelector('select[name="BingoPdfTitleFont"]');
+    const titleSizeSelect = document.querySelector('select[name="BingoPdfTitleSize"]');
+    const plateHeaderFontSelect = document.querySelector('select[name="BingoPlateHeaderFont"]');
+    const plateNumberFontSelect = document.querySelector('select[name="BingoPlateNumberFont"]');
+    const showBarcodeInput = document.querySelector('input[name="BingoShowBarcode"]');
+    const showPageNumbersInput = document.querySelector('input[name="BingoShowPageNumbers"]');
+
+    const readScheme = () => {
+      const checked = document.querySelector('input[name="BingoPlateScheme"]:checked');
+      return checked ? checked.value : "";
+    };
+
+    const readLayout = () => {
+      const checked = document.querySelector('input[name="BingoPdfLayoutOption"]:checked');
+      return checked && checked.value === "2" ? "2" : "1";
+    };
+
+    const buildUrl = (download) => {
+      const params = new URLSearchParams();
+      const plates = Number(platesSelect?.value || "6");
+      params.set("platesPerPage", String([1, 2, 3, 4, 6].includes(plates) ? plates : 6));
+
+      const override = (bannerOverride?.value || "").trim();
+      if (override) params.set("banner", override);
+      else if ((defaultBanner?.value || "").trim()) params.set("banner", defaultBanner.value.trim());
+
+      const scheme = readScheme();
+      if (scheme) params.set("scheme", scheme);
+      if (frameHex?.value) params.set("frame", frameHex.value);
+      if (emptyCellHex?.value) params.set("emptyCell", emptyCellHex.value);
+      if (bannerColorHex?.value) params.set("bannerColor", bannerColorHex.value);
+      if (bgHex?.value) params.set("bg", bgHex.value);
+      if (titleFontSelect?.value) params.set("titleFont", titleFontSelect.value);
+      if (titleSizeSelect?.value) params.set("titleSize", titleSizeSelect.value);
+      if (plateHeaderFontSelect?.value) params.set("plateHeaderFont", plateHeaderFontSelect.value);
+      if (plateNumberFontSelect?.value) params.set("plateNumberFont", plateNumberFontSelect.value);
+      // Default ON when the checkbox is absent (non-setup viewers).
+      params.set("showBarcode", showBarcodeInput && !showBarcodeInput.checked ? "false" : "true");
+      // Default OFF when absent (matches Design default).
+      params.set("showPageNumbers", showPageNumbersInput && showPageNumbersInput.checked ? "true" : "false");
+      params.set("layout", readLayout());
+      if (download) params.set("download", "true");
+      // Cache-bust so object reloads when settings change.
+      params.set("t", String(Date.now()));
+      const sep = base.includes("?") ? "&" : "?";
+      const url = base + sep + params.toString();
+      // Chrome PDF viewer: hide nav pane / fit page width in the embed (ignored on download).
+      if (!download) {
+        return url + "#navpanes=0&zoom=page-width";
+      }
+      return url;
+    };
+
+    let timer = 0;
+    const refresh = () => {
+      const url = buildUrl(false);
+      objectEl.setAttribute("data", url);
+      document.querySelectorAll("[data-bingo-preview-download]").forEach((a) => {
+        a.setAttribute("href", buildUrl(true));
+      });
+    };
+
+    const schedule = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(refresh, 280);
+    };
+
+    refresh();
+
+    platesSelect?.addEventListener("change", schedule);
+    bannerOverride?.addEventListener("input", schedule);
+    defaultBanner?.addEventListener("input", schedule);
+    frameHex?.addEventListener("input", schedule);
+    emptyCellHex?.addEventListener("input", schedule);
+    bannerColorHex?.addEventListener("input", schedule);
+    bgHex?.addEventListener("input", schedule);
+    titleFontSelect?.addEventListener("change", schedule);
+    titleSizeSelect?.addEventListener("change", schedule);
+    plateHeaderFontSelect?.addEventListener("change", schedule);
+    plateNumberFontSelect?.addEventListener("change", schedule);
+    showBarcodeInput?.addEventListener("change", schedule);
+    showPageNumbersInput?.addEventListener("change", schedule);
+    document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {
+      el.addEventListener("change", schedule);
+    });
+    document.querySelectorAll('input[name="BingoPdfLayoutOption"]').forEach((el) => {
+      el.addEventListener("change", schedule);
+    });
+    document.querySelectorAll("[data-color-swatch]").forEach((el) => {
+      el.addEventListener("input", schedule);
+    });
+    document.querySelectorAll("[data-bingo-preview-refresh]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        refresh();
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootBingoPreview, { once: true });
+  } else {
+    bootBingoPreview();
+  }
+
+  // Tjek plader: USB keyboard-wedge scanners type digits then Enter.
+  // Keep the series field focused and selected so the next scan replaces the previous.
+  const bootBingoScannerField = () => {
+    const input = document.querySelector("[data-bingo-scanner-input]");
+    if (!input || !(input instanceof HTMLInputElement)) return;
+
+    const focusSelect = () => {
+      input.focus({ preventScroll: true });
+      // Select-all so a new wedge scan overwrites without backspacing.
+      try {
+        input.select();
+      } catch {
+        /* ignore — some browsers reject select() when hidden */
+      }
+    };
+
+    input.addEventListener("focus", () => {
+      try {
+        input.select();
+      } catch {
+        /* ignore */
+      }
+    });
+
+    // Trim stray CR/LF some wedges leave before native Enter submit.
+    input.form?.addEventListener("submit", () => {
+      input.value = (input.value || "").trim();
+    });
+
+    focusSelect();
+    // After GET navigation the field may lose caret timing — re-assert once paint settles.
+    window.requestAnimationFrame(focusSelect);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootBingoScannerField, { once: true });
+  } else {
+    bootBingoScannerField();
+  }
 })();

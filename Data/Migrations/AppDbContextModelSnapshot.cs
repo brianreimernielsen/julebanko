@@ -17,7 +17,7 @@ namespace Julebanko.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "10.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -80,6 +80,89 @@ namespace Julebanko.Data.Migrations
                     b.ToTable("AppSettings");
                 });
 
+            modelBuilder.Entity("Julebanko.Models.BingoCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CellsJson")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Fingerprint")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<int>("SeasonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeriesNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchId");
+
+                    b.HasIndex("SeasonId", "Fingerprint")
+                        .IsUnique();
+
+                    b.HasIndex("SeasonId", "SeriesNumber")
+                        .IsUnique();
+
+                    b.ToTable("BingoCards");
+                });
+
+            modelBuilder.Entity("Julebanko.Models.BingoCardBatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BannerText")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByAdminId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("PlateCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlatesPerPage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeasonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByAdminId");
+
+                    b.HasIndex("SeasonId");
+
+                    b.ToTable("BingoCardBatches");
+                });
+
             modelBuilder.Entity("Julebanko.Models.Claim", b =>
                 {
                     b.Property<int>("Id")
@@ -87,6 +170,12 @@ namespace Julebanko.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AutoValidated")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("BingoCardId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -105,13 +194,26 @@ namespace Julebanko.Data.Migrations
                     b.Property<int>("SeasonId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SeriesNumber")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ValidationNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("ValidationStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("WinType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BingoCardId");
 
                     b.HasIndex("ReviewedByAdminId");
 
@@ -263,8 +365,51 @@ namespace Julebanko.Data.Migrations
                     b.ToTable("SeasonBackups");
                 });
 
+            modelBuilder.Entity("Julebanko.Models.BingoCard", b =>
+                {
+                    b.HasOne("Julebanko.Models.BingoCardBatch", "Batch")
+                        .WithMany("Cards")
+                        .HasForeignKey("BatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Julebanko.Models.Season", "Season")
+                        .WithMany("BingoCards")
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Batch");
+
+                    b.Navigation("Season");
+                });
+
+            modelBuilder.Entity("Julebanko.Models.BingoCardBatch", b =>
+                {
+                    b.HasOne("Julebanko.Models.AdminUser", "CreatedByAdmin")
+                        .WithMany()
+                        .HasForeignKey("CreatedByAdminId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Julebanko.Models.Season", "Season")
+                        .WithMany("BingoCardBatches")
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByAdmin");
+
+                    b.Navigation("Season");
+                });
+
             modelBuilder.Entity("Julebanko.Models.Claim", b =>
                 {
+                    b.HasOne("Julebanko.Models.BingoCard", "BingoCard")
+                        .WithMany()
+                        .HasForeignKey("BingoCardId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Julebanko.Models.AdminUser", "ReviewedByAdmin")
                         .WithMany()
                         .HasForeignKey("ReviewedByAdminId")
@@ -275,6 +420,8 @@ namespace Julebanko.Data.Migrations
                         .HasForeignKey("SeasonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BingoCard");
 
                     b.Navigation("ReviewedByAdmin");
 
@@ -321,8 +468,17 @@ namespace Julebanko.Data.Migrations
                     b.Navigation("Season");
                 });
 
+            modelBuilder.Entity("Julebanko.Models.BingoCardBatch", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
             modelBuilder.Entity("Julebanko.Models.Season", b =>
                 {
+                    b.Navigation("BingoCardBatches");
+
+                    b.Navigation("BingoCards");
+
                     b.Navigation("Claims");
 
                     b.Navigation("DrawnNumbers");

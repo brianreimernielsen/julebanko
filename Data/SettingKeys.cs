@@ -25,4 +25,61 @@ public static class SettingKeys
     public const string BrandNameSv = "BrandNameSv";
     public const string BrandFont = "BrandFont";
     public const string BodyFont = "BodyFont";
+
+    /// <summary>When true, claims are checked against plate + drawn numbers on submit.</summary>
+    public const string BingoAutoValidate = "BingoAutoValidate";
+
+    /// <summary>When true (default), each player may win each win type at most once per season.</summary>
+    public const string BingoPrizeOncePerType = "BingoPrizeOncePerType";
+
+    /// <summary>Default PDF plate banner (Setup). Empty → BrandName. Batch banner overrides this.</summary>
+    public const string BingoBannerText = "BingoBannerText";
+
+    /// <summary>Legacy; prefer BingoPlateScheme + BingoFrameColor / BingoBannerColor.</summary>
+    public const string BingoPrimaryColor = "BingoPrimaryColor";
+
+    /// <summary>Legacy; series color now comes from BingoPlateScheme.</summary>
+    public const string BingoAccentColor = "BingoAccentColor";
+
+    /// <summary>Deprecated — festive checkbox removed; keep key for old DBs.</summary>
+    public const string BingoFestiveLook = "BingoFestiveLook";
+
+    /// <summary>Id from <see cref="Services.BingoPlateSchemes"/> (two contrasting plate colors; series follows).</summary>
+    public const string BingoPlateScheme = "BingoPlateScheme";
+
+    /// <summary>PDF page paper color under decorative page backgrounds (default parchment).</summary>
+    public const string BingoPdfBackgroundColor = "BingoPdfBackgroundColor";
+
+    /// <summary>Plate header bar + border color.</summary>
+    public const string BingoFrameColor = "BingoFrameColor";
+
+    /// <summary>Blank/empty grid cell fill (should differ from header banner).</summary>
+    public const string BingoEmptyCellColor = "BingoEmptyCellColor";
+
+    /// <summary>Banner text color on plates and page header.</summary>
+    public const string BingoBannerColor = "BingoBannerColor";
+
+    /// <summary>PDF document-title font id from <see cref="Services.BingoPdfTitleFonts"/>.</summary>
+    public const string BingoPdfTitleFont = "BingoPdfTitleFont";
+
+    /// <summary>PDF document-title font size (pt) from <see cref="Services.BingoPdfTitleFonts.Sizes"/>.</summary>
+    public const string BingoPdfTitleSize = "BingoPdfTitleSize";
+
+    /// <summary>Font for individual plate header brand text (same catalog as title fonts).</summary>
+    public const string BingoPlateHeaderFont = "BingoPlateHeaderFont";
+
+    /// <summary>Font for plate grid numbers (same catalog as title fonts).</summary>
+    public const string BingoPlateNumberFont = "BingoPlateNumberFont";
+
+    /// <summary>When true (default), plate header shows Code128 + series digits; when false, series digits only.</summary>
+    public const string BingoShowBarcode = "BingoShowBarcode";
+
+    /// <summary>When true, footer shows «Brand page/total». Default false (Brian: optional).</summary>
+    public const string BingoShowPageNumbers = "BingoShowPageNumbers";
+
+    /// <summary>
+    /// PDF layout: "1" = full-page bg per language (Option 1, default);
+    /// "2" = composed live brand + L/R icons (Option 2).
+    /// </summary>
+    public const string BingoPdfLayoutOption = "BingoPdfLayoutOption";
 }

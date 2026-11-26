@@ -25,5 +25,32 @@ public enum MediaSlot
     PlayerHero = 1,
     PlayerBackground = 2,
     PlayerDecoration = 3,
-    PlayerHeroLogo = 4
+    PlayerHeroLogo = 4,
+    /// <summary>Legacy full-page PDF background (no longer drawn; upload UI de-emphasized).</summary>
+    BingoPdfBackground = 5,
+    /// <summary>Christmas garland left of the PDF document title.</summary>
+    BingoHeaderIconLeft = 6,
+    /// <summary>Christmas garland right of the PDF document title.</summary>
+    BingoHeaderIconRight = 7,
+    /// <summary>Option 1 full-page PDF background (Danish). Default art has Julebanko baked in.</summary>
+    BingoPageBackgroundDa = 8,
+    /// <summary>Option 1 full-page PDF background (Swedish). Default art has Julbingo baked in.</summary>
+    BingoPageBackgroundSv = 9,
+    /// <summary>Option 1 full-page PDF background (English). Default art has Christmas Bingo baked in.</summary>
+    BingoPageBackgroundEn = 10
+}
+
+/// <summary>
+/// Result of checking a claim's plate series against drawn numbers.
+/// </summary>
+public enum ClaimValidationStatus
+{
+    /// <summary>Auto-validate off or not yet checked.</summary>
+    NotChecked = 0,
+    /// <summary>Plate found and claimed win type matches drawn numbers.</summary>
+    Valid = 1,
+    /// <summary>Plate found but drawn numbers do not support the claimed win type.</summary>
+    Mismatch = 2,
+    /// <summary>No plate with that series in the active season.</summary>
+    CardNotFound = 3
 }

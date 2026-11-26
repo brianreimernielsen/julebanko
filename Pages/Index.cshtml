@@ -116,12 +116,27 @@
                 }
                 else if (Model.StatusIsError)
                 {
-                    <div class="alert alert-error">@Localizer["YourName"]</div>
+                    <div class="alert alert-error">
+                        @if (Model.StatusMessage == "SeriesRequired")
+                        { @Localizer["SeriesRequired"] }
+                        else if (Model.StatusMessage == "SeriesNotFound")
+                        { @Localizer["SeriesNotFound"] }
+                        else if (Model.StatusMessage == "ValidationMismatch")
+                        { @Localizer["ValidationMismatch"] }
+                        else if (Model.StatusMessage == "PrizeOnceUsed")
+                        { @Localizer["PrizeOnceUsed"] }
+                        else
+                        { @Localizer["YourName"] }
+                    </div>
                 }
                 <form method="post" class="form-stack">
                     <label>
                         @Localizer["YourName"]
                         <input asp-for="PlayerName" maxlength="120" required />
+                    </label>
+                    <label>
+                        @Localizer["BingoSeriesNumber"]
+                        <input asp-for="SeriesNumber" maxlength="32" inputmode="numeric" required />
                     </label>
                     <label>
                         @Localizer["WinType"]
@@ -131,7 +146,16 @@
                             <option value="@((int)WinType.FullBoard)">@Localizer["FullBoard"]</option>
                         </select>
                     </label>
-                    <button class="btn btn-primary" type="submit">@Localizer["Send"]</button>
+                    @if (Model.ShowForceSubmit)
+                    {
+                        <input type="hidden" name="ForceDespiteMismatch" value="true" />
+                        <button class="btn btn-primary" type="submit">@Localizer["ForceSubmitClaim"]</button>
+                        <p class="muted">@Localizer["ForceSubmitHint"]</p>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" type="submit">@Localizer["Send"]</button>
+                    }
                 </form>
             </div>
         </div>

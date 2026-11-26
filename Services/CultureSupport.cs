@@ -9,7 +9,7 @@ public static class CultureSupport
     public const string Swedish = "sv";
 
     public const string DefaultBrandDa = "Julebanko";
-    public const string DefaultBrandEn = "Julebanko";
+    public const string DefaultBrandEn = "Christmas Bingo";
     public const string DefaultBrandSv = "Julbingo";
 
     public static readonly string[] Supported = [Danish, English, Swedish];

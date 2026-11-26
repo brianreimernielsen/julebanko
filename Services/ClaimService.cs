@@ -1,10 +1,15 @@
+using System.Globalization;
 using Julebanko.Data;
 using Julebanko.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Julebanko.Services;
 
-public class ClaimService(AppDbContext db, SeasonService seasons, EmailService email)
+public class ClaimService(
+    AppDbContext db,
+    SeasonService seasons,
+    EmailService email,
+    BingoCardService bingoCards)
 {
     public async Task<IReadOnlyList<Claim>> GetApprovedAsync()
     {
@@ -19,6 +24,7 @@ public class ClaimService(AppDbContext db, SeasonService seasons, EmailService e
     {
         var season = await seasons.GetActiveSeasonAsync();
         return await db.Claims.AsNoTracking()
+            .Include(c => c.BingoCard)
             .Where(c => c.SeasonId == season.Id && c.Status == ClaimStatus.Pending)
             .OrderBy(c => c.CreatedAt)
             .ToListAsync();
@@ -53,17 +59,85 @@ public class ClaimService(AppDbContext db, SeasonService seasons, EmailService e
             .ToListAsync();
     }
 
-    public async Task<(bool Ok, string? Error)> SubmitAsync(string playerName, WinType winType)
+    /// <summary>Claims (any status) that reference the given series number.</summary>
+    public async Task<IReadOnlyList<Claim>> GetBySeriesAsync(string? seriesInput)
+    {
+        if (!BingoPlateGenerator.TryParseSeries(seriesInput, out var series))
+        {
+            return Array.Empty<Claim>();
+        }
+
+        var season = await seasons.GetActiveSeasonAsync();
+        var display = BingoPlateGenerator.FormatSeries(series);
+        // Also match raw digit strings players may have typed without zero-padding.
+        var raw = series.ToString(CultureInfo.InvariantCulture);
+        return await db.Claims.AsNoTracking()
+            .Where(c => c.SeasonId == season.Id
+                        && c.SeriesNumber != null
+                        && (c.SeriesNumber == display || c.SeriesNumber == raw))
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<(bool Ok, string? Error, ClaimValidationStatus? Validation, bool? ForceAllowed)>
+        SubmitAsync(string playerName, WinType winType, string? seriesNumber, bool forceDespiteMismatch = false)
     {
         playerName = (playerName ?? string.Empty).Trim();
         if (string.IsNullOrWhiteSpace(playerName) || playerName.Length > 120)
         {
-            return (false, "NameRequired");
+            return (false, "NameRequired", null, null);
         }
 
         if (!Enum.IsDefined(winType))
         {
-            return (false, "InvalidWinType");
+            return (false, "InvalidWinType", null, null);
+        }
+
+        if (!BingoPlateGenerator.TryParseSeries(seriesNumber, out var seriesParsed))
+        {
+            return (false, "SeriesRequired", null, null);
+        }
+
+        var seriesDisplay = BingoPlateGenerator.FormatSeries(seriesParsed);
+
+        if (await bingoCards.IsPrizeOncePerTypeAsync())
+        {
+            if (await bingoCards.PlayerAlreadyHasWinTypeAsync(playerName, winType))
+            {
+                return (false, "PrizeOnceUsed", null, null);
+            }
+        }
+
+        var autoValidate = await bingoCards.IsAutoValidateEnabledAsync();
+        ClaimValidationStatus validationStatus = ClaimValidationStatus.NotChecked;
+        var autoValidated = false;
+        string? validationNote = null;
+        int? bingoCardId = null;
+
+        if (autoValidate)
+        {
+            var result = await bingoCards.ValidateClaimAsync(seriesDisplay, winType);
+            validationStatus = result.Status;
+            autoValidated = result.AutoValidated;
+            validationNote = result.Note;
+            bingoCardId = result.CardId;
+
+            if (validationStatus != ClaimValidationStatus.Valid && !forceDespiteMismatch)
+            {
+                return (false, validationStatus == ClaimValidationStatus.CardNotFound
+                        ? "SeriesNotFound"
+                        : "ValidationMismatch",
+                    validationStatus,
+                    true);
+            }
+        }
+        else
+        {
+            // Still resolve card id when possible for admin lookup.
+            var card = await bingoCards.FindBySeriesAsync(seriesParsed);
+            bingoCardId = card?.Id;
+            validationStatus = ClaimValidationStatus.NotChecked;
+            validationNote = "AutoValidateOff";
         }
 
         var season = await seasons.GetActiveSeasonTrackedAsync();
@@ -73,7 +147,12 @@ public class ClaimService(AppDbContext db, SeasonService seasons, EmailService e
             PlayerName = playerName,
             WinType = winType,
             Status = ClaimStatus.Pending,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            SeriesNumber = seriesDisplay,
+            BingoCardId = bingoCardId,
+            ValidationStatus = validationStatus,
+            AutoValidated = autoValidated,
+            ValidationNote = validationNote
         };
         db.Claims.Add(claim);
         await db.SaveChangesAsync();
@@ -87,7 +166,7 @@ public class ClaimService(AppDbContext db, SeasonService seasons, EmailService e
             // Claim is saved; mail failure should not roll back the player claim.
         }
 
-        return (true, null);
+        return (true, null, validationStatus, null);
     }
 
     public async Task<(bool Ok, string? Error)> ReviewAsync(int claimId, bool approve, int adminId)
@@ -153,6 +232,19 @@ public class ClaimService(AppDbContext db, SeasonService seasons, EmailService e
             WinType.TwoRows => da ? "2 rækker" : sv ? "2 rader" : "2 rows",
             WinType.FullBoard => da ? "Fuld plade" : sv ? "Full bricka" : "Full board",
             _ => type.ToString()
+        };
+    }
+
+    public static string ValidationLabel(ClaimValidationStatus status, string culture)
+    {
+        var da = culture.StartsWith("da", StringComparison.OrdinalIgnoreCase);
+        var sv = culture.StartsWith("sv", StringComparison.OrdinalIgnoreCase);
+        return status switch
+        {
+            ClaimValidationStatus.Valid => da ? "Matcher plade" : sv ? "Matchar bricka" : "Matches plate",
+            ClaimValidationStatus.Mismatch => da ? "Matcher ikke" : sv ? "Matchar inte" : "Does not match",
+            ClaimValidationStatus.CardNotFound => da ? "Plade ikke fundet" : sv ? "Bricka saknas" : "Plate not found",
+            _ => da ? "Ikke tjekket" : sv ? "Ej kontrollerad" : "Not checked"
         };
     }
 }

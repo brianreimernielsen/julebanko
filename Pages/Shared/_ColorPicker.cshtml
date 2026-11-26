@@ -1,0 +1,42 @@
+@model Julebanko.Models.ColorPickerModel
+@{
+    var digits = ColorHex.DisplayDigits(Model.Value);
+    var normalized = ColorHex.TryNormalize(Model.Value, out var n) ? n : "#808080";
+    var rgb = ColorHex.ToRgb(normalized);
+    var rgbText = rgb is null ? "" : $"RGB {rgb.Value.R}, {rgb.Value.G}, {rgb.Value.B}";
+    var inputId = "cp-" + Model.Name.Replace('.', '-');
+}
+<div class="color-picker" data-color-picker data-show-rgb="@(Model.ShowRgb ? "1" : "0")">
+    <label class="color-picker-label" for="@inputId-hex">@Model.Label</label>
+    @if (!string.IsNullOrWhiteSpace(Model.Hint))
+    {
+        <p class="muted color-picker-hint">@Model.Hint</p>
+    }
+    <div class="color-picker-controls">
+        <input type="color"
+               class="color-picker-swatch"
+               id="@inputId-swatch"
+               value="@normalized"
+               aria-label="@Model.Label"
+               data-color-swatch />
+        <span class="color-picker-hash" aria-hidden="true">#</span>
+        <input type="text"
+               class="color-picker-hex"
+               id="@inputId-hex"
+               name="@Model.Name"
+               value="@digits"
+               maxlength="6"
+               spellcheck="false"
+               autocomplete="off"
+               inputmode="text"
+               pattern="[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}"
+               @(Model.Required ? "required" : null)
+               data-color-hex
+               aria-describedby="@inputId-rgb @inputId-err" />
+        @if (Model.ShowRgb)
+        {
+            <span class="color-picker-rgb" id="@inputId-rgb" data-color-rgb>@rgbText</span>
+        }
+    </div>
+    <p class="color-picker-error" id="@inputId-err" data-color-error hidden>@Localizer["ColorHexInvalid"]</p>
+</div>

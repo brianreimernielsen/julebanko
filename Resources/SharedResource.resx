@@ -59,14 +59,26 @@
   <data name="Drawn" xml:space="preserve"><value>Drawn</value></data>
   <data name="NonePending" xml:space="preserve"><value>No pending claims.</value></data>
   <data name="AdminAutoRefreshHint" xml:space="preserve"><value>This board refreshes automatically about every 15 seconds while the tab is visible.</value></data>
-  <data name="ConfirmReset" xml:space="preserve"><value>This will clear all drawn numbers and claims for the active season after creating a backup. Continue?</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>This clears drawn numbers and claims for the active season after backup. With “Include bingo plates” checked, batches and plates are deleted too. Continue?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Reset season</value></data>
+  <data name="SeasonResetNote" xml:space="preserve"><value>Note</value></data>
+  <data name="IncludePlatesInReset" xml:space="preserve"><value>Include bingo plates</value></data>
+  <data name="IncludePlatesInResetHint" xml:space="preserve"><value>Default: on. Deletes BingoCardBatches and BingoCards with the season. The backup stores the plates so Restore can bring them back.</value></data>
+  <data name="ResetPlatesOnly" xml:space="preserve"><value>Reset plates only</value></data>
+  <data name="ConfirmResetPlatesOnly" xml:space="preserve"><value>Deletes all bingo plates and batches for the active season after backup. Drawn numbers and claims are kept (plate links cleared). Continue?</value></data>
+  <data name="PlatesResetOk" xml:space="preserve"><value>Bingo plates reset and backup created.</value></data>
+  <data name="SeasonResetOkWithPlates" xml:space="preserve"><value>Season and bingo plates reset; backup created.</value></data>
+  <data name="Backups" xml:space="preserve"><value>Backups</value></data>
+  <data name="NoBackupsYet" xml:space="preserve"><value>No backups yet.</value></data>
+  <data name="BackupWhenUtc" xml:space="preserve"><value>When (UTC)</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>restored</value></data>
+  <data name="BackupPlatesHint" xml:space="preserve"><value>When a backup includes plates (season reset with plates, or “Reset plates only”), Undo also restores batches and plates.</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Restore backup</value></data>
-  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Restore this backup? Current season draws and claims will be replaced.</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Restore this backup? Current season data (and plates, if present in the backup) will be replaced.</value></data>
   <data name="Undo" xml:space="preserve"><value>Undo</value></data>
   <data name="OK" xml:space="preserve"><value>OK</value></data>
   <data name="BackupRestoredOk" xml:space="preserve"><value>Backup restored.</value></data>
-  <data name="SeasonResetOk" xml:space="preserve"><value>Season reset and backup created.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Season reset and backup created (plates kept).</value></data>
   <data name="ConfirmRequired" xml:space="preserve"><value>Confirm is required.</value></data>
   <data name="BackupNotFound" xml:space="preserve"><value>Backup not found.</value></data>
   <data name="BackupAlreadyRestored" xml:space="preserve"><value>This backup was already restored.</value></data>
@@ -114,4 +126,110 @@
   <data name="FontsPreviewHint" xml:space="preserve"><value>Each option below is shown in that font so you can compare before saving.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Brand / hero font</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Player body font</value></data>
+  <data name="BingoCards" xml:space="preserve"><value>Bingo plates</value></data>
+  <data name="BingoDesign" xml:space="preserve"><value>Design/generate plates</value></data>
+  <data name="BingoDesignHint" xml:space="preserve"><value>PDF settings, generation, and batch downloads.</value></data>
+  <data name="BingoCheck" xml:space="preserve"><value>Check plates</value></data>
+  <data name="BingoCheckHint" xml:space="preserve"><value>Daily admin path: look up a series (or scan), see cells/rows hit by drawn numbers, and approved claims with a star.</value></data>
+  <data name="BingoCheckLiveHint" xml:space="preserve"><value>Highlights follow the season's drawn numbers live.</value></data>
+  <data name="BingoDrawnCount" xml:space="preserve"><value>Numbers drawn</value></data>
+  <data name="BingoRowLabel" xml:space="preserve"><value>Row {0}</value></data>
+  <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>E.g. 000123 or scan barcode</value></data>
+  <data name="BingoScannerHint" xml:space="preserve"><value>USB scanner: keep this field focused — it submits on Enter (keyboard wedge).</value></data>
+  <data name="BingoLookupResult" xml:space="preserve"><value>Lookup result</value></data>
+  <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims for this plate</value></data>
+  <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="BingoApprovedClaim" xml:space="preserve"><value>Approved claim</value></data>
+  <data name="BingoCardsGenerate" xml:space="preserve"><value>Generate plates</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Enter number of pages; creates pages × plates-per-page unique Danish banko plates (1–90), stores them, and downloads a PDF (default 6 per A4 page).</value></data>
+  <data name="BingoPageCount" xml:space="preserve"><value>Number of pages</value></data>
+  <data name="BingoPageCountHint" xml:space="preserve"><value>Total plates = pages × plates per page.</value></data>
+  <data name="BingoPlateCount" xml:space="preserve"><value>Number of plates</value></data>
+  <data name="BingoPlatesPerPage" xml:space="preserve"><value>Plates per page</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Batch banner (overrides default)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Blank = use default banner</value></data>
+  <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Optional override for this batch. Blank: uses the Setup default banner; if that is also blank, uses the brand name.</value></data>
+  <data name="BingoBatchNote" xml:space="preserve"><value>Note (optional)</value></data>
+  <data name="BingoGenerateDownload" xml:space="preserve"><value>Generate &amp; download PDF</value></data>
+  <data name="BingoLayoutPreview" xml:space="preserve"><value>Layout preview</value></data>
+  <data name="BingoLayoutPreviewHint" xml:space="preserve"><value>One sample page with dummy series numbers (990001…). Does not create plates in the database and does not consume real series numbers. Updates when you change plates/page, banner, scheme, or colors.</value></data>
+  <data name="BingoRefreshPreview" xml:space="preserve"><value>Refresh preview</value></data>
+  <data name="BingoDownloadPreviewPdf" xml:space="preserve"><value>Download preview PDF</value></data>
+  <data name="BingoPreviewFallback" xml:space="preserve"><value>Your browser cannot display PDFs here. Download instead:</value></data>
+  <data name="BingoSettings" xml:space="preserve"><value>Plate settings</value></data>
+  <data name="BingoAutoValidate" xml:space="preserve"><value>Auto-validate claims against plates</value></data>
+  <data name="BingoAutoValidateHint" xml:space="preserve"><value>Warns the player on mismatch but still allows a manual submit. Email marks claims that were not auto-validated.</value></data>
+  <data name="BingoPrizeOncePerType" xml:space="preserve"><value>One prize per win type per player</value></data>
+  <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Default: each player may claim at most one 1-row, one 2-row, and one full board in the season. Turn off to allow repeats.</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Default banner (Setup)</value></data>
+  <data name="BingoBannerTextHint" xml:space="preserve"><value>Blank = brand name</value></data>
+  <data name="BingoBannerTextHelp" xml:space="preserve"><value>Default text on all PDF plates. Blank: brand name. Batch banner can override per generation.</value></data>
+  <data name="BingoPrimaryColor" xml:space="preserve"><value>Plate primary color (hex, optional)</value></data>
+  <data name="BingoAccentColor" xml:space="preserve"><value>Plate accent color (hex, optional)</value></data>
+  <data name="BingoFestiveLook" xml:space="preserve"><value>Festive PDF styling</value></data>
+  <data name="BingoPlateScheme" xml:space="preserve"><value>Plate color scheme</value></data>
+  <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Pick a predefined high-contrast scheme (two colors). The series number uses the scheme accent.</value></data>
+  <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF background color</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Paper/parchment under Option 2 (and when no Option 1 image). Default matches Option 1 cream (~#FCF3E4).</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Plate header / frame</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Deep festive color for the plate header bar and outer border (default ~#AA1F0D).</value></data>
+  <data name="BingoEmptyCellColor" xml:space="preserve"><value>Empty cell color</value></data>
+  <data name="BingoEmptyCellColorHint" xml:space="preserve"><value>Fill for blank grid cells — keep festive but a different shade than the header (default cream-tinted red ~#C46852).</value></data>
+  <data name="BingoBannerColor" xml:space="preserve"><value>Banner text color</value></data>
+  <data name="BingoBannerColorHint" xml:space="preserve"><value>Color of plate banner text and the document title in the page header.</value></data>
+  <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF title font</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Font for the Option 2 document title in the page header (Option 1 uses the brand baked into the background art).</value></data>
+  <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF title size</value></data>
+  <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Limited presets so the title stays printable above 6 plates per A4 page.</value></data>
+  <data name="BingoPlateHeaderFont" xml:space="preserve"><value>Plate header font</value></data>
+  <data name="BingoPlateHeaderFontHint" xml:space="preserve"><value>Font for the brand text on each plate’s red header bar. Same printable font list as the PDF title.</value></data>
+  <data name="BingoPlateNumberFont" xml:space="preserve"><value>Plate number font</value></data>
+  <data name="BingoPlateNumberFontHint" xml:space="preserve"><value>Font for the grid numbers (and series digits under the barcode). Same printable font list as the PDF title.</value></data>
+  <data name="BingoShowBarcode" xml:space="preserve"><value>Show barcode</value></data>
+  <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 above the series number on each plate (USB scanner). Turn off for number-only.</value></data>
+  <data name="BingoShowPageNumbers" xml:space="preserve"><value>Show page numbers</value></data>
+  <data name="BingoShowPageNumbersHint" xml:space="preserve"><value>Footer «Brand page/total». Off by default — turn on if you want printed page numbers.</value></data>
+  <data name="BingoHeaderIcons" xml:space="preserve"><value>Header Christmas icons</value></data>
+  <data name="BingoHeaderIconsHint" xml:space="preserve"><value>Garlands left and right of the plate title in the PDF header. Defaults ship with the app; upload your own or restore defaults. Black backdrop is treated as transparent.</value></data>
+  <data name="BingoHeaderIconLeft" xml:space="preserve"><value>Left icon</value></data>
+  <data name="BingoHeaderIconRight" xml:space="preserve"><value>Right icon</value></data>
+  <data name="BingoHeaderIconRestore" xml:space="preserve"><value>Restore default</value></data>
+  <data name="BingoHeaderIconUsingDefault" xml:space="preserve"><value>Using bundled default</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF background image (legacy)</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>This legacy full-page upload is unused. Use per-language page backgrounds below, or delete the leftover file here.</value></data>
+  <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Restore the bundled default Christmas icon for this side?</value></data>
+  <data name="BingoPdfLayoutOption" xml:space="preserve"><value>PDF layout</value></data>
+  <data name="BingoPdfLayoutOptionHint" xml:space="preserve"><value>Option 1 uses a full-page background per language (brand baked into the default art). Option 2 draws a live editable brand with side icons. Default is Option 1.</value></data>
+  <data name="BingoPdfLayoutOption1" xml:space="preserve"><value>Option 1 — Full-page background (default)</value></data>
+  <data name="BingoPdfLayoutOption2" xml:space="preserve"><value>Option 2 — Live brand + icons (straight title)</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Option 1 page backgrounds (by language)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Full-page art for Option 1. Defaults: Danish = Julebanko, Swedish = Julbingo (brand baked in). Custom brand → upload a matching image or use Option 2. English has no bundled default yet — upload required.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Danish (da) — Julebanko</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Swedish (sv) — Julbingo</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>English (en) — Christmas Bingo</value></data>
+  <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Restore default</value></data>
+  <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Using bundled default</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Bundled Christmas Bingo background is available; restore default or upload a custom image.</value></data>
+  <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Restore the bundled default page background for this language?</value></data>
+    <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>
+  <data name="BingoBatches" xml:space="preserve"><value>Generated batches</value></data>
+  <data name="BingoNoBatches" xml:space="preserve"><value>No batches yet.</value></data>
+  <data name="BingoDownloadPdf" xml:space="preserve"><value>Download PDF</value></data>
+  <data name="BingoBrowse" xml:space="preserve"><value>Browse season plates</value></data>
+  <data name="BingoSeriesNumber" xml:space="preserve"><value>Series number</value></data>
+  <data name="BingoSearch" xml:space="preserve"><value>Search</value></data>
+  <data name="BingoShowing" xml:space="preserve"><value>Showing</value></data>
+  <data name="BingoNoCards" xml:space="preserve"><value>No plates found.</value></data>
+  <data name="BingoHitRows" xml:space="preserve"><value>Rows hit</value></data>
+  <data name="BingoWinStatus" xml:space="preserve"><value>Win status</value></data>
+  <data name="BingoPreview" xml:space="preserve"><value>Plate</value></data>
+  <data name="BingoBatch" xml:space="preserve"><value>Batch</value></data>
+  <data name="BingoNoWin" xml:space="preserve"><value>No approved win</value></data>
+  <data name="BingoValidation" xml:space="preserve"><value>Validation</value></data>
+  <data name="SeriesRequired" xml:space="preserve"><value>Enter your plate series number.</value></data>
+  <data name="SeriesNotFound" xml:space="preserve"><value>No plate with that series number was found. You can still submit for manual review.</value></data>
+  <data name="ValidationMismatch" xml:space="preserve"><value>The drawn numbers do not match this plate for the win type you selected. You can still submit for manual review.</value></data>
+  <data name="PrizeOnceUsed" xml:space="preserve"><value>You already have a claim for this win type this season.</value></data>
+  <data name="ForceSubmitClaim" xml:space="preserve"><value>Submit anyway for manual review</value></data>
+  <data name="ForceSubmitHint" xml:space="preserve"><value>Your claim will be marked as not auto-validated so an admin can check it.</value></data>
 </root>

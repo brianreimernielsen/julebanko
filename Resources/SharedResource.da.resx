@@ -59,14 +59,26 @@
   <data name="Drawn" xml:space="preserve"><value>Trukket</value></data>
   <data name="NonePending" xml:space="preserve"><value>Ingen afventende meldinger.</value></data>
   <data name="AdminAutoRefreshHint" xml:space="preserve"><value>Denne tavle opdateres automatisk ca. hvert 15. sekund, mens fanen er synlig.</value></data>
-  <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter alle trukne tal og claims for den aktive sæson efter backup. Fortsæt?</value></data>
+  <data name="ConfirmReset" xml:space="preserve"><value>Dette sletter trukne tal og claims for den aktive sæson efter backup. Med «Medtag bankoplader» slettes også batches og plader. Fortsæt?</value></data>
   <data name="ResetSeason" xml:space="preserve"><value>Nulstil sæson</value></data>
+  <data name="SeasonResetNote" xml:space="preserve"><value>Note</value></data>
+  <data name="IncludePlatesInReset" xml:space="preserve"><value>Medtag bankoplader</value></data>
+  <data name="IncludePlatesInResetHint" xml:space="preserve"><value>Standard: til. Sletter BingoCardBatches og BingoCards sammen med sæsonen. Backup indeholder pladerne, så Gendan kan genskabe dem.</value></data>
+  <data name="ResetPlatesOnly" xml:space="preserve"><value>Nulstil plader</value></data>
+  <data name="ConfirmResetPlatesOnly" xml:space="preserve"><value>Sletter alle bankoplader og batches for den aktive sæson efter backup. Trukne tal og claims beholdes (plade-link fjernes). Fortsæt?</value></data>
+  <data name="PlatesResetOk" xml:space="preserve"><value>Bankoplader nulstillet og backup oprettet.</value></data>
+  <data name="SeasonResetOkWithPlates" xml:space="preserve"><value>Sæson og bankoplader nulstillet; backup oprettet.</value></data>
+  <data name="Backups" xml:space="preserve"><value>Backups</value></data>
+  <data name="NoBackupsYet" xml:space="preserve"><value>Ingen backups endnu.</value></data>
+  <data name="BackupWhenUtc" xml:space="preserve"><value>Tidspunkt (UTC)</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>gendannet</value></data>
+  <data name="BackupPlatesHint" xml:space="preserve"><value>Når en backup indeholder plader (sæson-reset med plader, eller «Nulstil plader»), gendanner Undo også batches og plader.</value></data>
   <data name="UndoBackup" xml:space="preserve"><value>Gendan backup</value></data>
-  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Gendan denne backup? Aktuelle sæsons trukne tal og claims bliver erstattet.</value></data>
+  <data name="ConfirmRestoreBackup" xml:space="preserve"><value>Gendan denne backup? Aktuelle sæsons data (og plader, hvis de er i backup) bliver erstattet.</value></data>
   <data name="Undo" xml:space="preserve"><value>Fortryd</value></data>
   <data name="OK" xml:space="preserve"><value>OK</value></data>
   <data name="BackupRestoredOk" xml:space="preserve"><value>Backup gendannet.</value></data>
-  <data name="SeasonResetOk" xml:space="preserve"><value>Sæson nulstillet og backup oprettet.</value></data>
+  <data name="SeasonResetOk" xml:space="preserve"><value>Sæson nulstillet og backup oprettet (plader beholdt).</value></data>
   <data name="ConfirmRequired" xml:space="preserve"><value>Bekræftelse er påkrævet.</value></data>
   <data name="BackupNotFound" xml:space="preserve"><value>Backup ikke fundet.</value></data>
   <data name="BackupAlreadyRestored" xml:space="preserve"><value>Denne backup er allerede gendannet.</value></data>
@@ -114,4 +126,110 @@
   <data name="FontsPreviewHint" xml:space="preserve"><value>Hver mulighed nedenfor vises i den pågældende skrifttype, så du kan sammenligne før du gemmer.</value></data>
   <data name="BrandFont" xml:space="preserve"><value>Brand- / hero-skrift</value></data>
   <data name="BodyFont" xml:space="preserve"><value>Spiller-brødtekstskrift</value></data>
+  <data name="BingoCards" xml:space="preserve"><value>Bankoplader</value></data>
+  <data name="BingoDesign" xml:space="preserve"><value>Design/generér plader</value></data>
+  <data name="BingoDesignHint" xml:space="preserve"><value>PDF-indstillinger, generering og download af batches.</value></data>
+  <data name="BingoCheck" xml:space="preserve"><value>Tjek plader</value></data>
+  <data name="BingoCheckHint" xml:space="preserve"><value>Daglig admin-sti: slå serienummer op (eller skan), se ramte celler/rækker mod trukne tal, og godkendte claims med stjerne.</value></data>
+  <data name="BingoCheckLiveHint" xml:space="preserve"><value>Markering følger sæsonens trukne tal live.</value></data>
+  <data name="BingoDrawnCount" xml:space="preserve"><value>Trukne tal</value></data>
+  <data name="BingoRowLabel" xml:space="preserve"><value>Række {0}</value></data>
+  <data name="BingoSeriesLookupPlaceholder" xml:space="preserve"><value>Fx 000123 eller skan stregkode</value></data>
+  <data name="BingoScannerHint" xml:space="preserve"><value>USB-scanner: hold feltet i fokus — Enter (keyboard wedge) sender søgningen.</value></data>
+  <data name="BingoLookupResult" xml:space="preserve"><value>Opslag</value></data>
+  <data name="BingoRelatedClaims" xml:space="preserve"><value>Claims for denne plade</value></data>
+  <data name="BingoClaimStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="BingoApprovedClaim" xml:space="preserve"><value>Godkendt claim</value></data>
+  <data name="BingoCardsGenerate" xml:space="preserve"><value>Generér plader</value></data>
+  <data name="BingoCardsGenerateHint" xml:space="preserve"><value>Angiv antal sider; der oprettes sider × plader pr. side unikke danske bankoplader (1–90), gemmes i databasen, og PDF downloades (standard 6 pr. A4-side).</value></data>
+  <data name="BingoPageCount" xml:space="preserve"><value>Antal sider</value></data>
+  <data name="BingoPageCountHint" xml:space="preserve"><value>Antal plader = antal sider × plader pr. side.</value></data>
+  <data name="BingoPlateCount" xml:space="preserve"><value>Antal plader</value></data>
+  <data name="BingoPlatesPerPage" xml:space="preserve"><value>Plader pr. side</value></data>
+  <data name="BingoBannerOverride" xml:space="preserve"><value>Batch-banner (overstyrer standard)</value></data>
+  <data name="BingoBannerOverrideHint" xml:space="preserve"><value>Tom = brug standard-banner</value></data>
+  <data name="BingoBannerOverrideHelp" xml:space="preserve"><value>Valgfri overstyring for dette batch. Tom: bruger Setup-standardbanner; er den også tom, bruges brandnavnet.</value></data>
+  <data name="BingoBatchNote" xml:space="preserve"><value>Note (valgfri)</value></data>
+  <data name="BingoGenerateDownload" xml:space="preserve"><value>Generér og download PDF</value></data>
+  <data name="BingoLayoutPreview" xml:space="preserve"><value>Forhåndsvisning</value></data>
+  <data name="BingoLayoutPreviewHint" xml:space="preserve"><value>Én eksempel-side med dummy-serienumre (990001…). Opretter ikke plader i databasen og bruger ikke rigtige serienumre. Opdateres når du ændrer plader/side, banner, skema eller farver.</value></data>
+  <data name="BingoRefreshPreview" xml:space="preserve"><value>Opdater forhåndsvisning</value></data>
+  <data name="BingoDownloadPreviewPdf" xml:space="preserve"><value>Download forhåndsvisnings-PDF</value></data>
+  <data name="BingoPreviewFallback" xml:space="preserve"><value>Browseren kan ikke vise PDF her. Brug download i stedet:</value></data>
+  <data name="BingoSettings" xml:space="preserve"><value>Plade-indstillinger</value></data>
+  <data name="BingoAutoValidate" xml:space="preserve"><value>Auto-valider claims mod plader</value></data>
+  <data name="BingoAutoValidateHint" xml:space="preserve"><value>Advarer spilleren ved mismatch, men tillader stadig manuel indsendelse. E-mail markerer claims der ikke blev auto-valideret.</value></data>
+  <data name="BingoPrizeOncePerType" xml:space="preserve"><value>Højst én præmie pr. vintype pr. spiller</value></data>
+  <data name="BingoPrizeOncePerTypeHint" xml:space="preserve"><value>Standard: hver spiller må højst melde én 1-række, én 2-rækker og én fuld plade i sæsonen. Slå fra for at tillade gentagelser.</value></data>
+  <data name="BingoBannerText" xml:space="preserve"><value>Standard-banner (Setup)</value></data>
+  <data name="BingoBannerTextHint" xml:space="preserve"><value>Tom = brandnavn</value></data>
+  <data name="BingoBannerTextHelp" xml:space="preserve"><value>Standardtekst på alle PDF-plader. Tom: brandnavnet. Batch-banner kan overstyre pr. generering.</value></data>
+  <data name="BingoPrimaryColor" xml:space="preserve"><value>Plade-primærfarve (hex, valgfri)</value></data>
+  <data name="BingoAccentColor" xml:space="preserve"><value>Plade-accentfarve (hex, valgfri)</value></data>
+  <data name="BingoFestiveLook" xml:space="preserve"><value>Juleagtig PDF-stil</value></data>
+  <data name="BingoPlateScheme" xml:space="preserve"><value>Pladefarveskema</value></data>
+  <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Vælg et af de prædefinerede kontrastkoemaer (to farver). Serienummeret følger skemaets accentfarve.</value></data>
+  <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-baggrundsfarve</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papir-/pergament under Option 2 (og uden Option 1-billede). Standard matcher Option 1-creme (~#FCF3E4).</value></data>
+  <data name="BingoFrameColor" xml:space="preserve"><value>Pladehoved / ramme</value></data>
+  <data name="BingoFrameColorHint" xml:space="preserve"><value>Dyb festlig farve til pladens hovedbjælke og ydre kant (standard ~#AA1F0D).</value></data>
+  <data name="BingoEmptyCellColor" xml:space="preserve"><value>Tomme celler</value></data>
+  <data name="BingoEmptyCellColorHint" xml:space="preserve"><value>Fyldfarve til tomme gitterceller — festlig, men en anden nuance end hovedbjælken (standard cremet rød ~#C46852).</value></data>
+  <data name="BingoBannerColor" xml:space="preserve"><value>Banner-tekstfarve</value></data>
+  <data name="BingoBannerColorHint" xml:space="preserve"><value>Farve på plade-bannertekst og dokumenttitlen i sidehovedet.</value></data>
+  <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF-titelskrift</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Skrift til Option 2-dokumenttitlen i sidehovedet (Option 1 bruger brand bagt ind i baggrundsgrafikken).</value></data>
+  <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF-titelstørrelse</value></data>
+  <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begrænsede størrelser, så titlen forbliver printbar over 6 plader pr. A4-side.</value></data>
+  <data name="BingoPlateHeaderFont" xml:space="preserve"><value>Pladehoved-skrift</value></data>
+  <data name="BingoPlateHeaderFontHint" xml:space="preserve"><value>Skrift til brandteksten på hver plades røde hovedbjælke. Samme printbare skriftliste som PDF-titlen.</value></data>
+  <data name="BingoPlateNumberFont" xml:space="preserve"><value>Pladenummer-skrift</value></data>
+  <data name="BingoPlateNumberFontHint" xml:space="preserve"><value>Skrift til gittertallene (og seriecifre under stregkoden). Samme printbare skriftliste som PDF-titlen.</value></data>
+  <data name="BingoShowBarcode" xml:space="preserve"><value>Vis stregkode</value></data>
+  <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 over serienummeret på pladen (USB-scanner). Slå fra for kun tal.</value></data>
+  <data name="BingoShowPageNumbers" xml:space="preserve"><value>Vis sidenumre</value></data>
+  <data name="BingoShowPageNumbersHint" xml:space="preserve"><value>Sidefod «Brand side/antal». Fra som standard — slå til hvis du vil have trykte sidenumre.</value></data>
+  <data name="BingoHeaderIcons" xml:space="preserve"><value>Header-juleikoner</value></data>
+  <data name="BingoHeaderIconsHint" xml:space="preserve"><value>Guirlander til venstre og højre for pladetitlen i PDF-sidehovedet. Standard følger med appen; upload egne eller gendan standard. Sort baggrund behandles som gennemsigtig.</value></data>
+  <data name="BingoHeaderIconLeft" xml:space="preserve"><value>Venstre ikon</value></data>
+  <data name="BingoHeaderIconRight" xml:space="preserve"><value>Højre ikon</value></data>
+  <data name="BingoHeaderIconRestore" xml:space="preserve"><value>Gendan standard</value></data>
+  <data name="BingoHeaderIconUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-baggrundsbillede (ældre)</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Denne ældre fuldside-upload bruges ikke. Brug sidebaggrunde pr. sprog nedenfor, eller slet den resterende fil her.</value></data>
+  <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Gendan det medfølgende standard-juleikon for denne side?</value></data>
+  <data name="BingoPdfLayoutOption" xml:space="preserve"><value>PDF-layout</value></data>
+  <data name="BingoPdfLayoutOptionHint" xml:space="preserve"><value>Option 1 bruger fuldside-baggrund pr. sprog (brand bagt ind i standard-grafik). Option 2 tegner live redigerbart brand med sideikoner. Standard er Option 1.</value></data>
+  <data name="BingoPdfLayoutOption1" xml:space="preserve"><value>Option 1 — Fuldside-baggrund (standard)</value></data>
+  <data name="BingoPdfLayoutOption2" xml:space="preserve"><value>Option 2 — Live brand + ikoner (lige titel)</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Option 1-sidebaggrunde (pr. sprog)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Fuldside-grafik til Option 1. Standard: dansk = Julebanko, svensk = Julbingo (brand bagt ind). Eget brand → upload matchende billede eller brug Option 2. Engelsk har endnu ingen medfølgende standard — upload påkrævet.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Dansk (da) — Julebanko</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svensk (sv) — Julbingo</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelsk (en) — Christmas Bingo</value></data>
+  <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Gendan standard</value></data>
+  <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Medfølgende Christmas Bingo-baggrund er tilgængelig; gendan standard eller upload et eget billede.</value></data>
+  <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Gendan den medfølgende standard-sidebaggrund for dette sprog?</value></data>
+  <data name="ColorHexInvalid" xml:space="preserve"><value>Ugyldig hex-farve. Brug 3 eller 6 hex-cifre (uden krav om #).</value></data>
+  <data name="BingoBatches" xml:space="preserve"><value>Genererede batches</value></data>
+  <data name="BingoNoBatches" xml:space="preserve"><value>Ingen batches endnu.</value></data>
+  <data name="BingoDownloadPdf" xml:space="preserve"><value>Download PDF</value></data>
+  <data name="BingoBrowse" xml:space="preserve"><value>Gennemse sæsonens plader</value></data>
+  <data name="BingoSeriesNumber" xml:space="preserve"><value>Serienummer</value></data>
+  <data name="BingoSearch" xml:space="preserve"><value>Søg</value></data>
+  <data name="BingoShowing" xml:space="preserve"><value>Viser</value></data>
+  <data name="BingoNoCards" xml:space="preserve"><value>Ingen plader fundet.</value></data>
+  <data name="BingoHitRows" xml:space="preserve"><value>Rækker ramt</value></data>
+  <data name="BingoWinStatus" xml:space="preserve"><value>Vindestatus</value></data>
+  <data name="BingoPreview" xml:space="preserve"><value>Plade</value></data>
+  <data name="BingoBatch" xml:space="preserve"><value>Batch</value></data>
+  <data name="BingoNoWin" xml:space="preserve"><value>Ingen godkendt gevinst</value></data>
+  <data name="BingoValidation" xml:space="preserve"><value>Validering</value></data>
+  <data name="SeriesRequired" xml:space="preserve"><value>Angiv pladens serienummer.</value></data>
+  <data name="SeriesNotFound" xml:space="preserve"><value>Ingen plade med det serienummer blev fundet. Du kan stadig indsende til manuel gennemgang.</value></data>
+  <data name="ValidationMismatch" xml:space="preserve"><value>De trukne tal matcher ikke denne plade for den valgte vintype. Du kan stadig indsende til manuel gennemgang.</value></data>
+  <data name="PrizeOnceUsed" xml:space="preserve"><value>Du har allerede en melding for denne vintype i denne sæson.</value></data>
+  <data name="ForceSubmitClaim" xml:space="preserve"><value>Indsend alligevel til manuel gennemgang</value></data>
+  <data name="ForceSubmitHint" xml:space="preserve"><value>Din melding markeres som ikke auto-valideret, så en admin kan tjekke den.</value></data>
 </root>

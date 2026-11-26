@@ -5,10 +5,11 @@ ASP.NET Core 10 Razor Pages + SQL Server + cookie auth. Deployable on IIS.
 
 ## Features
 
-- **Player page** — today's numbers, all season numbers (draw order + sorted), claim form (1 row / 2 rows / full board), public list of **confirmed** winners only
-- **Banko Admin** — draw N unique numbers 1–90 (default 2), approve/reject claims
-- **Setup Admin** — everything Banko Admin can do, plus theme colors, image uploads, claim email To:, password management, season reset with backup/undo, edit/delete confirmed winners
-- **Email** on claim via SMTP `outbound12.electric.net:587` (TLS, no password; IP allowlisted)
+- **Player page** — today's numbers, all season numbers (draw order + sorted), claim form (plate series + 1 row / 2 rows / full board), public list of **confirmed** winners only
+- **Bankoplader (v2)** — generate unique Danish bingo plates (PDF, default 6/page), store series + rows in SQL, admin browse/search, optional auto-validate on claim, once-per-win-type prize rule (configurable)
+- **Banko Admin** — draw N unique numbers 1–90 (default 2), approve/reject claims, generate/download plate PDFs
+- **Setup Admin** — everything Banko Admin can do, plus theme colors, image uploads, claim email To:, password management, season reset with backup/undo, edit/delete confirmed winners, plate branding/settings
+- **Email** on claim via SMTP `outbound12.electric.net:587` (TLS, no password; IP allowlisted); notes when a plate was not auto-validated
 - **i18n** — Danish (default), English, Swedish
 
 ## Requirements

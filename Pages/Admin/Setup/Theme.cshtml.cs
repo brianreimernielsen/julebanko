@@ -17,6 +17,7 @@ public class ThemeModel(SettingsService settings) : PageModel
     [BindProperty] public int PlayerSnowIntensity { get; set; } = 1;
     [BindProperty] public bool PlayerNisseEnabled { get; set; } = true;
     public bool Saved { get; private set; }
+    public string? ColorError { get; private set; }
 
     public async Task OnGetAsync()
     {
@@ -30,13 +31,22 @@ public class ThemeModel(SettingsService settings) : PageModel
             PlayerSnowIntensity = 1;
         }
 
+        if (!TryNormalizeAll(
+                out var playerBg, out var adminBg, out var accent,
+                out var playerText, out var adminText))
+        {
+            ColorError = "Invalid hex color. Use 3 or 6 hex digits (with or without #).";
+            await LoadAsync();
+            return Page();
+        }
+
         await settings.SetManyAsync(new Dictionary<string, string>
         {
-            [SettingKeys.PlayerBgColor] = PlayerBgColor,
-            [SettingKeys.AdminBgColor] = AdminBgColor,
-            [SettingKeys.AccentColor] = AccentColor,
-            [SettingKeys.PlayerTextColor] = PlayerTextColor,
-            [SettingKeys.AdminTextColor] = AdminTextColor,
+            [SettingKeys.PlayerBgColor] = playerBg,
+            [SettingKeys.AdminBgColor] = adminBg,
+            [SettingKeys.AccentColor] = accent,
+            [SettingKeys.PlayerTextColor] = playerText,
+            [SettingKeys.AdminTextColor] = adminText,
             [SettingKeys.SeasonTitle] = SeasonTitle.Trim(),
             [SettingKeys.PlayerSnowEnabled] = PlayerSnowEnabled ? "true" : "false",
             [SettingKeys.PlayerSnowIntensity] = PlayerSnowIntensity.ToString(),
@@ -46,6 +56,18 @@ public class ThemeModel(SettingsService settings) : PageModel
         Saved = true;
         await LoadAsync();
         return Page();
+    }
+
+    private bool TryNormalizeAll(
+        out string playerBg, out string adminBg, out string accent,
+        out string playerText, out string adminText)
+    {
+        playerBg = adminBg = accent = playerText = adminText = "";
+        return ColorHex.TryNormalize(PlayerBgColor, out playerBg)
+               && ColorHex.TryNormalize(AdminBgColor, out adminBg)
+               && ColorHex.TryNormalize(AccentColor, out accent)
+               && ColorHex.TryNormalize(PlayerTextColor, out playerText)
+               && ColorHex.TryNormalize(AdminTextColor, out adminText);
     }
 
     private async Task LoadAsync()

@@ -63,6 +63,8 @@ builder.Services.AddScoped<SeasonService>();
 builder.Services.AddScoped<DrawService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<ClaimService>();
+builder.Services.AddScoped<BingoPdfService>();
+builder.Services.AddScoped<BingoCardService>();
 builder.Services.AddScoped<MediaService>();
 builder.Services.AddScoped<SeasonResetService>();
 builder.Services.AddScoped<AdminAuthService>();

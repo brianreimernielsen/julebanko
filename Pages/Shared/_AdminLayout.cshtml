@@ -59,6 +59,8 @@
                 <a class="@(path.Equals("/Admin", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin">@Localizer["Dashboard"]</a>
                 <a class="@(path.StartsWith("/Admin/Draw", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Draw">@Localizer["DrawNumbers"]</a>
                 <a class="@(path.StartsWith("/Admin/Claims", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Claims">@Localizer["PendingClaims"]</a>
+                <a class="@(path.StartsWith("/Admin/BingoCheck", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/BingoCheck">@Localizer["BingoCheck"]</a>
+                <a class="@(path.StartsWith("/Admin/BingoCards", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/BingoCards">@Localizer["BingoDesign"]</a>
                 @if (isSetup)
                 {
                     <a class="@(path.StartsWith("/Admin/Setup/Theme", StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Admin/Setup/Theme">@Localizer["Theme"]</a>
