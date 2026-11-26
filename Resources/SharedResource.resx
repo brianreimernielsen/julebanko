@@ -176,9 +176,13 @@
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner text color</value></data>
   <data name="BingoBannerColorHint" xml:space="preserve"><value>Color of plate banner text and the document title in the page header.</value></data>
   <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF title font</value></data>
-  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Font for the document title in the page header only. Plate grid numbers stay on the clear default face.</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Font for the Option 2 document title in the page header (Option 1 uses the brand baked into the background art).</value></data>
   <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF title size</value></data>
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Limited presets so the title stays printable above 6 plates per A4 page.</value></data>
+  <data name="BingoPlateHeaderFont" xml:space="preserve"><value>Plate header font</value></data>
+  <data name="BingoPlateHeaderFontHint" xml:space="preserve"><value>Font for the brand text on each plate’s red header bar. Same printable font list as the PDF title.</value></data>
+  <data name="BingoPlateNumberFont" xml:space="preserve"><value>Plate number font</value></data>
+  <data name="BingoPlateNumberFontHint" xml:space="preserve"><value>Font for the grid numbers (and series digits under the barcode). Same printable font list as the PDF title.</value></data>
   <data name="BingoShowBarcode" xml:space="preserve"><value>Show barcode</value></data>
   <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 above the series number on each plate (USB scanner). Turn off for number-only.</value></data>
   <data name="BingoShowPageNumbers" xml:space="preserve"><value>Show page numbers</value></data>

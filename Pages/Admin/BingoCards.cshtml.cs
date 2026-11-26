@@ -35,6 +35,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     [BindProperty] public string BingoBannerColor { get; set; } = BingoPdfService.FestiveRedHex;
     [BindProperty] public string BingoPdfTitleFont { get; set; } = BingoPdfTitleFonts.DefaultFontId;
     [BindProperty] public int BingoPdfTitleSize { get; set; } = BingoPdfTitleFonts.DefaultSize;
+    [BindProperty] public string BingoPlateHeaderFont { get; set; } = BingoPdfTitleFonts.DefaultPlateHeaderFontId;
+    [BindProperty] public string BingoPlateNumberFont { get; set; } = BingoPdfTitleFonts.DefaultPlateNumberFontId;
     [BindProperty] public bool BingoShowBarcode { get; set; } = true;
     /// <summary>Default OFF — page numbers are optional (Brian).</summary>
     [BindProperty] public bool BingoShowPageNumbers { get; set; }
@@ -120,6 +122,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         string? bg = null,
         string? titleFont = null,
         int? titleSize = null,
+        string? plateHeaderFont = null,
+        string? plateNumberFont = null,
         bool? showBarcode = null,
         bool? showPageNumbers = null,
         string? layout = null,
@@ -135,6 +139,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             BackgroundColor = NormalizeOptionalHex(bg),
             TitleFont = string.IsNullOrWhiteSpace(titleFont) ? null : BingoPdfTitleFonts.Resolve(titleFont).Id,
             TitleSize = titleSize is null ? null : BingoPdfTitleFonts.ResolveSize(titleSize.Value),
+            PlateHeaderFont = string.IsNullOrWhiteSpace(plateHeaderFont) ? null : BingoPdfTitleFonts.Resolve(plateHeaderFont).Id,
+            PlateNumberFont = string.IsNullOrWhiteSpace(plateNumberFont) ? null : BingoPdfTitleFonts.Resolve(plateNumberFont).Id,
             ShowBarcode = showBarcode,
             ShowPageNumbers = showPageNumbers,
             LayoutOption = string.IsNullOrWhiteSpace(layout) ? null : BingoPdfService.NormalizeLayoutOption(layout)
@@ -174,6 +180,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         var banner = ColorHex.OrDefault(BingoBannerColor, frame);
         var titleFont = BingoPdfTitleFonts.Resolve(BingoPdfTitleFont).Id;
         var titleSize = BingoPdfTitleFonts.ResolveSize(BingoPdfTitleSize);
+        var plateHeaderFont = BingoPdfTitleFonts.Resolve(BingoPlateHeaderFont).Id;
+        var plateNumberFont = BingoPdfTitleFonts.Resolve(BingoPlateNumberFont).Id;
 
         await settings.SetManyAsync(new Dictionary<string, string>
         {
@@ -186,6 +194,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             [Data.SettingKeys.BingoBannerColor] = banner,
             [Data.SettingKeys.BingoPdfTitleFont] = titleFont,
             [Data.SettingKeys.BingoPdfTitleSize] = titleSize.ToString(),
+            [Data.SettingKeys.BingoPlateHeaderFont] = plateHeaderFont,
+            [Data.SettingKeys.BingoPlateNumberFont] = plateNumberFont,
             [Data.SettingKeys.BingoShowBarcode] = BingoShowBarcode ? "true" : "false",
             [Data.SettingKeys.BingoShowPageNumbers] = BingoShowPageNumbers ? "true" : "false",
             [Data.SettingKeys.BingoPdfLayoutOption] = BingoPdfService.NormalizeLayoutOption(BingoPdfLayoutOption)
@@ -383,6 +393,10 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             await settings.GetAsync(Data.SettingKeys.BingoPdfTitleFont, BingoPdfTitleFonts.DefaultFontId)).Id;
         BingoPdfTitleSize = BingoPdfTitleFonts.ResolveSize(
             await settings.GetAsync(Data.SettingKeys.BingoPdfTitleSize, BingoPdfTitleFonts.DefaultSize.ToString()));
+        BingoPlateHeaderFont = BingoPdfTitleFonts.Resolve(
+            await settings.GetAsync(Data.SettingKeys.BingoPlateHeaderFont, BingoPdfTitleFonts.DefaultPlateHeaderFontId)).Id;
+        BingoPlateNumberFont = BingoPdfTitleFonts.Resolve(
+            await settings.GetAsync(Data.SettingKeys.BingoPlateNumberFont, BingoPdfTitleFonts.DefaultPlateNumberFontId)).Id;
 
         var showBarcodeRaw = await settings.GetAsync(Data.SettingKeys.BingoShowBarcode, "true");
         BingoShowBarcode = !string.Equals(showBarcodeRaw, "false", StringComparison.OrdinalIgnoreCase)

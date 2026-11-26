@@ -140,6 +140,26 @@
                 </select>
             </label>
             <p class="muted" style="margin-top:0;">@Localizer["BingoPdfTitleSizeHint"]</p>
+            <label>
+                @Localizer["BingoPlateHeaderFont"]
+                <select asp-for="BingoPlateHeaderFont">
+                    @foreach (var font in Model.TitleFonts)
+                    {
+                        <option value="@font.Id">@font.Label</option>
+                    }
+                </select>
+            </label>
+            <p class="muted" style="margin-top:0;">@Localizer["BingoPlateHeaderFontHint"]</p>
+            <label>
+                @Localizer["BingoPlateNumberFont"]
+                <select asp-for="BingoPlateNumberFont">
+                    @foreach (var font in Model.TitleFonts)
+                    {
+                        <option value="@font.Id">@font.Label</option>
+                    }
+                </select>
+            </label>
+            <p class="muted" style="margin-top:0;">@Localizer["BingoPlateNumberFontHint"]</p>
 
             <fieldset class="plate-scheme-picker">
                 <legend>@Localizer["BingoPlateScheme"]</legend>

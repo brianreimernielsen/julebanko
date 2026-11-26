@@ -176,9 +176,13 @@
   <data name="BingoBannerColor" xml:space="preserve"><value>Bannertextfärg</value></data>
   <data name="BingoBannerColorHint" xml:space="preserve"><value>Färg på brickbannertext och dokumenttiteln i sidhuvudet.</value></data>
   <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF-titelsnitt</value></data>
-  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Typsnitt för dokumenttiteln i sidhuvudet. Brickans siffror behåller det tydliga standardtypsnittet.</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Typsnitt för Option 2-dokumenttiteln i sidhuvudet (Option 1 använder varumärket inbakat i bakgrundsgrafiken).</value></data>
   <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF-titelstorlek</value></data>
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begränsade storlekar så titeln förblir utskrivbar ovanför 6 brickor per A4-sida.</value></data>
+  <data name="BingoPlateHeaderFont" xml:space="preserve"><value>Brickrubrikens typsnitt</value></data>
+  <data name="BingoPlateHeaderFontHint" xml:space="preserve"><value>Typsnitt för varumärkestexten på varje brickas röda rubrikrad. Samma utskrivbara typsnittslista som PDF-titeln.</value></data>
+  <data name="BingoPlateNumberFont" xml:space="preserve"><value>Bricknummer-typsnitt</value></data>
+  <data name="BingoPlateNumberFontHint" xml:space="preserve"><value>Typsnitt för rutnätets siffror (och seriesiffror under streckkoden). Samma utskrivbara typsnittslista som PDF-titeln.</value></data>
   <data name="BingoShowBarcode" xml:space="preserve"><value>Visa streckkod</value></data>
   <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 ovanför serienumret på brickan (USB-scanner). Stäng av för endast nummer.</value></data>
   <data name="BingoShowPageNumbers" xml:space="preserve"><value>Visa sidnummer</value></data>

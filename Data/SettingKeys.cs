@@ -62,6 +62,12 @@ public static class SettingKeys
     /// <summary>PDF document-title font size (pt) from <see cref="Services.BingoPdfTitleFonts.Sizes"/>.</summary>
     public const string BingoPdfTitleSize = "BingoPdfTitleSize";
 
+    /// <summary>Font for individual plate header brand text (same catalog as title fonts).</summary>
+    public const string BingoPlateHeaderFont = "BingoPlateHeaderFont";
+
+    /// <summary>Font for plate grid numbers (same catalog as title fonts).</summary>
+    public const string BingoPlateNumberFont = "BingoPlateNumberFont";
+
     /// <summary>When true (default), plate header shows Code128 + series digits; when false, series digits only.</summary>
     public const string BingoShowBarcode = "BingoShowBarcode";
 

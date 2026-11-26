@@ -1688,6 +1688,8 @@
     const bgHex = document.querySelector('input[name="BingoPdfBackgroundColor"]');
     const titleFontSelect = document.querySelector('select[name="BingoPdfTitleFont"]');
     const titleSizeSelect = document.querySelector('select[name="BingoPdfTitleSize"]');
+    const plateHeaderFontSelect = document.querySelector('select[name="BingoPlateHeaderFont"]');
+    const plateNumberFontSelect = document.querySelector('select[name="BingoPlateNumberFont"]');
     const showBarcodeInput = document.querySelector('input[name="BingoShowBarcode"]');
     const showPageNumbersInput = document.querySelector('input[name="BingoShowPageNumbers"]');
 
@@ -1717,6 +1719,8 @@
       if (bgHex?.value) params.set("bg", bgHex.value);
       if (titleFontSelect?.value) params.set("titleFont", titleFontSelect.value);
       if (titleSizeSelect?.value) params.set("titleSize", titleSizeSelect.value);
+      if (plateHeaderFontSelect?.value) params.set("plateHeaderFont", plateHeaderFontSelect.value);
+      if (plateNumberFontSelect?.value) params.set("plateNumberFont", plateNumberFontSelect.value);
       // Default ON when the checkbox is absent (non-setup viewers).
       params.set("showBarcode", showBarcodeInput && !showBarcodeInput.checked ? "false" : "true");
       // Default OFF when absent (matches Design default).
@@ -1758,6 +1762,8 @@
     bgHex?.addEventListener("input", schedule);
     titleFontSelect?.addEventListener("change", schedule);
     titleSizeSelect?.addEventListener("change", schedule);
+    plateHeaderFontSelect?.addEventListener("change", schedule);
+    plateNumberFontSelect?.addEventListener("change", schedule);
     showBarcodeInput?.addEventListener("change", schedule);
     showPageNumbersInput?.addEventListener("change", schedule);
     document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {

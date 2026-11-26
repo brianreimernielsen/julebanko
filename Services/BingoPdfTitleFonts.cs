@@ -3,12 +3,16 @@ using QuestPDF.Drawing;
 namespace Julebanko.Services;
 
 /// <summary>
-/// Printable PDF document-title font + size presets (Setup). Grid cell numbers stay on the default face.
+/// Printable PDF font catalog for Design (document title, plate header, grid numbers) + title size presets.
 /// Embedded TTF files under <c>Fonts/</c> are registered once for Linux/Windows IIS parity.
 /// </summary>
 public static class BingoPdfTitleFonts
 {
     public const string DefaultFontId = "liberation-serif";
+    /// <summary>Clear sans for plate header brand text on the red bar.</summary>
+    public const string DefaultPlateHeaderFontId = "liberation-sans";
+    /// <summary>Clear sans for grid digits (readable when stamped/printed).</summary>
+    public const string DefaultPlateNumberFontId = "liberation-sans";
     public const int DefaultSize = 24;
 
     public sealed record FontOption(string Id, string Label, string FileName);

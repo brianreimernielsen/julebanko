@@ -176,9 +176,13 @@
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner-tekstfarve</value></data>
   <data name="BingoBannerColorHint" xml:space="preserve"><value>Farve på plade-bannertekst og dokumenttitlen i sidehovedet.</value></data>
   <data name="BingoPdfTitleFont" xml:space="preserve"><value>PDF-titelskrift</value></data>
-  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Skrift til dokumenttitlen i sidehovedet. Pladens tal bruger den faste, tydelige standardskrift.</value></data>
+  <data name="BingoPdfTitleFontHint" xml:space="preserve"><value>Skrift til Option 2-dokumenttitlen i sidehovedet (Option 1 bruger brand bagt ind i baggrundsgrafikken).</value></data>
   <data name="BingoPdfTitleSize" xml:space="preserve"><value>PDF-titelstørrelse</value></data>
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begrænsede størrelser, så titlen forbliver printbar over 6 plader pr. A4-side.</value></data>
+  <data name="BingoPlateHeaderFont" xml:space="preserve"><value>Pladehoved-skrift</value></data>
+  <data name="BingoPlateHeaderFontHint" xml:space="preserve"><value>Skrift til brandteksten på hver plades røde hovedbjælke. Samme printbare skriftliste som PDF-titlen.</value></data>
+  <data name="BingoPlateNumberFont" xml:space="preserve"><value>Pladenummer-skrift</value></data>
+  <data name="BingoPlateNumberFontHint" xml:space="preserve"><value>Skrift til gittertallene (og seriecifre under stregkoden). Samme printbare skriftliste som PDF-titlen.</value></data>
   <data name="BingoShowBarcode" xml:space="preserve"><value>Vis stregkode</value></data>
   <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 over serienummeret på pladen (USB-scanner). Slå fra for kun tal.</value></data>
   <data name="BingoShowPageNumbers" xml:space="preserve"><value>Vis sidenumre</value></data>

@@ -69,6 +69,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             : BingoPdfTitleFonts.ResolveSize(
                 await settings.GetAsync(SettingKeys.BingoPdfTitleSize, BingoPdfTitleFonts.DefaultSize.ToString()));
 
+        var plateHeaderFontId = !string.IsNullOrWhiteSpace(styleOverrides?.PlateHeaderFont)
+            ? BingoPdfTitleFonts.Resolve(styleOverrides!.PlateHeaderFont).Id
+            : BingoPdfTitleFonts.Resolve(
+                await settings.GetAsync(SettingKeys.BingoPlateHeaderFont, BingoPdfTitleFonts.DefaultPlateHeaderFontId)).Id;
+        var plateNumberFontId = !string.IsNullOrWhiteSpace(styleOverrides?.PlateNumberFont)
+            ? BingoPdfTitleFonts.Resolve(styleOverrides!.PlateNumberFont).Id
+            : BingoPdfTitleFonts.Resolve(
+                await settings.GetAsync(SettingKeys.BingoPlateNumberFont, BingoPdfTitleFonts.DefaultPlateNumberFontId)).Id;
+
         var schemeId = !string.IsNullOrWhiteSpace(styleOverrides?.PlateScheme)
             ? styleOverrides!.PlateScheme!
             : await settings.GetAsync(SettingKeys.BingoPlateScheme, BingoPlateSchemes.DefaultId);
@@ -142,13 +151,13 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         {
             return BuildOption1Document(
                 pages, platesPerPage, pageBgBytes!, banner, brand, festiveRed, emptyCell, ink, paper,
-                plateScale, showBarcode, showPageNumbers);
+                plateScale, showBarcode, showPageNumbers, plateHeaderFontId, plateNumberFontId);
         }
 
         return BuildOption2Document(
             pages, platesPerPage, banner, brand, titleFontId, titleSize, titleColor, festiveRed,
             emptyCell, ink, paper, gold, leftIconBytes, rightIconBytes, plateScale,
-            showBarcode, showPageNumbers);
+            showBarcode, showPageNumbers, plateHeaderFontId, plateNumberFontId);
     }
 
     /// <summary>
@@ -166,14 +175,19 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         Color paper,
         PlateScale plateScale,
         bool showBarcode,
-        bool showPageNumbers)
+        bool showPageNumbers,
+        string plateHeaderFontId,
+        string plateNumberFontId)
     {
-        // Clear the decorative red frame + baked title band; plates sit in the cream well.
-        const float marginLeft = 34f;
-        const float marginRight = 34f;
+        // Clear the decorative red frame + baked title band; plates sit in the cream well
+        // above the full spruce/ornament bottom banner (well ends ~12% from page bottom).
+        const float marginLeft = 38f;
+        const float marginRight = 38f;
         const float marginTop = 108f;
-        const float marginBottom = 40f;
+        // Keep full spruce/gift banner clear of the plate stack (well ends ~12% up).
+        const float marginBottom = 148f;
         const float gap = 4f;
+        const float plateCornerRadius = 9f;
 
         var document = Document.Create(container =>
         {
@@ -203,7 +217,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         for (var i = 0; i < pageCards.Count; i++)
                         {
                             col.Item().Height(plateHeight).Element(e => RenderPlate(
-                                e, pageCards[i], banner, festiveRed, emptyCell, ink, fillScale, showBarcode));
+                                e, pageCards[i], banner, festiveRed, emptyCell, ink, fillScale, showBarcode,
+                                plateCornerRadius, plateHeaderFontId, plateNumberFontId));
                             if (i < pageCards.Count - 1)
                             {
                                 col.Item().Height(gap);
@@ -250,7 +265,9 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         byte[]? rightIconBytes,
         PlateScale plateScale,
         bool showBarcode,
-        bool showPageNumbers)
+        bool showPageNumbers,
+        string plateHeaderFontId,
+        string plateNumberFontId)
     {
         const float pageMargin = 14f;
         const float flourishHeight = 10f;
@@ -335,7 +352,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         for (var i = 0; i < pageCards.Count; i++)
                         {
                             col.Item().Height(plateHeight).Element(e => RenderPlate(
-                                e, pageCards[i], banner, festiveRed, emptyCell, ink, fillScale, showBarcode));
+                                e, pageCards[i], banner, festiveRed, emptyCell, ink, fillScale, showBarcode,
+                                cornerRadius: 0f, plateHeaderFontId, plateNumberFontId));
                             if (i < pageCards.Count - 1)
                             {
                                 col.Item().Height(gap);
@@ -412,13 +430,17 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         Color emptyCell,
         Color ink,
         PlateScale scale,
-        bool showBarcode)
+        bool showBarcode,
+        float cornerRadius,
+        string plateHeaderFontId,
+        string plateNumberFontId)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
         var hriFont = HriFontSize(scale);
         var hriLine = HriLineHeight(scale);
         var headerH = PlateHeaderHeight(scale, showBarcode);
+        var barcodeCorner = cornerRadius > 0f ? Math.Max(2.5f, cornerRadius * 0.45f) : 0f;
         byte[]? barcodePng = null;
         if (showBarcode)
         {
@@ -428,7 +450,13 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                 heightPx: (int)(scale.BarcodeHeight * 3f));
         }
 
-        container
+        var plate = container;
+        if (cornerRadius > 0f)
+        {
+            plate = plate.CornerRadius(cornerRadius);
+        }
+
+        plate
             .Border(1.2f)
             .BorderColor(festiveRed)
             .Column(col =>
@@ -437,11 +465,18 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             {
                 r.RelativeItem().AlignMiddle()
                     .Text(banner)
+                    .FontFamily(plateHeaderFontId)
                     .FontSize(scale.BannerFont)
                     .SemiBold()
                     .FontColor(Colors.White);
 
-                r.ConstantItem(scale.BarcodeWidth + 6f).AlignMiddle().AlignRight()
+                var barcodeBox = r.ConstantItem(scale.BarcodeWidth + 6f).AlignMiddle().AlignRight();
+                if (barcodeCorner > 0f)
+                {
+                    barcodeBox = barcodeBox.CornerRadius(barcodeCorner);
+                }
+
+                barcodeBox
                     .Background(Colors.White)
                     .Padding(1)
                     .Column(bc =>
@@ -454,6 +489,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
 
                         bc.Item().Height(hriLine).AlignCenter().AlignMiddle()
                             .Text(seriesText)
+                            .FontFamily(plateNumberFontId)
                             .FontSize(hriFont)
                             .SemiBold()
                             .FontColor(Colors.Black);
@@ -483,6 +519,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                             .AlignMiddle()
                             .AlignCenter()
                             .Text(n?.ToString() ?? "")
+                            .FontFamily(plateNumberFontId)
                             .FontSize(scale.CellFont)
                             .SemiBold()
                             .FontColor(ink);
@@ -546,6 +583,10 @@ public sealed class BingoPdfStyleOverrides
     public string? BackgroundColor { get; init; }
     public string? TitleFont { get; init; }
     public int? TitleSize { get; init; }
+    /// <summary>Plate header brand font id from <see cref="BingoPdfTitleFonts"/>.</summary>
+    public string? PlateHeaderFont { get; init; }
+    /// <summary>Plate grid number font id from <see cref="BingoPdfTitleFonts"/>.</summary>
+    public string? PlateNumberFont { get; init; }
     public bool? ShowBarcode { get; init; }
     public bool? ShowPageNumbers { get; init; }
     /// <summary>"1" or "2" — see <see cref="BingoPdfService.LayoutOption1"/>.</summary>

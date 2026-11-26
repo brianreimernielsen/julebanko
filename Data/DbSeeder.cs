@@ -112,6 +112,8 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.BingoShowBarcode, "true");
         await EnsureSettingAsync(db, SettingKeys.BingoShowPageNumbers, "false");
         await EnsureSettingAsync(db, SettingKeys.BingoPdfLayoutOption, BingoPdfService.LayoutOption1);
+        await EnsureSettingAsync(db, SettingKeys.BingoPlateHeaderFont, BingoPdfTitleFonts.DefaultPlateHeaderFontId);
+        await EnsureSettingAsync(db, SettingKeys.BingoPlateNumberFont, BingoPdfTitleFonts.DefaultPlateNumberFontId);
 
         await db.SaveChangesAsync(cancellationToken);
 
