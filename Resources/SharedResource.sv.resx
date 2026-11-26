@@ -170,7 +170,7 @@
   <data name="BingoPlateScheme" xml:space="preserve"><value>Brickans färgschema</value></data>
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Välj ett fördefinierat högkontrastschema (två färger). Serienumret följer schemats accentfärg.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-bakgrundsfärg</value></data>
-  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Används när ingen bakgrundsbild är uppladdad.</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Pappersfärg bakom brickorna och sidhuvudikonerna.</value></data>
   <data name="BingoFrameColor" xml:space="preserve"><value>Ramfärg</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Färg på brickans ram/kant.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Bannertextfärg</value></data>
@@ -181,8 +181,17 @@
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begränsade storlekar så titeln förblir utskrivbar ovanför 6 brickor per A4-sida.</value></data>
   <data name="BingoShowBarcode" xml:space="preserve"><value>Visa streckkod</value></data>
   <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 ovanför serienumret på brickan (USB-scanner). Stäng av för endast nummer.</value></data>
-  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-bakgrundsbild</value></data>
-  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Valfri helsidesbild bakom brickorna (jpg/png/webp/gif, max 2 MB). Använd t.ex. ett julmotiv som bakgrund.</value></data>
+  <data name="BingoShowPageNumbers" xml:space="preserve"><value>Visa sidnummer</value></data>
+  <data name="BingoShowPageNumbersHint" xml:space="preserve"><value>Sidfot «Brand sida/antal». Av som standard — slå på om du vill ha tryckta sidnummer.</value></data>
+  <data name="BingoHeaderIcons" xml:space="preserve"><value>Sidhuvud-julikoner</value></data>
+  <data name="BingoHeaderIconsHint" xml:space="preserve"><value>Girlanger till vänster och höger om bricktiteln i PDF-sidhuvudet. Standard följer med appen; ladda upp egna eller återställ. Svart bakgrund behandlas som genomskinlig.</value></data>
+  <data name="BingoHeaderIconLeft" xml:space="preserve"><value>Vänster ikon</value></data>
+  <data name="BingoHeaderIconRight" xml:space="preserve"><value>Höger ikon</value></data>
+  <data name="BingoHeaderIconRestore" xml:space="preserve"><value>Återställ standard</value></data>
+  <data name="BingoHeaderIconUsingDefault" xml:space="preserve"><value>Använder medföljande standard</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-bakgrundsbild (äldre)</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Helsidesbakgrunder ritas inte längre. Använd sidhuvudikoner och bakgrundsfärg i stället. Du kan radera en kvarvarande uppladdning här.</value></data>
+  <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Återställ den medföljande standardjulikonen för denna sida?</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ogiltig hex-färg. Använd 3 eller 6 hex-siffror (# valfritt).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererade batcher</value></data>
   <data name="BingoNoBatches" xml:space="preserve"><value>Inga batcher ännu.</value></data>

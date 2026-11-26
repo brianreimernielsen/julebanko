@@ -50,7 +50,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             ? styleOverrides!.PlateScheme!
             : await settings.GetAsync(SettingKeys.BingoPlateScheme, BingoPlateSchemes.DefaultId);
         var scheme = BingoPlateSchemes.GetOrDefault(schemeId);
-        var seriesColor = ParseColor(scheme.ColorB, Colors.Amber.Darken2);
+        // Series color kept for barcode/HRI contrast contexts; gold under-header rule removed (Brian).
+        _ = ParseColor(scheme.ColorB, Colors.Amber.Darken2);
 
         var frameHex = !string.IsNullOrWhiteSpace(styleOverrides?.FrameColor)
             ? styleOverrides!.FrameColor!
@@ -84,6 +85,10 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         var showBarcode = styleOverrides?.ShowBarcode
             ?? IsTruthy(await settings.GetAsync(SettingKeys.BingoShowBarcode, "true"));
 
+        // Default OFF — Brian questioned usefulness; opt-in via Design «Vis sidenumre».
+        var showPageNumbers = styleOverrides?.ShowPageNumbers
+            ?? IsTruthy(await settings.GetAsync(SettingKeys.BingoShowPageNumbers, "false"));
+
         var frameColor = ParseColor(frameHex, ParseColor(scheme.ColorA, Colors.Red.Darken3));
         var bannerColor = ParseColor(bannerHex, frameColor);
         var paper = ParseColor(bgHex, Colors.White);
@@ -91,12 +96,12 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         var plateFill = BlendTowardWhite(scheme.ColorA, 0.88f);
         var emptyCell = BlendTowardWhite(scheme.ColorA, 0.75f);
 
-        byte[]? bgImage = null;
-        var bgAsset = await media.TryReadBytesAsync(MediaSlot.BingoPdfBackground);
-        if (bgAsset is not null)
-        {
-            bgImage = bgAsset.Value.Bytes;
-        }
+        // Header garlands: uploaded override, else bundled sample-media defaults.
+        // Full-page BingoPdfBackground image is intentionally not drawn (Brian: prefer header icons).
+        var leftIcon = await media.TryReadBingoHeaderIconAsync(MediaSlot.BingoHeaderIconLeft);
+        var rightIcon = await media.TryReadBingoHeaderIconAsync(MediaSlot.BingoHeaderIconRight);
+        byte[]? leftIconBytes = leftIcon?.Bytes;
+        byte[]? rightIconBytes = rightIcon?.Bytes;
 
         var layouts = LayoutFor(platesPerPage);
         var pages = cards
@@ -106,8 +111,10 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .ToList();
 
         var plateScale = PlateScaleFor(platesPerPage, fillPage);
-        // Document header: main title only (Setup font/size). Page nums live in the footer.
-        var docHeaderHeight = titleSize + 12f;
+        // Document header: garlands + title. Icon height tracks title size.
+        var headerIconHeight = Math.Max(22f, titleSize + 4f);
+        var headerIconWidth = headerIconHeight * 3f; // assets are ~3:1
+        var docHeaderHeight = Math.Max(titleSize + 12f, headerIconHeight + 4f);
 
         var document = Document.Create(container =>
         {
@@ -120,16 +127,30 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                     page.PageColor(paper);
                     page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
 
-                    if (bgImage is { Length: > 0 })
+                    page.Header().Height(docHeaderHeight).Row(header =>
                     {
-                        page.Background().Image(bgImage).FitUnproportionally();
-                    }
+                        header.ConstantItem(headerIconWidth).AlignMiddle().AlignLeft().Element(e =>
+                        {
+                            if (leftIconBytes is { Length: > 0 })
+                            {
+                                e.Height(headerIconHeight).Image(leftIconBytes).FitArea();
+                            }
+                        });
 
-                    page.Header().AlignCenter().Text(banner)
-                        .FontFamily(titleFontId)
-                        .FontSize(titleSize)
-                        .SemiBold()
-                        .FontColor(bannerColor);
+                        header.RelativeItem().AlignCenter().AlignMiddle().Text(banner)
+                            .FontFamily(titleFontId)
+                            .FontSize(titleSize)
+                            .SemiBold()
+                            .FontColor(bannerColor);
+
+                        header.ConstantItem(headerIconWidth).AlignMiddle().AlignRight().Element(e =>
+                        {
+                            if (rightIconBytes is { Length: > 0 })
+                            {
+                                e.Height(headerIconHeight).Image(rightIconBytes).FitArea();
+                            }
+                        });
+                    });
 
                     if (fillPage)
                     {
@@ -138,16 +159,17 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         const float contentTopPad = 4f;
                         const float gap = 3f;
                         var margin = 12f;
-                        var footerEstimate = 18f;
+                        var footerEstimate = showPageNumbers ? 18f : 4f;
                         var available = PageSizes.A4.Height - (2 * margin) - docHeaderHeight - footerEstimate - contentTopPad;
                         var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
                         var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
                         // Compact header: brand + optional Code128 / series digits (grid stays primary).
+                        // No gold horizontal rule under plate header (Brian).
                         var headerRow = Math.Max(
                             plateScale.BannerFont + 8f,
                             SeriesMarkerHeight(plateScale, showBarcode));
                         var chrome = (plateScale.Padding * 2) + headerRow
-                            + (plateScale.LinePad * 2) + 2f + plateScale.TablePad + 4f; // +4 safety vs overflow
+                            + plateScale.TablePad + 4f; // +4 safety vs overflow
                         var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
                         var fillScale = plateScale with { CellMinHeight = cellHeight };
 
@@ -163,7 +185,6 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                                     bannerColor,
                                     plateFill,
                                     emptyCell,
-                                    seriesColor,
                                     ink,
                                     fillScale,
                                     fillHeight: true,
@@ -199,7 +220,6 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                                                     bannerColor,
                                                     plateFill,
                                                     emptyCell,
-                                                    seriesColor,
                                                     ink,
                                                     plateScale,
                                                     fillHeight: false,
@@ -216,14 +236,17 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         });
                     }
 
-                    // Footer only: «Brand 1/4» — not on plates.
-                    page.Footer().AlignCenter().DefaultTextStyle(x => x.FontSize(9).FontColor(Colors.Grey.Darken1)).Text(text =>
+                    if (showPageNumbers)
                     {
-                        text.Span($"{brand} ");
-                        text.CurrentPageNumber();
-                        text.Span("/");
-                        text.TotalPages();
-                    });
+                        // Footer only when opted in: «Brand 1/4» — not on plates.
+                        page.Footer().AlignCenter().DefaultTextStyle(x => x.FontSize(9).FontColor(Colors.Grey.Darken1)).Text(text =>
+                        {
+                            text.Span($"{brand} ");
+                            text.CurrentPageNumber();
+                            text.Span("/");
+                            text.TotalPages();
+                        });
+                    }
                 });
             }
         });
@@ -239,7 +262,6 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         Color bannerText,
         Color plateFill,
         Color emptyCell,
-        Color series,
         Color ink,
         PlateScale scale,
         bool fillHeight,
@@ -292,7 +314,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                 });
             });
 
-            col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(series);
+            // Gold/yellow horizontal rule under plate header removed (Brian: redundant).
 
             col.Item().PaddingTop(scale.TablePad).Table(table =>
             {
@@ -429,4 +451,6 @@ public sealed class BingoPdfStyleOverrides
     public int? TitleSize { get; init; }
     /// <summary>When set, overrides <see cref="SettingKeys.BingoShowBarcode"/> for preview.</summary>
     public bool? ShowBarcode { get; init; }
+    /// <summary>When set, overrides <see cref="SettingKeys.BingoShowPageNumbers"/> for preview.</summary>
+    public bool? ShowPageNumbers { get; init; }
 }

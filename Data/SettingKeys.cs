@@ -47,7 +47,7 @@ public static class SettingKeys
     /// <summary>Id from <see cref="Services.BingoPlateSchemes"/> (two contrasting plate colors; series follows).</summary>
     public const string BingoPlateScheme = "BingoPlateScheme";
 
-    /// <summary>PDF page background when no BingoPdfBackground image is uploaded.</summary>
+    /// <summary>PDF page paper color (header icons sit on this; full-page bg image no longer drawn).</summary>
     public const string BingoPdfBackgroundColor = "BingoPdfBackgroundColor";
 
     /// <summary>Plate frame / border color.</summary>
@@ -64,4 +64,7 @@ public static class SettingKeys
 
     /// <summary>When true (default), plate header shows Code128 + series digits; when false, series digits only.</summary>
     public const string BingoShowBarcode = "BingoShowBarcode";
+
+    /// <summary>When true, footer shows «Brand page/total». Default false (Brian: optional).</summary>
+    public const string BingoShowPageNumbers = "BingoShowPageNumbers";
 }

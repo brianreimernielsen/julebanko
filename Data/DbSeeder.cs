@@ -110,6 +110,7 @@ public static class DbSeeder
         await EnsureSettingAsync(db, SettingKeys.BingoFrameColor, "#8B1E1E");
         await EnsureSettingAsync(db, SettingKeys.BingoBannerColor, "#8B1E1E");
         await EnsureSettingAsync(db, SettingKeys.BingoShowBarcode, "true");
+        await EnsureSettingAsync(db, SettingKeys.BingoShowPageNumbers, "false");
 
         await db.SaveChangesAsync(cancellationToken);
 

@@ -170,7 +170,7 @@
   <data name="BingoPlateScheme" xml:space="preserve"><value>Pladefarveskema</value></data>
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Vælg et af de prædefinerede kontrastkoemaer (to farver). Serienummeret følger skemaets accentfarve.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-baggrundsfarve</value></data>
-  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Bruges når der ikke er uploadet et baggrundsbillede.</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papirfarve bag pladerne og header-ikonerne.</value></data>
   <data name="BingoFrameColor" xml:space="preserve"><value>Ramme-farve</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Farve på pladens ramme/kant.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner-tekstfarve</value></data>
@@ -181,8 +181,17 @@
   <data name="BingoPdfTitleSizeHint" xml:space="preserve"><value>Begrænsede størrelser, så titlen forbliver printbar over 6 plader pr. A4-side.</value></data>
   <data name="BingoShowBarcode" xml:space="preserve"><value>Vis stregkode</value></data>
   <data name="BingoShowBarcodeHint" xml:space="preserve"><value>Code128 over serienummeret på pladen (USB-scanner). Slå fra for kun tal.</value></data>
-  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-baggrundsbillede</value></data>
-  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Valgfrit fuldside-billede bag pladerne (jpg/png/webp/gif, max 2 MB). Brug fx et julemotiv som baggrund.</value></data>
+  <data name="BingoShowPageNumbers" xml:space="preserve"><value>Vis sidenumre</value></data>
+  <data name="BingoShowPageNumbersHint" xml:space="preserve"><value>Sidefod «Brand side/antal». Fra som standard — slå til hvis du vil have trykte sidenumre.</value></data>
+  <data name="BingoHeaderIcons" xml:space="preserve"><value>Header-juleikoner</value></data>
+  <data name="BingoHeaderIconsHint" xml:space="preserve"><value>Guirlander til venstre og højre for pladetitlen i PDF-sidehovedet. Standard følger med appen; upload egne eller gendan standard. Sort baggrund behandles som gennemsigtig.</value></data>
+  <data name="BingoHeaderIconLeft" xml:space="preserve"><value>Venstre ikon</value></data>
+  <data name="BingoHeaderIconRight" xml:space="preserve"><value>Højre ikon</value></data>
+  <data name="BingoHeaderIconRestore" xml:space="preserve"><value>Gendan standard</value></data>
+  <data name="BingoHeaderIconUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
+  <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-baggrundsbillede (ældre)</value></data>
+  <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Fuldside-baggrundsbilleder tegnes ikke længere. Brug header-ikoner og baggrundsfarve i stedet. Du kan slette en tidligere upload her.</value></data>
+  <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Gendan det medfølgende standard-juleikon for denne side?</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ugyldig hex-farve. Brug 3 eller 6 hex-cifre (uden krav om #).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererede batches</value></data>
   <data name="BingoNoBatches" xml:space="preserve"><value>Ingen batches endnu.</value></data>

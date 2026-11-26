@@ -26,8 +26,12 @@ public enum MediaSlot
     PlayerBackground = 2,
     PlayerDecoration = 3,
     PlayerHeroLogo = 4,
-    /// <summary>Full-page background image behind bankoplader PDF plates.</summary>
-    BingoPdfBackground = 5
+    /// <summary>Legacy full-page PDF background (no longer drawn; upload UI de-emphasized).</summary>
+    BingoPdfBackground = 5,
+    /// <summary>Christmas garland left of the PDF document title.</summary>
+    BingoHeaderIconLeft = 6,
+    /// <summary>Christmas garland right of the PDF document title.</summary>
+    BingoHeaderIconRight = 7
 }
 
 /// <summary>

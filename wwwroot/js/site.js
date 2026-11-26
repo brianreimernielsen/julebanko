@@ -1689,6 +1689,7 @@
     const titleFontSelect = document.querySelector('select[name="BingoPdfTitleFont"]');
     const titleSizeSelect = document.querySelector('select[name="BingoPdfTitleSize"]');
     const showBarcodeInput = document.querySelector('input[name="BingoShowBarcode"]');
+    const showPageNumbersInput = document.querySelector('input[name="BingoShowPageNumbers"]');
 
     const readScheme = () => {
       const checked = document.querySelector('input[name="BingoPlateScheme"]:checked');
@@ -1713,6 +1714,8 @@
       if (titleSizeSelect?.value) params.set("titleSize", titleSizeSelect.value);
       // Default ON when the checkbox is absent (non-setup viewers).
       params.set("showBarcode", showBarcodeInput && !showBarcodeInput.checked ? "false" : "true");
+      // Default OFF when absent (matches Design default).
+      params.set("showPageNumbers", showPageNumbersInput && showPageNumbersInput.checked ? "true" : "false");
       if (download) params.set("download", "true");
       // Cache-bust so object reloads when settings change.
       params.set("t", String(Date.now()));
@@ -1750,6 +1753,7 @@
     titleFontSelect?.addEventListener("change", schedule);
     titleSizeSelect?.addEventListener("change", schedule);
     showBarcodeInput?.addEventListener("change", schedule);
+    showPageNumbersInput?.addEventListener("change", schedule);
     document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {
       el.addEventListener("change", schedule);
     });
