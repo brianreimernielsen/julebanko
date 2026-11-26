@@ -196,13 +196,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         string plateHeaderFontId,
         string plateNumberFontId)
     {
-        // Clear the decorative red frame + baked title band; plates sit in the cream well
-        // above the full spruce/ornament bottom banner (well ends ~12% from page bottom).
+        // Clear decorative title/footer bands; plates sit in the cream well with
+        // roughly equal breathing room under the top banner and above the bottom banner
+        // (shared margins across DA/SV/EN Option 1 art).
         const float marginLeft = 38f;
         const float marginRight = 38f;
-        const float marginTop = 108f;
-        // Keep full spruce/gift banner clear of the plate stack (well ends ~12% up).
-        const float marginBottom = 148f;
+        // Shared Option 1 margins: keep cream above first plate ≈ cream above bottom banner
+        // across DA/SV/EN (title flourish vs spruce tips differ slightly per language).
+        const float marginTop = 133f;
+        const float marginBottom = 129f;
         const float gap = 4f;
         const float plateCornerRadius = 9f;
 
