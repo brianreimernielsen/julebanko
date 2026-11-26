@@ -38,8 +38,8 @@ public static class BingoSeriesBarcode
     ];
 
     /// <summary>
-    /// PNG bytes for a short Code128 of the series display string (no HRI text under bars;
-    /// the plate already shows <c>Nr. ######</c>).
+    /// PNG bytes for a short Code128 of the series display string (bars only;
+    /// plate PDF draws the human-readable series under the image).
     /// </summary>
     public static byte[] CreateCode128Png(
         string seriesDisplay,

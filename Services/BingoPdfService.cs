@@ -139,8 +139,8 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         var available = PageSizes.A4.Height - (2 * margin) - docHeaderHeight - footerEstimate - contentTopPad;
                         var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
                         var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
-                        // Compact header: brand + series + short Code128 (height << former QR box).
-                        var headerRow = Math.Max(plateScale.BannerFont + 8f, plateScale.BarcodeHeight);
+                        // Compact header: brand + stacked Code128/HRI (barcode height unchanged).
+                        var headerRow = Math.Max(plateScale.BannerFont + 8f, BarcodeBlockHeight(plateScale));
                         var chrome = (plateScale.Padding * 2) + headerRow
                             + (plateScale.LinePad * 2) + 2f + plateScale.TablePad + 4f; // +4 safety vs overflow
                         var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
@@ -239,11 +239,14 @@ public class BingoPdfService(SettingsService settings, MediaService media)
     {
         var grid = BingoPlateGenerator.FromJson(card.CellsJson);
         var seriesText = BingoPlateGenerator.FormatSeries(card.SeriesNumber);
-        // Short Code128 in the header corner — same zero-padded digits USB wedge → Tjek.
+        // Short Code128 — same zero-padded digits USB wedge → Tjek; HRI drawn under bars in black.
         var barcodePng = BingoSeriesBarcode.CreateCode128Png(
             seriesText,
             widthPx: (int)(scale.BarcodeWidth * 3f),
             heightPx: (int)(scale.BarcodeHeight * 3f));
+        var hriFont = HriFontSize(scale);
+        var hriLine = HriLineHeight(scale);
+        var barcodeBlock = BarcodeBlockHeight(scale);
 
         // fillHeight: parent already set equal Height(plateHeight); keep content ≤ that (no ExtendVertical).
         _ = fillHeight;
@@ -255,17 +258,20 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .Padding(scale.Padding)
             .Column(col =>
         {
-            col.Item().Height(Math.Max(scale.BannerFont + 4f, scale.BarcodeHeight)).Row(r =>
+            col.Item().Height(Math.Max(scale.BannerFont + 4f, barcodeBlock)).Row(r =>
             {
                 r.RelativeItem().AlignMiddle()
                     .Text(banner).FontSize(scale.BannerFont).SemiBold().FontColor(bannerText);
-                r.ConstantItem(scale.SeriesWidth).AlignMiddle().AlignRight()
-                    .Text($"Nr. {seriesText}")
-                    .FontSize(scale.BannerFont).SemiBold().FontColor(series);
-                // Wide/short Code128 — FitArea scales to BarcodeWidth × BarcodeHeight.
-                r.ConstantItem(scale.BarcodeWidth + 4f).PaddingLeft(4f).AlignMiddle()
-                    .Height(scale.BarcodeHeight)
-                    .Image(barcodePng).FitArea();
+                // One field: Code128 on top, series digits directly under (black like the bars).
+                r.ConstantItem(scale.BarcodeWidth + 4f).PaddingLeft(4f).Column(bc =>
+                {
+                    bc.Item().Height(scale.BarcodeHeight).Image(barcodePng).FitArea();
+                    bc.Item().Height(hriLine).AlignCenter().AlignMiddle()
+                        .Text(seriesText)
+                        .FontSize(hriFont)
+                        .SemiBold()
+                        .FontColor(Colors.Black);
+                });
             });
 
             col.Item().PaddingVertical(scale.LinePad).LineHorizontal(0.8f).LineColor(series);
@@ -326,28 +332,37 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         float CellMinHeight,
         float TablePad,
         float LinePad,
-        float SeriesWidth,
         float BarcodeWidth,
         float BarcodeHeight);
+
+    /// <summary>HRI under Code128 — compact so header only grows by one number line.</summary>
+    private static float HriFontSize(PlateScale scale) => Math.Max(7f, scale.BannerFont - 4f);
+
+    /// <summary>Line box for HRI (font + small pad so QuestPDF does not clip/overflow).</summary>
+    private static float HriLineHeight(PlateScale scale) => HriFontSize(scale) + 3f;
+
+    /// <summary>Barcode (fixed ~24pt) + HRI line — no extra header chrome.</summary>
+    private static float BarcodeBlockHeight(PlateScale scale) =>
+        scale.BarcodeHeight + HriLineHeight(scale);
 
     private static PlateScale PlateScaleFor(int platesPerPage, bool fillPage)
     {
         if (!fillPage)
         {
-            // Compact (>6): short Code128; header no taller than banner text needs.
-            return new PlateScale(5, 10, 11, 22, 3, 2, 72, 88, 18);
+            // Compact (>6): short Code128; header grows only for HRI under bars.
+            return new PlateScale(5, 10, 11, 22, 3, 2, 88, 18);
         }
 
         // ≤6 single-column fillHeight; CellMinHeight set per page.
-        // 6/page Code128 height 24pt ≈ 8.5mm (vs former 56pt QR); width ~110pt for bar density.
+        // 6/page Code128 height 24pt ≈ 8.5mm; HRI sits under bars (black).
         // CellFont stays locked at these sizes (not Setup-configurable).
         return platesPerPage switch
         {
-            1 => new PlateScale(10, 18, 22, 0, 8, 5, 120, 160, 32),
-            2 => new PlateScale(8, 16, 18, 0, 6, 4, 110, 140, 28),
-            3 => new PlateScale(6, 14, 15, 0, 4, 3, 100, 130, 26),
-            4 => new PlateScale(5, 13, 13, 0, 3, 2, 90, 120, 24),
-            _ => new PlateScale(3, 12, 11, 0, 1, 1, 78, 110, 24) // 6 — short Code128 header
+            1 => new PlateScale(10, 18, 22, 0, 8, 5, 160, 32),
+            2 => new PlateScale(8, 16, 18, 0, 6, 4, 140, 28),
+            3 => new PlateScale(6, 14, 15, 0, 4, 3, 130, 26),
+            4 => new PlateScale(5, 13, 13, 0, 3, 2, 120, 24),
+            _ => new PlateScale(3, 12, 11, 0, 1, 1, 110, 24) // 6 — short Code128 + HRI
         };
     }
 
