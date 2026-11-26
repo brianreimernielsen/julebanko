@@ -31,13 +31,15 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     [BindProperty] public string BingoBannerText { get; set; } = "";
     [BindProperty] public string BingoPlateScheme { get; set; } = BingoPlateSchemes.DefaultId;
     [BindProperty] public string BingoPdfBackgroundColor { get; set; } = BingoPdfService.DefaultParchmentHex;
-    [BindProperty] public string BingoFrameColor { get; set; } = "#8B1E1E";
-    [BindProperty] public string BingoBannerColor { get; set; } = "#8B1E1E";
+    [BindProperty] public string BingoFrameColor { get; set; } = BingoPdfService.FestiveRedHex;
+    [BindProperty] public string BingoBannerColor { get; set; } = BingoPdfService.FestiveRedHex;
     [BindProperty] public string BingoPdfTitleFont { get; set; } = BingoPdfTitleFonts.DefaultFontId;
     [BindProperty] public int BingoPdfTitleSize { get; set; } = BingoPdfTitleFonts.DefaultSize;
     [BindProperty] public bool BingoShowBarcode { get; set; } = true;
     /// <summary>Default OFF — page numbers are optional (Brian).</summary>
     [BindProperty] public bool BingoShowPageNumbers { get; set; }
+    /// <summary>"1" full-page bg (default) or "2" composed live brand.</summary>
+    [BindProperty] public string BingoPdfLayoutOption { get; set; } = BingoPdfService.LayoutOption1;
     public MediaAsset? PdfBackgroundAsset { get; private set; }
     public MediaAsset? HeaderIconLeftAsset { get; private set; }
     public MediaAsset? HeaderIconRightAsset { get; private set; }
@@ -48,7 +50,9 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
     public string HeaderIconRightDefaultUrl => "/sample-media/bankoplade-header-icon-right.png";
     public string PageBgDaDefaultUrl => "/sample-media/bankoplade-page-bg-da.png";
     public string PageBgSvDefaultUrl => "/sample-media/bankoplade-page-bg-sv.png";
-    public string PageBgEnDefaultUrl => "/sample-media/bankoplade-page-bg-en.png";
+    /// <summary>EN has no bundled Option 1 default yet.</summary>
+    public string? PageBgEnDefaultUrl => null;
+    public bool HasPageBgEnDefault => false;
     public bool SettingsSaved { get; private set; }
     public string? MediaMessage { get; private set; }
     public bool MediaError { get; private set; }
@@ -118,6 +122,7 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         int? titleSize = null,
         bool? showBarcode = null,
         bool? showPageNumbers = null,
+        string? layout = null,
         bool download = false)
     {
         platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 ? platesPerPage : 6;
@@ -131,7 +136,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             TitleFont = string.IsNullOrWhiteSpace(titleFont) ? null : BingoPdfTitleFonts.Resolve(titleFont).Id,
             TitleSize = titleSize is null ? null : BingoPdfTitleFonts.ResolveSize(titleSize.Value),
             ShowBarcode = showBarcode,
-            ShowPageNumbers = showPageNumbers
+            ShowPageNumbers = showPageNumbers,
+            LayoutOption = string.IsNullOrWhiteSpace(layout) ? null : BingoPdfService.NormalizeLayoutOption(layout)
         };
 
         var pdfBytes = await bingo.BuildPreviewPdfAsync(platesPerPage, banner, style);
@@ -181,7 +187,8 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
             [Data.SettingKeys.BingoPdfTitleFont] = titleFont,
             [Data.SettingKeys.BingoPdfTitleSize] = titleSize.ToString(),
             [Data.SettingKeys.BingoShowBarcode] = BingoShowBarcode ? "true" : "false",
-            [Data.SettingKeys.BingoShowPageNumbers] = BingoShowPageNumbers ? "true" : "false"
+            [Data.SettingKeys.BingoShowPageNumbers] = BingoShowPageNumbers ? "true" : "false",
+            [Data.SettingKeys.BingoPdfLayoutOption] = BingoPdfService.NormalizeLayoutOption(BingoPdfLayoutOption)
         });
         SettingsSaved = true;
         await LoadAsync();
@@ -385,6 +392,9 @@ public class BingoCardsModel(BingoCardService bingo, SettingsService settings, M
         var showPagesRaw = await settings.GetAsync(Data.SettingKeys.BingoShowPageNumbers, "false");
         BingoShowPageNumbers = string.Equals(showPagesRaw, "true", StringComparison.OrdinalIgnoreCase)
             || showPagesRaw == "1";
+
+        BingoPdfLayoutOption = BingoPdfService.NormalizeLayoutOption(
+            await settings.GetAsync(Data.SettingKeys.BingoPdfLayoutOption, BingoPdfService.LayoutOption1));
 
         var assets = await media.GetAllAsync();
         assets.TryGetValue(MediaSlot.BingoPdfBackground, out var bgAsset);

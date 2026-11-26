@@ -4,8 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>2.0.0</Version>
-    <InformationalVersion>2.0.0-bankoplader</InformationalVersion>
+    <Version>3.0.0</Version>
+    <InformationalVersion>3.0.0-bankoplader</InformationalVersion>
     <!-- MailKit advisory GHSA-9j88-vvj5-vhgr; no fixed release yet; we build MimeMessage ourselves -->
     <NoWarn>$(NoWarn);NU1902</NoWarn>
   </PropertyGroup>

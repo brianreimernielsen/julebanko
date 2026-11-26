@@ -170,7 +170,7 @@
   <data name="BingoPlateScheme" xml:space="preserve"><value>Pladefarveskema</value></data>
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Vælg et af de prædefinerede kontrastkoemaer (to farver). Serienummeret følger skemaets accentfarve.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-baggrundsfarve</value></data>
-  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papir-/pergamentfarve under den dekorative sidebaggrund (standard creme).</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Papir-/pergament under Option 2 (og uden Option 1-billede). Standard matcher Option 1-creme (~#FCF3E4).</value></data>
   <data name="BingoFrameColor" xml:space="preserve"><value>Ramme-farve</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Farve på pladens ramme/kant.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner-tekstfarve</value></data>
@@ -192,13 +192,18 @@
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-baggrundsbillede (ældre)</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Denne ældre fuldside-upload bruges ikke. Brug sidebaggrunde pr. sprog nedenfor, eller slet den resterende fil her.</value></data>
   <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Gendan det medfølgende standard-juleikon for denne side?</value></data>
-  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Sidebaggrunde (pr. sprog)</value></data>
-  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Dekorativ creme/guld-ramme og sidefod for hvert sprog. Brandtekst tegnes ovenpå fra Opsætning — bag ikke titlen ind i billedet. Upload erstatter standard; gendan henter den tilbage.</value></data>
-  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Dansk (da)</value></data>
-  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svensk (sv)</value></data>
-  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelsk (en)</value></data>
+  <data name="BingoPdfLayoutOption" xml:space="preserve"><value>PDF-layout</value></data>
+  <data name="BingoPdfLayoutOptionHint" xml:space="preserve"><value>Option 1 bruger fuldside-baggrund pr. sprog (brand bagt ind i standard-grafik). Option 2 tegner live redigerbart brand med sideikoner. Standard er Option 1.</value></data>
+  <data name="BingoPdfLayoutOption1" xml:space="preserve"><value>Option 1 — Fuldside-baggrund (standard)</value></data>
+  <data name="BingoPdfLayoutOption2" xml:space="preserve"><value>Option 2 — Live brand + ikoner (lige titel)</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Option 1-sidebaggrunde (pr. sprog)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Fuldside-grafik til Option 1. Standard: dansk = Julebanko, svensk = Julbingo (brand bagt ind). Eget brand → upload matchende billede eller brug Option 2. Engelsk har endnu ingen medfølgende standard — upload påkrævet.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Dansk (da) — Julebanko</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svensk (sv) — Julbingo</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelsk (en) — Christmas Bingo</value></data>
   <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Gendan standard</value></data>
   <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Bruger medfølgende standard</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Ingen medfølgende engelsk baggrund endnu (Christmas Bingo). Upload én, eller brug Option 2 indtil den kommer. Uden upload falder Option 1 tilbage til Option 2 for engelsk.</value></data>
   <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Gendan den medfølgende standard-sidebaggrund for dette sprog?</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ugyldig hex-farve. Brug 3 eller 6 hex-cifre (uden krav om #).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererede batches</value></data>

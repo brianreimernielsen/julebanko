@@ -67,4 +67,10 @@ public static class SettingKeys
 
     /// <summary>When true, footer shows «Brand page/total». Default false (Brian: optional).</summary>
     public const string BingoShowPageNumbers = "BingoShowPageNumbers";
+
+    /// <summary>
+    /// PDF layout: "1" = full-page bg per language (Option 1, default);
+    /// "2" = composed live brand + L/R icons (Option 2).
+    /// </summary>
+    public const string BingoPdfLayoutOption = "BingoPdfLayoutOption";
 }

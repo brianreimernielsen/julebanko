@@ -105,6 +105,21 @@
             </label>
             <p class="muted" style="margin-top:0;">@Localizer["BingoShowPageNumbersHint"]</p>
 
+            <fieldset class="bingo-layout-option">
+                <legend>@Localizer["BingoPdfLayoutOption"]</legend>
+                <p class="muted" style="margin-top:0;">@Localizer["BingoPdfLayoutOptionHint"]</p>
+                <label class="checkbox-row">
+                    <input type="radio" name="BingoPdfLayoutOption" value="1"
+                           @(Model.BingoPdfLayoutOption == "1" ? "checked" : null) />
+                    @Localizer["BingoPdfLayoutOption1"]
+                </label>
+                <label class="checkbox-row">
+                    <input type="radio" name="BingoPdfLayoutOption" value="2"
+                           @(Model.BingoPdfLayoutOption == "2" ? "checked" : null) />
+                    @Localizer["BingoPdfLayoutOption2"]
+                </label>
+            </fieldset>
+
             <label>
                 @Localizer["BingoPdfTitleFont"]
                 <select asp-for="BingoPdfTitleFont">
@@ -212,32 +227,39 @@
             <h3>@Localizer["BingoPageBackgrounds"]</h3>
             <p class="muted">@Localizer["BingoPageBackgroundsHint"]</p>
             @{
-                var pageBgs = new (MediaSlot Slot, string Label, MediaAsset? Asset, string DefaultUrl)[]
+                var pageBgs = new (MediaSlot Slot, string Label, MediaAsset? Asset, string? DefaultUrl, bool HasDefault)[]
                 {
-                    (MediaSlot.BingoPageBackgroundDa, Localizer["BingoPageBackgroundDa"].Value, Model.PageBgDaAsset, Model.PageBgDaDefaultUrl),
-                    (MediaSlot.BingoPageBackgroundSv, Localizer["BingoPageBackgroundSv"].Value, Model.PageBgSvAsset, Model.PageBgSvDefaultUrl),
-                    (MediaSlot.BingoPageBackgroundEn, Localizer["BingoPageBackgroundEn"].Value, Model.PageBgEnAsset, Model.PageBgEnDefaultUrl)
+                    (MediaSlot.BingoPageBackgroundDa, Localizer["BingoPageBackgroundDa"].Value, Model.PageBgDaAsset, Model.PageBgDaDefaultUrl, true),
+                    (MediaSlot.BingoPageBackgroundSv, Localizer["BingoPageBackgroundSv"].Value, Model.PageBgSvAsset, Model.PageBgSvDefaultUrl, true),
+                    (MediaSlot.BingoPageBackgroundEn, Localizer["BingoPageBackgroundEn"].Value, Model.PageBgEnAsset, null, false)
                 };
             }
-            @foreach (var (slot, label, asset, defaultUrl) in pageBgs)
+            @foreach (var (slot, label, asset, defaultUrl, hasDefault) in pageBgs)
             {
                 <div style="margin:1rem 0; padding-top:0.75rem; border-top:1px solid var(--line);">
                     <h4 style="margin:0 0 0.5rem;">@label</h4>
                     @if (asset is not null)
                     {
-                        <img class="media-preview" src="@asset.RelativePath?v=@asset.UploadedAt.Ticks" alt="@asset.FileName" style="max-height:120px; background:#FEF6E3;" />
+                        <img class="media-preview" src="@asset.RelativePath?v=@asset.UploadedAt.Ticks" alt="@asset.FileName" style="max-height:120px; background:#FCF3E4;" />
                         <p class="muted">@asset.FileName</p>
+                    }
+                    else if (hasDefault && defaultUrl is not null)
+                    {
+                        <img class="media-preview" src="@defaultUrl" alt="@label" style="max-height:120px; background:#FCF3E4;" />
+                        <p class="muted">@Localizer["BingoPageBackgroundUsingDefault"]</p>
                     }
                     else
                     {
-                        <img class="media-preview" src="@defaultUrl" alt="@label" style="max-height:120px; background:#FEF6E3;" />
-                        <p class="muted">@Localizer["BingoPageBackgroundUsingDefault"]</p>
+                        <p class="muted">@Localizer["BingoPageBackgroundEnTodo"]</p>
                     }
-                    <form method="post" asp-page-handler="ResetPageBackground" style="display:inline-block; margin-right:0.5rem; margin-bottom:0.75rem;"
-                          onsubmit="return confirm('@Localizer["ConfirmResetBingoPageBackground"]');">
-                        <input type="hidden" name="slot" value="@((int)slot)" />
-                        <button class="btn btn-ghost btn-small" type="submit">@Localizer["BingoPageBackgroundRestore"]</button>
-                    </form>
+                    @if (hasDefault)
+                    {
+                        <form method="post" asp-page-handler="ResetPageBackground" style="display:inline-block; margin-right:0.5rem; margin-bottom:0.75rem;"
+                              onsubmit="return confirm('@Localizer["ConfirmResetBingoPageBackground"]');">
+                            <input type="hidden" name="slot" value="@((int)slot)" />
+                            <button class="btn btn-ghost btn-small" type="submit">@Localizer["BingoPageBackgroundRestore"]</button>
+                        </form>
+                    }
                     <form method="post" enctype="multipart/form-data" asp-page-handler="UploadPageBackground" class="form-stack" style="max-width:420px;">
                         <input type="hidden" name="slot" value="@((int)slot)" />
                         <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/*" required />

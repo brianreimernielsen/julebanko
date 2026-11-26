@@ -18,7 +18,8 @@ public static class BingoPlateSchemes
 
     public static readonly IReadOnlyList<BingoPlateScheme> All =
     [
-        new("crimson-gold", "Karmesin / guld", "Crimson / gold", "Karmosin / guld", "#8B1E1E", "#D4A017"),
+        // Default matches Option 1 bg art (sampled DA frame red ≈ #AA1F0D + gold accent).
+        new("crimson-gold", "Karmesin / guld", "Crimson / gold", "Karmosin / guld", "#AA1F0D", "#D4A017"),
         new("forest-cream", "Skovgrøn / creme", "Forest / cream", "Skogsgrön / grädde", "#1B4332", "#F4E8C1"),
         new("navy-amber", "Marine / rav", "Navy / amber", "Marin / bärnsten", "#1A365D", "#E6A23C"),
         new("plum-mint", "Blomme / mint", "Plum / mint", "Plommon / mint", "#5B2C6F", "#A8E6CF"),

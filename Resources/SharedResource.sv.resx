@@ -170,7 +170,7 @@
   <data name="BingoPlateScheme" xml:space="preserve"><value>Brickans färgschema</value></data>
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Välj ett fördefinierat högkontrastschema (två färger). Serienumret följer schemats accentfärg.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF-bakgrundsfärg</value></data>
-  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Pappers-/pergamentfärg under den dekorativa sidbakgrunden (standard cream).</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Pappers-/pergament under Option 2 (och utan Option 1-bild). Standard matchar Option 1-cream (~#FCF3E4).</value></data>
   <data name="BingoFrameColor" xml:space="preserve"><value>Ramfärg</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Färg på brickans ram/kant.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Bannertextfärg</value></data>
@@ -192,13 +192,18 @@
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF-bakgrundsbild (äldre)</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>Denna äldre helsidesuppladdning används inte. Använd sidbakgrunder per språk nedan, eller radera den kvarvarande filen här.</value></data>
   <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Återställ den medföljande standardjulikonen för denna sida?</value></data>
-  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Sidbakgrunder (per språk)</value></data>
-  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Dekorativ cream/guld-ram och sidfot för varje språk. Varumärkestext ritas ovanpå från Inställningar — baka inte in titeln i bilden. Uppladdning ersätter standard; återställ hämtar tillbaka den.</value></data>
-  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Danska (da)</value></data>
-  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svenska (sv)</value></data>
-  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelska (en)</value></data>
+  <data name="BingoPdfLayoutOption" xml:space="preserve"><value>PDF-layout</value></data>
+  <data name="BingoPdfLayoutOptionHint" xml:space="preserve"><value>Option 1 använder helsidesbakgrund per språk (varumärke inbakat i standardgrafiken). Option 2 ritar live redigerbart varumärke med sidoikoner. Standard är Option 1.</value></data>
+  <data name="BingoPdfLayoutOption1" xml:space="preserve"><value>Option 1 — Helsidesbakgrund (standard)</value></data>
+  <data name="BingoPdfLayoutOption2" xml:space="preserve"><value>Option 2 — Live varumärke + ikoner (rak titel)</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Option 1-sidbakgrunder (per språk)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Helsidesgrafik för Option 1. Standard: danska = Julebanko, svenska = Julbingo (varumärke inbakat). Eget varumärke → ladda upp matchande bild eller använd Option 2. Engelska har ännu ingen medföljande standard — uppladdning krävs.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Danska (da) — Julebanko</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Svenska (sv) — Julbingo</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>Engelska (en) — Christmas Bingo</value></data>
   <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Återställ standard</value></data>
   <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Använder medföljande standard</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>Ingen medföljande engelsk bakgrund ännu (Christmas Bingo). Ladda upp en, eller använd Option 2 tills den kommer. Utan uppladdning faller Option 1 tillbaka till Option 2 för engelska.</value></data>
   <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Återställ den medföljande standardsidbakgrunden för detta språk?</value></data>
   <data name="ColorHexInvalid" xml:space="preserve"><value>Ogiltig hex-färg. Använd 3 eller 6 hex-siffror (# valfritt).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Genererade batcher</value></data>

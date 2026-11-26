@@ -35,17 +35,19 @@ public class MediaService(AppDbContext db, IWebHostEnvironment env)
     ];
 
     /// <summary>
-    /// Per-culture festive page backgrounds (cream + gold frame + footer spruce).
-    /// No baked brand text — PDF draws brand from Setup settings on top.
+    /// Option 1 full-page backgrounds (baked brand in default art).
+    /// DA = Julebanko, SV = Julbingo. EN has no bundled default until Brian supplies
+    /// a Christmas Bingo asset (do not use the DA duplicate).
     /// </summary>
     public static readonly (MediaSlot Slot, string Culture, string FileName, string ContentType)[] BingoPageBackgroundSamples =
     [
         (MediaSlot.BingoPageBackgroundDa, "da", "bankoplade-page-bg-da.png", "image/png"),
-        (MediaSlot.BingoPageBackgroundSv, "sv", "bankoplade-page-bg-sv.png", "image/png"),
-        (MediaSlot.BingoPageBackgroundEn, "en", "bankoplade-page-bg-en.png", "image/png")
+        (MediaSlot.BingoPageBackgroundSv, "sv", "bankoplade-page-bg-sv.png", "image/png")
+        // TODO(EN Option 1): add bankoplade-page-bg-en.png when Christmas Bingo bg arrives.
     ];
 
-    public const long MaxBytes = 2 * 1024 * 1024;
+    /// <summary>Page backgrounds can be ~2MB art; allow a little headroom for uploads.</summary>
+    public const long MaxBytes = 3 * 1024 * 1024;
 
     public async Task<IReadOnlyDictionary<MediaSlot, MediaAsset>> GetAllAsync()
     {

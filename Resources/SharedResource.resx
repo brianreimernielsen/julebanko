@@ -170,7 +170,7 @@
   <data name="BingoPlateScheme" xml:space="preserve"><value>Plate color scheme</value></data>
   <data name="BingoPlateSchemeHint" xml:space="preserve"><value>Pick a predefined high-contrast scheme (two colors). The series number uses the scheme accent.</value></data>
   <data name="BingoPdfBackgroundColor" xml:space="preserve"><value>PDF background color</value></data>
-  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Paper/parchment color under the decorative page background (default cream).</value></data>
+  <data name="BingoPdfBackgroundColorHint" xml:space="preserve"><value>Paper/parchment under Option 2 (and when no Option 1 image). Default matches Option 1 cream (~#FCF3E4).</value></data>
   <data name="BingoFrameColor" xml:space="preserve"><value>Frame color</value></data>
   <data name="BingoFrameColorHint" xml:space="preserve"><value>Color of the plate border/frame.</value></data>
   <data name="BingoBannerColor" xml:space="preserve"><value>Banner text color</value></data>
@@ -192,15 +192,20 @@
   <data name="BingoPdfBackgroundImage" xml:space="preserve"><value>PDF background image (legacy)</value></data>
   <data name="BingoPdfBackgroundImageHint" xml:space="preserve"><value>This legacy full-page upload is unused. Use per-language page backgrounds below, or delete the leftover file here.</value></data>
   <data name="ConfirmResetBingoHeaderIcon" xml:space="preserve"><value>Restore the bundled default Christmas icon for this side?</value></data>
-  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Page backgrounds (by language)</value></data>
-  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Decorative cream/gold frame and footer for each language. Brand text is drawn on top from Setup — do not bake the title into the image. Upload replaces the default; restore brings it back.</value></data>
-  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Danish (da)</value></data>
-  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Swedish (sv)</value></data>
-  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>English (en)</value></data>
+  <data name="BingoPdfLayoutOption" xml:space="preserve"><value>PDF layout</value></data>
+  <data name="BingoPdfLayoutOptionHint" xml:space="preserve"><value>Option 1 uses a full-page background per language (brand baked into the default art). Option 2 draws a live editable brand with side icons. Default is Option 1.</value></data>
+  <data name="BingoPdfLayoutOption1" xml:space="preserve"><value>Option 1 — Full-page background (default)</value></data>
+  <data name="BingoPdfLayoutOption2" xml:space="preserve"><value>Option 2 — Live brand + icons (straight title)</value></data>
+  <data name="BingoPageBackgrounds" xml:space="preserve"><value>Option 1 page backgrounds (by language)</value></data>
+  <data name="BingoPageBackgroundsHint" xml:space="preserve"><value>Full-page art for Option 1. Defaults: Danish = Julebanko, Swedish = Julbingo (brand baked in). Custom brand → upload a matching image or use Option 2. English has no bundled default yet — upload required.</value></data>
+  <data name="BingoPageBackgroundDa" xml:space="preserve"><value>Danish (da) — Julebanko</value></data>
+  <data name="BingoPageBackgroundSv" xml:space="preserve"><value>Swedish (sv) — Julbingo</value></data>
+  <data name="BingoPageBackgroundEn" xml:space="preserve"><value>English (en) — Christmas Bingo</value></data>
   <data name="BingoPageBackgroundRestore" xml:space="preserve"><value>Restore default</value></data>
   <data name="BingoPageBackgroundUsingDefault" xml:space="preserve"><value>Using bundled default</value></data>
+  <data name="BingoPageBackgroundEnTodo" xml:space="preserve"><value>No bundled English background yet (Christmas Bingo). Upload one, or use Option 2 until it arrives. Without an upload, Option 1 falls back to Option 2 for English.</value></data>
   <data name="ConfirmResetBingoPageBackground" xml:space="preserve"><value>Restore the bundled default page background for this language?</value></data>
-  <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>
+    <data name="ColorHexInvalid" xml:space="preserve"><value>Invalid hex color. Use 3 or 6 hex digits (# optional).</value></data>
   <data name="BingoBatches" xml:space="preserve"><value>Generated batches</value></data>
   <data name="BingoNoBatches" xml:space="preserve"><value>No batches yet.</value></data>
   <data name="BingoDownloadPdf" xml:space="preserve"><value>Download PDF</value></data>

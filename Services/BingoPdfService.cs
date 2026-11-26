@@ -7,25 +7,35 @@ using QuestPDF.Infrastructure;
 namespace Julebanko.Services;
 
 /// <summary>
-/// JUL-42 festive bankoplade PDF: cream parchment + gold frame (via per-culture page bg),
-/// editable brand text overlaid on document header and plate header bars (never baked into images).
+/// Bankoplade PDF — two Design layouts (Brian / JUL-42):
+/// Option 1 (default): full-page per-language background; plates overlaid in parchment center.
+/// Option 2: composed live brand + L/R icons + straight title (no arch).
+/// Max 6 plates/page, single column.
 /// </summary>
 public class BingoPdfService(SettingsService settings, MediaService media)
 {
-    /// <summary>Reference parchment when no page-bg image / color override.</summary>
-    public const string DefaultParchmentHex = "#FEF6E3";
+    /// <summary>Parchment sampled from Option 1 DA bg (~#FCF3E4).</summary>
+    public const string DefaultParchmentHex = "#FCF3E4";
 
-    /// <summary>Gold accent for under-title flourish (matches plate schemes / reference).</summary>
+    /// <summary>Gold accent (scheme ColorB / flourish).</summary>
     public const string GoldAccentHex = "#C9A227";
 
-    /// <summary>Deep Christmas red for plate header bars and empty cells (not candy-pink).</summary>
-    public const string FestiveRedHex = "#8B1E1E";
+    /// <summary>Deep festive red sampled from Option 1 frame (~#AA1F0D).</summary>
+    public const string FestiveRedHex = "#AA1F0D";
+
+    public const string LayoutOption1 = "1";
+    public const string LayoutOption2 = "2";
 
     static BingoPdfService()
     {
         QuestPDF.Settings.License = LicenseType.Community;
         BingoPdfTitleFonts.EnsureRegistered(AppContext.BaseDirectory);
     }
+
+    public static string NormalizeLayoutOption(string? raw) =>
+        string.Equals(raw?.Trim(), LayoutOption2, StringComparison.Ordinal)
+            ? LayoutOption2
+            : LayoutOption1;
 
     public Task<byte[]> BuildPdfAsync(IReadOnlyList<BingoCard> cards, int platesPerPage, string? batchBanner)
         => BuildPdfAsync(cards, platesPerPage, batchBanner, styleOverrides: null);
@@ -36,14 +46,12 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         string? batchBanner,
         BingoPdfStyleOverrides? styleOverrides)
     {
-        // Brian / JUL-42: max 6 plates per page — single full-width column only (no 8/9 grids).
         platesPerPage = platesPerPage is 1 or 2 or 3 or 4 or 6 ? platesPerPage : 6;
 
         var culture = CultureSupport.Normalize(
             await settings.GetAsync(SettingKeys.DefaultCulture, CultureSupport.Danish));
         var brand = await settings.GetBrandNameOrFallbackAsync(culture);
 
-        // Document title + plate header brand: batch override → BingoBannerText → brand settings.
         var banner = !string.IsNullOrWhiteSpace(batchBanner)
             ? batchBanner.Trim()
             : await settings.GetAsync(SettingKeys.BingoBannerText, "");
@@ -99,12 +107,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         var showPageNumbers = styleOverrides?.ShowPageNumbers
             ?? IsTruthy(await settings.GetAsync(SettingKeys.BingoShowPageNumbers, "false"));
 
-        var frameColor = ParseColor(frameHex, ParseColor(FestiveRedHex, Colors.Red.Darken3));
-        var titleColor = ParseColor(bannerHex, frameColor);
+        var layoutOption = NormalizeLayoutOption(
+            !string.IsNullOrWhiteSpace(styleOverrides?.LayoutOption)
+                ? styleOverrides!.LayoutOption
+                : await settings.GetAsync(SettingKeys.BingoPdfLayoutOption, LayoutOption1));
+
+        var festiveRed = ParseColor(scheme.ColorA, ParseColor(FestiveRedHex, Colors.Red.Darken3));
+        var titleColor = ParseColor(bannerHex, festiveRed);
         var paper = ParseColor(bgHex, ParseColor(DefaultParchmentHex, Colors.White));
         var gold = ParseColor(GoldAccentHex, Colors.Amber.Darken2);
-        var festiveRed = ParseColor(scheme.ColorA, ParseColor(FestiveRedHex, Colors.Red.Darken3));
-        // Reference: empty cells = deep Christmas red (not washed pink).
         var emptyCell = festiveRed;
         var ink = Color.FromHex("#1A1A1A");
 
@@ -113,9 +124,11 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         byte[]? leftIconBytes = leftIcon?.Bytes;
         byte[]? rightIconBytes = rightIcon?.Bytes;
 
-        // Per-culture decorative page bg (cream/gold/footer) — brand text drawn on top.
         var pageBg = await media.TryReadBingoPageBackgroundAsync(culture);
         byte[]? pageBgBytes = pageBg?.Bytes;
+
+        // Option 1 needs a page bg. EN has no bundled default — fall back to Option 2 until asset arrives.
+        var useOption1 = layoutOption == LayoutOption1 && pageBgBytes is { Length: > 0 };
 
         var pages = cards
             .Select((card, i) => (card, i))
@@ -124,16 +137,43 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .ToList();
 
         var plateScale = PlateScaleFor(platesPerPage);
-        var headerIconHeight = Math.Max(20f, titleSize + 2f);
-        var headerIconWidth = headerIconHeight * 2.9f;
-        const float headerIconOverlap = 6f;
-        const float flourishHeight = 10f;
-        // Extra height for arched title (ends sit lower than center).
-        var arcAmplitude = titleSize * 0.42f;
-        var titleBandHeight = Math.Max(titleSize + arcAmplitude + 10f, headerIconHeight + 4f);
-        var docHeaderHeight = titleBandHeight + flourishHeight + 4f;
-        // Approximate title chord width for icon placement beside the arc.
-        var titleChordWidth = Math.Max(80f, banner.Length * titleSize * 0.58f);
+
+        if (useOption1)
+        {
+            return BuildOption1Document(
+                pages, platesPerPage, pageBgBytes!, banner, brand, festiveRed, emptyCell, ink, paper,
+                plateScale, showBarcode, showPageNumbers);
+        }
+
+        return BuildOption2Document(
+            pages, platesPerPage, banner, brand, titleFontId, titleSize, titleColor, festiveRed,
+            emptyCell, ink, paper, gold, leftIconBytes, rightIconBytes, plateScale,
+            showBarcode, showPageNumbers);
+    }
+
+    /// <summary>
+    /// Option 1: full-page bg (baked brand) + plates in the parchment well.
+    /// </summary>
+    private static byte[] BuildOption1Document(
+        List<List<BingoCard>> pages,
+        int platesPerPage,
+        byte[] pageBgBytes,
+        string banner,
+        string brand,
+        Color festiveRed,
+        Color emptyCell,
+        Color ink,
+        Color paper,
+        PlateScale plateScale,
+        bool showBarcode,
+        bool showPageNumbers)
+    {
+        // Clear the decorative red frame + baked title band; plates sit in the cream well.
+        const float marginLeft = 34f;
+        const float marginRight = 34f;
+        const float marginTop = 108f;
+        const float marginBottom = 40f;
+        const float gap = 4f;
 
         var document = Document.Create(container =>
         {
@@ -142,25 +182,106 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(14);
+                    page.MarginLeft(marginLeft);
+                    page.MarginRight(marginRight);
+                    page.MarginTop(marginTop);
+                    page.MarginBottom(marginBottom);
+                    page.PageColor(paper);
+                    page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
+                    page.Background().Image(pageBgBytes).FitUnproportionally();
+
+                    var footerPad = showPageNumbers ? 14f : 0f;
+                    var available = PageSizes.A4.Height - marginTop - marginBottom - footerPad;
+                    var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
+                    var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
+                    var plateHeaderH = PlateHeaderHeight(plateScale, showBarcode);
+                    var cellHeight = Math.Max(10f, (plateHeight - plateHeaderH - 2f) / BingoPlateGenerator.Rows);
+                    var fillScale = plateScale with { CellMinHeight = cellHeight };
+
+                    page.Content().Column(col =>
+                    {
+                        for (var i = 0; i < pageCards.Count; i++)
+                        {
+                            col.Item().Height(plateHeight).Element(e => RenderPlate(
+                                e, pageCards[i], banner, festiveRed, emptyCell, ink, fillScale, showBarcode));
+                            if (i < pageCards.Count - 1)
+                            {
+                                col.Item().Height(gap);
+                            }
+                        }
+                    });
+
+                    if (showPageNumbers)
+                    {
+                        page.Footer().AlignCenter()
+                            .DefaultTextStyle(x => x.FontSize(9).FontColor(Colors.Grey.Darken1))
+                            .Text(text =>
+                            {
+                                text.Span($"{brand} ");
+                                text.CurrentPageNumber();
+                                text.Span("/");
+                                text.TotalPages();
+                            });
+                    }
+                });
+            }
+        });
+
+        return document.GeneratePdf();
+    }
+
+    /// <summary>
+    /// Option 2: live straight brand + L/R icons (no arch) on parchment / optional chrome.
+    /// </summary>
+    private static byte[] BuildOption2Document(
+        List<List<BingoCard>> pages,
+        int platesPerPage,
+        string banner,
+        string brand,
+        string titleFontId,
+        float titleSize,
+        Color titleColor,
+        Color festiveRed,
+        Color emptyCell,
+        Color ink,
+        Color paper,
+        Color gold,
+        byte[]? leftIconBytes,
+        byte[]? rightIconBytes,
+        PlateScale plateScale,
+        bool showBarcode,
+        bool showPageNumbers)
+    {
+        const float pageMargin = 14f;
+        const float flourishHeight = 10f;
+        var pageContentWidth = PageSizes.A4.Width - (2f * pageMargin);
+        var titleLayout = ResolveHeaderTitleLayout(banner, titleSize, pageContentWidth);
+        var headerIconHeight = titleLayout.IconHeight;
+        var headerIconWidth = titleLayout.IconWidth;
+        var titleChordWidth = titleLayout.TitleChordWidth;
+        var iconTitleGap = titleLayout.IconTitleGap;
+        var titleBandHeight = Math.Max(titleSize + 12f, headerIconHeight + 4f);
+        var docHeaderHeight = titleBandHeight + flourishHeight + 4f;
+
+        var document = Document.Create(container =>
+        {
+            foreach (var pageCards in pages)
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(pageMargin);
                     page.PageColor(paper);
                     page.DefaultTextStyle(x => x.FontSize(10).FontColor(ink));
 
-                    if (pageBgBytes is { Length: > 0 })
-                    {
-                        // Decorative chrome only — no baked brand; live text overlays this.
-                        page.Background().Image(pageBgBytes).FitUnproportionally();
-                    }
-
                     page.Header().Column(headerCol =>
                     {
-                        // Centered [icon | arched brand | icon] — brand is live editable text on an arc.
+                        // Straight title (no arch) — long brands stay readable with scaled icons + gap.
                         headerCol.Item().Height(titleBandHeight).AlignMiddle().Row(header =>
                         {
                             header.RelativeItem();
 
-                            header.ConstantItem(headerIconWidth).AlignMiddle().AlignRight()
-                                .TranslateX(headerIconOverlap).Element(e =>
+                            header.ConstantItem(headerIconWidth).AlignMiddle().AlignCenter().Element(e =>
                             {
                                 if (leftIconBytes is { Length: > 0 })
                                 {
@@ -168,19 +289,18 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                                 }
                             });
 
-                            header.ConstantItem(titleChordWidth).AlignMiddle()
-                                .Element(e => RenderArchedBrand(
-                                    e,
-                                    banner,
-                                    titleFontId,
-                                    titleSize,
-                                    titleColor,
-                                    titleChordWidth,
-                                    titleBandHeight,
-                                    arcAmplitude));
+                            header.ConstantItem(iconTitleGap);
 
-                            header.ConstantItem(headerIconWidth).AlignMiddle().AlignLeft()
-                                .TranslateX(-headerIconOverlap).Element(e =>
+                            header.ConstantItem(titleChordWidth).AlignMiddle().AlignCenter()
+                                .Text(banner)
+                                .FontFamily(titleFontId)
+                                .FontSize(titleSize)
+                                .SemiBold()
+                                .FontColor(titleColor);
+
+                            header.ConstantItem(iconTitleGap);
+
+                            header.ConstantItem(headerIconWidth).AlignMiddle().AlignCenter().Element(e =>
                             {
                                 if (rightIconBytes is { Length: > 0 })
                                 {
@@ -191,35 +311,23 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                             header.RelativeItem();
                         });
 
-                        // Gold under-title flourish (approximate snowflake-line from reference).
                         headerCol.Item().Height(flourishHeight).AlignCenter().AlignMiddle().Row(fl =>
                         {
-                            fl.RelativeItem().AlignMiddle()
-                                .LineHorizontal(0.8f).LineColor(gold);
+                            fl.RelativeItem().AlignMiddle().LineHorizontal(0.8f).LineColor(gold);
                             fl.ConstantItem(14).AlignCenter().AlignMiddle()
                                 .Text("✦").FontSize(8).FontColor(gold);
-                            fl.RelativeItem().AlignMiddle()
-                                .LineHorizontal(0.8f).LineColor(gold);
+                            fl.RelativeItem().AlignMiddle().LineHorizontal(0.8f).LineColor(gold);
                         });
                     });
 
                     const float contentTopPad = 2f;
                     const float gap = 4f;
-                    var margin = 14f;
-                    // Leave room for page-number footer and/or decorative spruce band on page bg.
                     var footerEstimate = showPageNumbers ? 16f : 6f;
-                    if (pageBgBytes is { Length: > 0 })
-                    {
-                        footerEstimate = Math.Max(footerEstimate, 88f);
-                    }
-
-                    var available = PageSizes.A4.Height - (2 * margin) - docHeaderHeight - footerEstimate - contentTopPad;
+                    var available = PageSizes.A4.Height - (2 * pageMargin) - docHeaderHeight - footerEstimate - contentTopPad;
                     var gapsTotal = Math.Max(0, pageCards.Count - 1) * gap;
                     var plateHeight = (available - gapsTotal) / Math.Max(1, pageCards.Count);
-                    // Header chrome must match RenderPlate exactly — overflow here drops the grid.
                     var plateHeaderH = PlateHeaderHeight(plateScale, showBarcode);
-                    var chrome = plateHeaderH + 2f;
-                    var cellHeight = Math.Max(10f, (plateHeight - chrome) / BingoPlateGenerator.Rows);
+                    var cellHeight = Math.Max(10f, (plateHeight - plateHeaderH - 2f) / BingoPlateGenerator.Rows);
                     var fillScale = plateScale with { CellMinHeight = cellHeight };
 
                     page.Content().PaddingTop(contentTopPad).Column(col =>
@@ -227,15 +335,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
                         for (var i = 0; i < pageCards.Count; i++)
                         {
                             col.Item().Height(plateHeight).Element(e => RenderPlate(
-                                e,
-                                pageCards[i],
-                                banner,
-                                festiveRed,
-                                emptyCell,
-                                ink,
-                                fillScale,
-                                showBarcode));
-
+                                e, pageCards[i], banner, festiveRed, emptyCell, ink, fillScale, showBarcode));
                             if (i < pageCards.Count - 1)
                             {
                                 col.Item().Height(gap);
@@ -245,13 +345,15 @@ public class BingoPdfService(SettingsService settings, MediaService media)
 
                     if (showPageNumbers)
                     {
-                        page.Footer().AlignCenter().DefaultTextStyle(x => x.FontSize(9).FontColor(Colors.Grey.Darken1)).Text(text =>
-                        {
-                            text.Span($"{brand} ");
-                            text.CurrentPageNumber();
-                            text.Span("/");
-                            text.TotalPages();
-                        });
+                        page.Footer().AlignCenter()
+                            .DefaultTextStyle(x => x.FontSize(9).FontColor(Colors.Grey.Darken1))
+                            .Text(text =>
+                            {
+                                text.Span($"{brand} ");
+                                text.CurrentPageNumber();
+                                text.Span("/");
+                                text.TotalPages();
+                            });
                     }
                 });
             }
@@ -260,73 +362,48 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         return document.GeneratePdf();
     }
 
-    /// <summary>
-    /// Editable brand along a gentle upward arc (center high) so it sits over the snow-wave band.
-    /// Per-glyph Rotate + Translate — not a baked image.
-    /// </summary>
-    private static void RenderArchedBrand(
-        IContainer container,
-        string text,
-        string fontId,
-        float fontSize,
-        Color color,
-        float width,
-        float height,
-        float amplitude)
+    private readonly record struct HeaderTitleLayout(
+        float TitleChordWidth,
+        float IconWidth,
+        float IconHeight,
+        float IconTitleGap);
+
+    /// <summary>Size [icon | title | icon] so long brands (e.g. Christmas Bingo) stay fully readable.</summary>
+    private static HeaderTitleLayout ResolveHeaderTitleLayout(string banner, float titleSize, float pageContentWidth)
     {
-        if (string.IsNullOrEmpty(text))
+        var len = Math.Max(1, banner.Length);
+        var longTitle = len >= 12;
+        var estimatedTitle = Math.Max(80f, len * titleSize * (longTitle ? 0.72f : 0.60f));
+        var baseIconHeight = Math.Max(20f, titleSize + 2f);
+        var baseIconWidth = baseIconHeight * 2.9f;
+        var gap = longTitle ? 18f : 4f;
+        var maxGroup = pageContentWidth * 0.96f;
+        var iconScale = longTitle ? 0.48f : 1f;
+        var titleChord = estimatedTitle;
+        for (var iter = 0; iter < 4; iter++)
         {
-            return;
+            var iconWidthTry = baseIconWidth * iconScale;
+            var group = (2f * iconWidthTry) + titleChord + (2f * gap);
+            if (group <= maxGroup)
+            {
+                break;
+            }
+
+            var iconBudget = Math.Max(40f, maxGroup - titleChord - (2f * gap));
+            iconScale = Math.Clamp(iconBudget / (2f * baseIconWidth), 0.36f, iconScale);
+            var maxTitle = maxGroup - (2f * baseIconWidth * iconScale) - (2f * gap);
+            titleChord = Math.Min(titleChord, Math.Max(80f, maxTitle));
         }
 
-        var chars = text.ToCharArray();
-        var n = chars.Length;
-        var charStep = width / Math.Max(1, n);
-        var maxTilt = Math.Clamp(n * 1.1f, 8f, 18f); // degrees from center to end
-
-        // Tight Height box so Layers cannot inflate the page header and starve plate content.
-        container.Height(height).Layers(layers =>
-        {
-            layers.PrimaryLayer();
-
-            for (var i = 0; i < n; i++)
-            {
-                var t = n == 1 ? 0.5f : i / (float)(n - 1);
-                // Rainbow arch: center highest (smaller Y), ends lower on the page.
-                var y = amplitude * (1f - 4f * t * (1f - t));
-                var tilt = -maxTilt + t * (2f * maxTilt);
-                var x = i * charStep;
-
-                layers.Layer()
-                    .Unconstrained()
-                    .TranslateX(x)
-                    .TranslateY(y)
-                    .Width(charStep + 2f)
-                    .Height(fontSize + 6f)
-                    .AlignCenter()
-                    .AlignMiddle()
-                    .Rotate(tilt)
-                    .Text(chars[i].ToString())
-                    .FontFamily(fontId)
-                    .FontSize(fontSize)
-                    .SemiBold()
-                    .FontColor(color);
-            }
-        });
+        var iconHeight = baseIconHeight * iconScale;
+        var iconWidth = baseIconWidth * iconScale;
+        titleChord = Math.Max(80f, Math.Min(titleChord, maxGroup - (2f * iconWidth) - (2f * gap)));
+        return new HeaderTitleLayout(titleChord, iconWidth, iconHeight, gap);
     }
 
-    /// <summary>
-    /// Reference plate: dark-red header bar with white brand + barcode box; white number cells;
-    /// deep festive-red empty cells.
-    /// </summary>
     private static float PlateHeaderHeight(PlateScale scale, bool showBarcode) =>
         Math.Max(scale.BannerFont + 6f, SeriesMarkerHeight(scale, showBarcode) + 4f);
 
-    /// <summary>
-    /// Reference plate: dark-red header bar with white brand + barcode inset; white number cells;
-    /// deep festive-red empty cells. Header height must fit inside parent Height(plateHeight)
-    /// or QuestPDF silently drops the grid.
-    /// </summary>
     private static void RenderPlate(
         IContainer container,
         BingoCard card,
@@ -356,7 +433,6 @@ public class BingoPdfService(SettingsService settings, MediaService media)
             .BorderColor(festiveRed)
             .Column(col =>
         {
-            // Dark red header — no vertical padding (would overflow Height and drop the grid).
             col.Item().Height(headerH).Background(festiveRed).PaddingHorizontal(6).Row(r =>
             {
                 r.RelativeItem().AlignMiddle()
@@ -440,7 +516,7 @@ public class BingoPdfService(SettingsService settings, MediaService media)
         2 => new PlateScale(0, 14, 18, 0, 0, 0, 110, 20),
         3 => new PlateScale(0, 13, 15, 0, 0, 0, 100, 18),
         4 => new PlateScale(0, 12, 13, 0, 0, 0, 95, 16),
-        _ => new PlateScale(0, 11, 11, 0, 0, 0, 90, 16) // 6
+        _ => new PlateScale(0, 11, 11, 0, 0, 0, 90, 16)
     };
 
     private static Color ParseColor(string hex, Color fallback)
@@ -472,4 +548,6 @@ public sealed class BingoPdfStyleOverrides
     public int? TitleSize { get; init; }
     public bool? ShowBarcode { get; init; }
     public bool? ShowPageNumbers { get; init; }
+    /// <summary>"1" or "2" — see <see cref="BingoPdfService.LayoutOption1"/>.</summary>
+    public string? LayoutOption { get; init; }
 }

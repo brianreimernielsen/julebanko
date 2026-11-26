@@ -1696,6 +1696,11 @@
       return checked ? checked.value : "";
     };
 
+    const readLayout = () => {
+      const checked = document.querySelector('input[name="BingoPdfLayoutOption"]:checked');
+      return checked && checked.value === "2" ? "2" : "1";
+    };
+
     const buildUrl = (download) => {
       const params = new URLSearchParams();
       const plates = Number(platesSelect?.value || "6");
@@ -1716,6 +1721,7 @@
       params.set("showBarcode", showBarcodeInput && !showBarcodeInput.checked ? "false" : "true");
       // Default OFF when absent (matches Design default).
       params.set("showPageNumbers", showPageNumbersInput && showPageNumbersInput.checked ? "true" : "false");
+      params.set("layout", readLayout());
       if (download) params.set("download", "true");
       // Cache-bust so object reloads when settings change.
       params.set("t", String(Date.now()));
@@ -1755,6 +1761,9 @@
     showBarcodeInput?.addEventListener("change", schedule);
     showPageNumbersInput?.addEventListener("change", schedule);
     document.querySelectorAll('input[name="BingoPlateScheme"]').forEach((el) => {
+      el.addEventListener("change", schedule);
+    });
+    document.querySelectorAll('input[name="BingoPdfLayoutOption"]').forEach((el) => {
       el.addEventListener("change", schedule);
     });
     document.querySelectorAll("[data-color-swatch]").forEach((el) => {
